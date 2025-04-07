@@ -6,17 +6,18 @@ services:
      - ${PWD}/postgresql:/var/lib/postgresql/data
     restart: always
     ## linux
-    networks:
-      fabmanager:
-         ipv4_address: 172.18.0.2
+    #networks:
+    #  fabmanager:
+    #     ipv4_address: 172.18.0.2
     ## osx
-    #ports:
-    #  - "5432:5432"
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
 
   elasticsearch:
     image: elasticsearch:5.6
+    platform: linux/amd64  # Spécifie la plateforme pour compatibilité ARM
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m -Dlog4j2.formatMsgNoLookups=true"
     ulimits:
@@ -30,26 +31,29 @@ services:
       - ${PWD}/elasticsearch/backups:/usr/share/elasticsearch/backups
     restart: always
     ## linux
-    networks:
-      fabmanager:
-        ipv4_address: 172.18.0.3
+    #networks:
+    #  fabmanager:
+    #    ipv4_address: 172.18.0.3
     ## osx
-    #ports:
-    #  - "9200:9200"
-    #  - "9300:9300"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
 
   kibana:
     image: kibana:5.6
+    platform: linux/amd64  # Spécifie la plateforme pour compatibilité ARM
     environment:
-      ELASTICSEARCH_HOSTS: http://fabmanager-elastic:9200
+      ELASTICSEARCH_HOSTS: http://localhost:9200
     restart: always
     ## linux
-    networks:
-      fabmanager:
-        ipv4_address: 172.18.0.5
+    #networks:
+    #  fabmanager:
+    #    ipv4_address: 172.18.0.5
     ## osx
-    #ports:
-    #  - "5601:5601"
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
 
   redis:
     image: redis:6-alpine
@@ -57,31 +61,30 @@ services:
       - ${PWD}/redis:/data
     restart: always
     ## linux
-    networks:
-      fabmanager:
-        ipv4_address: 172.18.0.4
+    #networks:
+    #  fabmanager:
+    #    ipv4_address: 172.18.0.4
     ## osx
-    #ports:
-    #  - "6379:6379"
+    ports:
+      - "6379:6379"
 
   mailcatcher:
     image: sj26/mailcatcher
     restart: always
     ## linux
-    networks:
-      fabmanager:
-        ipv4_address: 172.18.0.6
+    #networks:
+    #  fabmanager:
+    #    ipv4_address: 172.18.0.6
     ## osx
-    #ports:
-    #  - "1080:1080"
-    #  - "1025:1025"
+    ports:
+      - "1080:1080"
+      - "1025:1025"
 
 ## linux
-networks:
-  fabmanager:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.18.0.0/16
-          gateway: 172.18.0.1
-
+#networks:
+#  fabmanager:
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 172.18.0.0/16
+#          gateway: 172.18.0.1

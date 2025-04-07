@@ -45,7 +45,7 @@ fr:
         projects_gallery: "Galerie de projets"
         subscriptions: "Abonnements"
         public_calendar: "Agenda"
-        fablab_store: "Boutique"
+        fablab_store: "Matériel Nomade"
         #left menu (admin)
         trainings_monitoring: "Formations"
         manage_the_calendar: "Agenda"
@@ -54,7 +54,7 @@ fr:
         subscriptions_and_prices: "Abonnements & Tarifs"
         manage_the_events: "Événements"
         manage_the_machines: "Machines"
-        manage_the_store: "Boutique"
+        manage_the_store: "Matériel Nomade"
         manage_the_spaces: "Espaces"
         projects: "Projets"
         statistics: "Statistiques"
@@ -231,7 +231,7 @@ fr:
         book: "Réserver"
         _or_the_: " ou la "
         store_ad:
-          title: "Découvrez notre boutique"
+          title: "Découvrez notre boutique de matériel nomade"
           buy: "Consultez les produits des projets des membres ainsi que les consommables liés aux différentes machines et outils de l'atelier."
           sell: "Si vous voulez également vendre vos créations, veuillez nous le faire savoir."
           link: "Vers la boutique"
@@ -407,7 +407,7 @@ fr:
         projects_using_the_space: "Projets utilisant l'espace"
       #public store
       store:
-        fablab_store: "Boutique"
+        fablab_store: "Matériel Nomade"
         unexpected_error_occurred: "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
         add_to_cart_success: "Produit ajouté au panier."
         products:
