@@ -17,6 +17,8 @@ class Order < PaymentDocument
 
   before_create :add_environment
   after_create :update_reference
+  # Nouveau
+  after_save :handle_state_change, if: :saved_change_to_state?
 
   delegate :user, to: :statistic_profile
 
@@ -36,5 +38,44 @@ class Order < PaymentDocument
 
   def self.columns_out_of_footprint
     %w[payment_method]
+  end
+
+  # Nouveau
+  private
+  def handle_state_change
+    if state_before_last_save == 'paid' && state == 'in_progress'
+      ActiveRecord::Base.transaction do
+        order_items.each do |item|
+          next unless item.orderable_type == 'Product'
+
+          product = item.orderable
+          quantity = item.quantity || 1
+          # Vérification du stock (cohérent avec Orders::OrderService.in_stock?)
+          available_stock = product.stock['external'] || 0
+          raise Cart::OutStockError, "Stock insuffisant pour #{product.name}" if available_stock < quantity
+
+          # Débit du stock
+          ProductService.update_stock(product, [{
+            stock_type: 'external',
+            reason: "borrowed",
+            quantity: quantity,
+            order_item_id: item.id
+          }]).save!
+        end
+        order_activities.create(
+          activity_type: 'in_progress',
+          details: 'Stock debited for order'
+        )
+      end
+    end
+  end
+
+  def add_environment
+    self.token = Rails.env[0..2] + token
+  end
+
+  def update_reference
+    generate_reference
+    save
   end
 end

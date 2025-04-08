@@ -34,10 +34,11 @@ module Payments::PaymentConcern
         order.payment_gateway_object = PaymentGatewayObject.new(gateway_object_id: payment_id, gateway_object_type: payment_type)
       end
       activity = order.order_activities.create(activity_type: 'paid', operator_profile_id: order.operator_profile_id)
-      order.order_items.each do |item|
-        ProductService.update_stock(item.orderable,
-                                    [{ stock_type: 'external', reason: 'sold', quantity: item.quantity, order_item_id: item.id }]).save
-      end
+      # Suppression du débit de stock
+      # order.order_items.each do |item|
+      #  ProductService.update_stock(item.orderable,
+      #                              [{ stock_type: 'external', reason: 'sold', quantity: item.quantity, order_item_id: item.id }]).save
+      # end
       if order.save
         create_invoice(order, coupon, payment_id, payment_type)
         NotificationCenter.call type: 'notify_admin_order_is_paid',
