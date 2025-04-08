@@ -465,7 +465,7 @@ fr:
           last_update: "Dernière mise à jour"
           state:
             cart: 'Panier'
-            in_progress: "Prêt effectué"
+            in_progress: 'Prêt effectué'
             paid: "Payée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
@@ -492,7 +492,7 @@ fr:
           pickup: "Retirer vos produits"
           state:
             cart: 'Panier'
-            in_progress: "Prêt effectué"
+            in_progress: 'Prêt effectué'
             paid: "Payée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
@@ -510,7 +510,7 @@ fr:
         order_actions:
           state:
             cart: 'Panier'
-            in_progress: "Prêt effectué"
+            in_progress: 'Prêt effectué'
             paid: "Payée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
@@ -520,7 +520,7 @@ fr:
           confirm: 'Confirmer'
           confirmation_required: "Confirmation requise"
           confirm_order_in_progress_html: "Veuillez confirmer que cette commande en cours de préparation."
-          order_in_progress_success: "La commande de prêt est effectuée"
+          order_in_progress_success: 'La commande de prêt est effectuée'
           confirm_order_ready_html: "Veuillez confirmer que cette commande est prête."
           order_ready_note: 'Laissez votre message'
           order_ready_success: "La commande est prête"
