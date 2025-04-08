@@ -497,7 +497,7 @@ fr:
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"
-            refunded: "Remboursée"
+            refunded: "Retournée"
             delivered: "Livrée"
           payment:
             by_wallet: "par porte-monnaie"
@@ -515,7 +515,7 @@ fr:
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"
-            refunded: "Remboursée"
+            refunded: "Retournée"
             delivered: "Livrée"
           confirm: 'Confirmer'
           confirmation_required: "Confirmation requise"
