@@ -664,7 +664,7 @@ fr:
         event_status:
           pre_registered: "Pré-inscrit"
           to_pay: "À payer"
-          paid: "Payé"
+          paid: "Commandé"
           canceled: "Annulée"
           present: "Présent"
           registered: "Inscrit"

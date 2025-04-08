@@ -411,7 +411,7 @@ fr:
         state_pending_card: "En attente du paiement par carte"
         state_requires_payment_method: "La carte bancaire doit être mise à jour"
         state_requires_action: "Action requise"
-        state_paid: "Payée"
+        state_paid: "Commandé"
         state_error: "Erreur"
         state_gateway_canceled: "Annulé par la passerelle de paiement"
         state_canceled: "Annulée"
@@ -466,11 +466,11 @@ fr:
           state:
             cart: 'Panier'
             in_progress: 'Prêt effectué'
-            paid: "Payée"
+            paid: "Commandée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"
-            refunded: "Remboursée"
+            refunded: "Retour effectué"
             delivered: "Livrée"
         show_order:
           back_to_list: "Retour à la liste"
@@ -493,7 +493,7 @@ fr:
           state:
             cart: 'Panier'
             in_progress: 'Prêt effectué'
-            paid: "Payée"
+            paid: "Commandée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"
@@ -511,7 +511,7 @@ fr:
           state:
             cart: 'Panier'
             in_progress: 'Prêt effectué'
-            paid: "Payée"
+            paid: "Commandée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"
