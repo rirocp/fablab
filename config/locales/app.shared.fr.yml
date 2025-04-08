@@ -519,7 +519,7 @@ fr:
             delivered: "Livrée"
           confirm: 'Confirmer'
           confirmation_required: "Confirmation requise"
-          confirm_order_in_progress_html: "Veuillez confirmer que cette commande en cours de préparation."
+          confirm_order_in_progress_html: "Veuillez confirmer que le prêt est effectué, le stock sera déduit."
           order_in_progress_success: 'La commande de prêt est effectuée'
           confirm_order_ready_html: "Veuillez confirmer que cette commande est prête."
           order_ready_note: 'Laissez votre message'

@@ -10,7 +10,13 @@ class Order < PaymentDocument
   has_one :payment_gateway_object, as: :item, dependent: :destroy
   has_many :order_activities, dependent: :destroy
 
+  # paid = commandé
+  # canceled = annulé
+  # in progress = prêt effectué
+  # refunded = retour effectué
   ALL_STATES = %w[cart paid payment_failed refunded in_progress ready canceled delivered].freeze
+
+
   enum state: ALL_STATES.zip(ALL_STATES).to_h
 
   validates :token, :state, presence: true
@@ -43,7 +49,9 @@ class Order < PaymentDocument
   # Nouveau
   private
   def handle_state_change
-    if state_before_last_save == 'paid' && state == 'in_progress'
+    case [state_before_last_save, state]
+    when ['paid', 'in_progress']
+      # Débit du stock lors du passage à "Prêt effectué"
       ActiveRecord::Base.transaction do
         order_items.each do |item|
           next unless item.orderable_type == 'Product'
@@ -72,6 +80,28 @@ class Order < PaymentDocument
           activity_type: 'in_progress',
         )
       end
+      
+    when ['in_progress', 'refunded']
+      # Restitution du stock lors du passage à "Retour effectué"
+      ActiveRecord::Base.transaction do
+        order_items.each do |item|
+          next unless item.orderable_type == 'Product'
+
+          product = item.orderable
+          quantity = item.quantity || 1
+          ProductService.update_stock(product, [{
+            stock_type: 'external',
+            reason: 'returned',  # Raison valide dans INCOMING_REASONS
+            quantity: quantity,  # Quantité positive pour ajouter au stock
+            order_item_id: item.id
+          }]).save!
+        end
+        order_activities.create(activity_type: 'refunded')
+      end
+
+    when ['paid', 'canceled']
+      # Pas de changement de stock, juste une activité
+      order_activities.create(activity_type: 'canceled')
     end
   end
 
