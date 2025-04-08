@@ -465,7 +465,7 @@ fr:
           last_update: "Dernière mise à jour"
           state:
             cart: 'Panier'
-            in_progress: 'Prêt effectué'
+            in_progress: "Prêt effectué"
             paid: "Payée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
@@ -510,7 +510,7 @@ fr:
         order_actions:
           state:
             cart: 'Panier'
-            in_progress: 'Prêt effectué'
+            in_progress: "Prêt effectué"
             paid: "Payée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
