@@ -2518,7 +2518,7 @@ fr:
           filter_period_to: "au"
           state:
             cart: 'Panier'
-            in_progress: 'En cours de préparation'
+            in_progress: 'Prêt effectué'
             paid: "Payée"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
