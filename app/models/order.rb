@@ -54,10 +54,16 @@ class Order < PaymentDocument
           available_stock = product.stock['external'] || 0
           raise Cart::OutStockError, "Stock insuffisant pour #{product.name}" if available_stock < quantity
 
+          # order.order_items.each do |item|
+          #  ProductService.update_stock(item.orderable,
+          #                              [{ stock_type: 'external', reason: 'sold', quantity: item.quantity, order_item_id: item.id }]).save
+          # end
+
           # Débit du stock
+          
           ProductService.update_stock(product, [{
             stock_type: 'external',
-            reason: "borrowed",
+            reason: 'borrowed',
             quantity: quantity,
             order_item_id: item.id
           }]).save!
