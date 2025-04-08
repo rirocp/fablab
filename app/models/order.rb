@@ -60,7 +60,7 @@ class Order < PaymentDocument
           # end
 
           # Débit du stock
-          
+
           ProductService.update_stock(product, [{
             stock_type: 'external',
             reason: 'borrowed',
@@ -70,7 +70,6 @@ class Order < PaymentDocument
         end
         order_activities.create(
           activity_type: 'in_progress',
-          details: 'Stock debited for order'
         )
       end
     end
