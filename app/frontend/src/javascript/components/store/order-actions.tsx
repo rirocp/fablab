@@ -51,21 +51,21 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
     let actions = [];
     switch (order.state) {
       case 'paid':
-        //actions = actions.concat(['in_progress', 'ready', 'delivered', 'canceled', 'refunded']);
+        // actions = actions.concat(['in_progress', 'ready', 'delivered', 'canceled', 'refunded']);
         actions = actions.concat(['in_progress', 'canceled']);
         break;
       case 'payment_failed':
         actions = actions.concat(['canceled']);
         break;
       case 'in_progress':
-        //actions = actions.concat(['ready', 'delivered', 'canceled', 'refunded']);
+        // actions = actions.concat(['ready', 'delivered', 'canceled', 'refunded']);
         actions = actions.concat(['refunded']);
         break;
       case 'ready':
         actions = actions.concat(['delivered', 'canceled', 'refunded']);
         break;
       case 'canceled':
-        //actions = actions.concat(['refunded']);
+        // actions = actions.concat(['refunded']);
         actions = [];
         break;
       default:
