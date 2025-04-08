@@ -664,7 +664,7 @@ fr:
         event_status:
           pre_registered: "Pré-inscrit"
           to_pay: "À payer"
-          paid: "Commandé"
+          paid: "En attente de traitement"
           canceled: "Annulée"
           present: "Présent"
           registered: "Inscrit"
@@ -1224,7 +1224,7 @@ fr:
           state: "État"
           unknown: "Inconnu : "
           active: "Actif"
-          pending: "En attente"
+          pending: "En attente de traitement"
           previous_provider: "Fournisseur précédent"
           confirmation_required: "Supprimer le fournisseur ?"
           do_you_really_want_to_delete_the_TYPE_authentication_provider_NAME: "Êtes-vous sûr(e) de vouloir supprimer le fournisseur d'authentification {TYPE} : {NAME} ?"
@@ -2519,7 +2519,7 @@ fr:
           state:
             cart: 'Panier'
             in_progress: 'Prêt effectué'
-            paid: "Commandée"
+            paid: "En attente de traitement"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"

@@ -411,7 +411,7 @@ fr:
         state_pending_card: "En attente du paiement par carte"
         state_requires_payment_method: "La carte bancaire doit être mise à jour"
         state_requires_action: "Action requise"
-        state_paid: "Commandé"
+        state_paid: "En attente de traitement"
         state_error: "Erreur"
         state_gateway_canceled: "Annulé par la passerelle de paiement"
         state_canceled: "Annulée"
@@ -466,7 +466,7 @@ fr:
           state:
             cart: 'Panier'
             in_progress: 'Prêt effectué'
-            paid: "Commandée"
+            paid: "En attente de traitement"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"
@@ -493,11 +493,11 @@ fr:
           state:
             cart: 'Panier'
             in_progress: 'Prêt effectué'
-            paid: "Commandée"
+            paid: "En attente de traitement"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"
-            refunded: "Retournée"
+            refunded: "Retour effectué"
             delivered: "Livrée"
           payment:
             by_wallet: "par porte-monnaie"
@@ -511,11 +511,11 @@ fr:
           state:
             cart: 'Panier'
             in_progress: 'Prêt effectué'
-            paid: "Commandée"
+            paid: "En attente de traitement"
             payment_failed: "Erreur de paiement"
             canceled: "Annulée"
             ready: "Prête"
-            refunded: "Retournée"
+            refunded: "Retour effectué"
             delivered: "Livrée"
           confirm: 'Confirmer'
           confirmation_required: "Confirmation requise"
@@ -526,10 +526,12 @@ fr:
           order_ready_success: "La commande est prête"
           confirm_order_delivered_html: "Veuillez confirmer que cette commande a été livrée."
           order_delivered_success: "La commande a été livrée"
-          confirm_order_canceled_html: "<strong>Voulez-vous vraiment annuler cette commande ?</strong><p>Si cela impacte le stock, veuillez refléter le changement dans <em>modifier le produit &gt; gestion des stocks</em>. Ceci ne sera pas automatique.</p>"
+          confirm_order_canceled_html: "<strong>Voulez-vous vraiment annuler cette commande ?</strong>"
+          # confirm_order_canceled_html: "<strong>Voulez-vous vraiment annuler cette commande ?</strong><p>Si cela impacte le stock, veuillez refléter le changement dans <em>modifier le produit &gt; gestion des stocks</em>. Ceci ne sera pas automatique.</p>"
           order_canceled_success: "La commande a été annulée"
-          confirm_order_refunded_html: "<strong>Voulez-vous vraiment rembourser cette commande ?</strong><p>Si c'est le cas, merci d'effecturer le remboursement et de générer l'avoir depuis l'onglet <em>Factures</em>.</p><p>Si cela impacte les stocks, veuillez modifier votre produit et refléter le changement dans l’onglet <em>gestion des stocks</em>.</p><p>Ces actions ne seront pas automatiques.</p>"
-          order_refunded_success: "La commande a été remboursée"
+          # confirm_order_refunded_html: "<strong>Voulez-vous vraiment rembourser cette commande ?</strong><p>Si c'est le cas, merci d'effecturer le remboursement et de générer l'avoir depuis l'onglet <em>Factures</em>.</p><p>Si cela impacte les stocks, veuillez modifier votre produit et refléter le changement dans l’onglet <em>gestion des stocks</em>.</p><p>Ces actions ne seront pas automatiques.</p>"
+          confirm_order_refunded_html: "<strong>Voulez-vous vraiment rembourser cette commande ?</strong>"
+          order_refunded_success: "Le matériel a été retourné" # "La commande a été remboursée"
       unsaved_form_alert:
         modal_title: "Vous avez des modifications non enregistrées"
         confirmation_message: "Si vous quittez cette page, vos modifications seront perdues. Êtes-vous sûr(e) de vouloir continuer ?"

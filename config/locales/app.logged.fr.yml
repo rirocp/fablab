@@ -47,7 +47,7 @@ fr:
         tracking_your_reservation: "Suivi de votre réservation"
         in_the_process_of_validation: "En cours de validation"
         settle_your_payment: "Venez régler à l'accueil"
-        paid: "Commandé"
+        paid: "En attente de traitement"
         canceled: "Annulé"
         registered: "Inscrit"
         not_validated: "Non validé"
