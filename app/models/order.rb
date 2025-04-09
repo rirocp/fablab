@@ -84,7 +84,8 @@ class Order < PaymentDocument
         # Envoi du premier email immédiatement
         NotificationsMailer.notify_user_order_in_progress(self).deliver_later
         # Planification du second email après 2 minutes
-        NotifyUserOrderReminderWorker.new.perform_in(2.minutes, id)
+        # Commit 15 : effacer new de new.perform_in
+        NotifyUserOrderReminderWorker.perform_in(2.minutes, id)
       end
 
     when ['in_progress', 'refunded']
