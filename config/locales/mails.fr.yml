@@ -5,6 +5,14 @@ fr:
       sincerely: "Cordialement,"
       signature: "L'équipe du Fab Lab."
       do_not_reply: "Merci de ne pas répondre directement à cet email."
+      notify_user_order_in_progress:
+        subject: "Votre commande est prête - Retour requis dans 5 minutes"
+        body:
+          order_in_progress: "Votre commande %{REFERENCE} est maintenant \"Prêt effectué\". Veuillez retourner l'article emprunté dans les 5 minutes."
+      notify_user_order_reminder:
+        subject: "Rappel : Retournez votre article emprunté"
+        body:
+          order_reminder: "Ceci est un rappel pour votre commande %{REFERENCE}. Il vous reste 3 minutes pour retourner l’article emprunté."
   users_mailer:
     notify_user_account_created:
       subject: "Votre compte Fab Lab a bien été créé"

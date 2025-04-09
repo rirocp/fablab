@@ -53,9 +53,36 @@ class NotificationsMailer < BaseMailer
          template_name: 'notify_member_create_reservation')
   end
 
+  # Commit 14
+  def notify_user_order_in_progress(order)
+    @order = order
+    @recipient = order.statistic_profile.user # Utilisateur qui a passé la commande
+    mail(
+      to: @recipient.email,
+      from: 'ne-pas-repondre@fab-manager.fr',
+      subject: t('notifications_mailer.notify_user_order_in_progress.subject'),
+      template_name: 'notify_user_order_in_progress'
+    )
+  end
+  
+  # Commit 14
+  def notify_user_order_reminder(order)
+    @order = order
+    @recipient = order.statistic_profile.user
+    mail(
+      to: @recipient.email,
+      from: 'ne-pas-repondre@fab-manager.fr',
+      subject: t('notifications_mailer.notify_user_order_reminder.subject'),
+      template_name: 'notify_user_order_reminder'
+    )
+  end
+
   private
 
   def mark_notification_as_send
     @notification.mark_as_send unless @notification.is_send
   end
+
+
+
 end

@@ -9,6 +9,7 @@ class Order < PaymentDocument
   has_many :order_items, dependent: :destroy
   has_one :payment_gateway_object, as: :item, dependent: :destroy
   has_many :order_activities, dependent: :destroy
+  after_save :handle_state_change, if: :saved_change_to_state?
 
   # paid = commandé
   # canceled = annulé
@@ -79,8 +80,13 @@ class Order < PaymentDocument
         order_activities.create(
           activity_type: 'in_progress',
         )
+        # Commit 14
+        # Envoi du premier email immédiatement
+        NotificationsMailer.notify_user_order_in_progress(self).deliver_later
+        # Planification du second email après 2 minutes
+        NotifyUserOrderReminderWorker.new.perform_in(2.minutes, id)
       end
-      
+
     when ['in_progress', 'refunded']
       # Restitution du stock lors du passage à "Retour effectué"
       ActiveRecord::Base.transaction do
