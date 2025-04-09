@@ -5,6 +5,7 @@ fr:
       sincerely: "Cordialement,"
       signature: "L'équipe du Fab Lab."
       do_not_reply: "Merci de ne pas répondre directement à cet email."
+      #Commit 14
       notify_user_order_in_progress:
         subject: "Votre commande est prête - Retour requis dans 5 minutes"
         body:
