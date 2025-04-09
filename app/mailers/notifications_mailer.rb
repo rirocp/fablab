@@ -2,7 +2,7 @@
 
 # Handle most of the emails sent by the platform. Triggered by notifications
 class NotificationsMailer < BaseMailer
-  after_action :mark_notification_as_send
+  after_action :mark_notification_as_send, if: -> { @notification.present? } # Ajoutez cette condition
 
   def send_mail_by(notification)
     @notification = notification
@@ -64,7 +64,7 @@ class NotificationsMailer < BaseMailer
       template_name: 'notify_user_order_in_progress'
     )
   end
-  
+
   # Commit 14
   def notify_user_order_reminder(order)
     @order = order
