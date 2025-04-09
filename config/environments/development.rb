@@ -45,7 +45,7 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    # Commit 15
+    # Commit 16
     address: 'localhost',
     port: 1025
   #  address: Rails.application.secrets.smtp_address,
