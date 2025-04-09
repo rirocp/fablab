@@ -82,9 +82,11 @@ class Order < PaymentDocument
         )
         # Commit 14
         # Envoi du premier email immédiatement
+        Rails.logger.info "Envoi de l’email notify_user_order_in_progress à #{statistic_profile.user.email}"
         NotificationsMailer.notify_user_order_in_progress(self).deliver_later
         # Planification du second email après 2 minutes
         # Commit 15 : effacer new de new.perform_in
+        Rails.logger.info "Planification de NotifyUserOrderReminderWorker pour la commande #{id}"
         NotifyUserOrderReminderWorker.perform_in(2.minutes, id)
       end
 
