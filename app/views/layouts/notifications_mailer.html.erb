@@ -30,7 +30,7 @@
                   </a>
                 <% else %>
                   <a href="<%= root_url %>">
-                    <img src="<%= File.join(root_url, asset_pack_path('static/fabmanager-logo.png')) %>"
+                    <img src="<%= asset_path('static/fabmanager-logo.png') %>" # "<%= File.join(root_url, asset_pack_path('static/fabmanager-logo.png')) %>"
                          alt="<%=fablab_name%>"
                          width="140" />
                   </a>
