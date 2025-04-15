@@ -61,10 +61,6 @@ export const ProductItem: React.FC<ProductItemProps> = ({ product, onEdit, onDel
             : t('app.admin.store.product_item.hidden')
           }
         </FabStateLabel>
-        <div className={`stock ${stockColor(product, 'internal')}`}>
-          <span>{t('app.admin.store.product_item.stock.internal')}</span>
-          <p>{product.stock.internal}</p>
-        </div>
         <div className={`stock ${stockColor(product, 'external')}`}>
           <span>{t('app.admin.store.product_item.stock.external')}</span>
           <p>{product.stock.external}</p>
@@ -82,3 +78,9 @@ export const ProductItem: React.FC<ProductItemProps> = ({ product, onEdit, onDel
     </div>
   );
 };
+
+/*
+<div className={`stock ${stockColor(product, 'internal')}`}>
+          <span>{t('app.admin.store.product_item.stock.internal')}</span>
+          <p>{product.stock.internal}</p>
+        </div>*/
