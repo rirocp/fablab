@@ -557,7 +557,7 @@ fr:
   statistic_profile:
     birthday_in_past: "La date de naissance doit être dans le passé"
   order:
-    please_contact_FABLAB: "Veuillez nous contacter pour des instructions de retrait."
+    please_contact_FABLAB: ""
   cart_item_validation:
     slot: "Le créneau n'existe pas"
     availability: "La disponibilité n'existe pas"
