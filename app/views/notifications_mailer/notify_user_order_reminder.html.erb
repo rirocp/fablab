@@ -2,7 +2,7 @@
 <p>Bonjour <%= @recipient.profile.full_name %>,</p>
 
 <p>Ceci est un rappel concernant votre commande (référence : <%= @order.reference %>) marquée comme "Prêt effectué".</p>
-<p>Votre délai de <strong><%= RETURN_DEADLINE_MINUTES %> minutes</strong> pour retourner l’article est écoulé. Merci de respecter le délai.</p>
+<p>Votre délai de <strong><%= RETURN_DEADLINE_MINUTES %> minutes</strong> de prêt de l’article est écoulé. Merci de le retourner.</p>
 
 <p>Cordialement,<br>L’équipe <%= Setting.get('fablab_name') %></p>
 <p><small>Ceci est un message automatique, merci de ne pas y répondre.</small></p>

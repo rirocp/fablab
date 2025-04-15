@@ -15,15 +15,15 @@ fr:
         logon_or_login: "créer un compte sur %{PROVIDER} ou utiliser un compte pré-existant en cliquant ici."
         token_if_link_problem: "En cas de problème avec le lien, vous pourrez saisir manuellement le code suivant lors de votre première connexion :"
   notifications_mailer:
-    see_you_later: "A très bientôt sur {GENDER, select, male{le} female{la} neutral{} other{les}}" #messageFormat interpolation
+    see_you_later: "A très bientôt sur {GENDER, select, male{le} female{la} neutral{} other{les}} {FABLAB_NAME}" #messageFormat interpolation
     sincerely: "Cordialement,"
     signature: "L'équipe du Fab Lab."
     do_not_reply: "Merci de ne pas répondre directement à cet email."
     notify_user_order_in_progress:
-      subject: "Votre commande est prête - Retour requis dans {MINUTES} minutes"
+      subject: "Votre commande est prête - Retour requis dans"
       body:
         order_in_progress: "Votre commande %{REFERENCE} est maintenant au statut \"Prêt effectué\". Veuillez retourner l'article emprunté dans les <%= RETURN_DEADLINE_MINUTES %> minutes."
-        see_you_later: "A très bientôt sur {GENDER, select, male{le} female{la} neutral{} other{les}}" #messageFormat interpolation
+        see_you_later: "A très bientôt sur {GENDER, select, male{le} female{la} neutral{} other{les} {FABLAB_NAME}}" #messageFormat interpolation
         sincerely: "Cordialement,"
         signature: "L'équipe du Fab Lab."
     do_not_reply: "Merci de ne pas répondre directement à cet email."

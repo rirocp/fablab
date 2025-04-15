@@ -60,7 +60,8 @@ class NotificationsMailer < BaseMailer
     mail(
       to: @recipient.email,
       from: 'ne-pas-repondre@fab-manager.fr',
-      subject: t('notifications_mailer.notify_user_order_in_progress.subject', minutes: RETURN_DEADLINE_MINUTES),
+      #subject: t('notifications_mailer.notify_user_order_in_progress.subject', minutes: RETURN_DEADLINE_MINUTES),
+      subject: "Votre commande est prête - Retour requis dans #{RETURN_DEADLINE_MINUTES} minutes",
       template_name: 'notify_user_order_in_progress'
     )
   end

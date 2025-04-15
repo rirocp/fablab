@@ -11,6 +11,21 @@
     /* Client-specific Styles */
     #outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
     a{color:<%=primary_color%>;} a:hover{color:<%=primary_color%>;}
+    #content {
+      padding: 20px;
+      line-height: 1.6;
+    }
+    #footer {
+      color: #666;
+      font-size: 11px;
+      background-color: #f3f3f3;
+      padding: 15px 20px;
+      border-top: 2px dashed #ddd;
+      text-align: center;
+    }
+    #footer a {
+      color: <%= primary_color %>;
+    }
     </style>
 </head>
 <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="width:100% !important; -webkit-text-size-adjust:none; margin:0; padding:0; background-color:#fafafa; font-family:Arial; font-size:14px;">
@@ -39,23 +54,36 @@
               <td id="title" style="font-size:14px; color:#fff; font-weight:bold; background-color:<%=primary_color%>"><%= message.subject %></td>
             </tr>
             <tr>
-              <td>
+              <td id="content"> #>
                 <%= yield %>
               </td>
             </tr>
             <tr>
-              <td>
+              <td id = "footer"> #>
                 <p>
-                  <%= t("layouts.notifications_mailer.see_you_later", GENDER: fablab_gender) %> 
-                      # <%= _t(".see_you_later", { GENDER:fablab_gender })
+                  <%= t("layouts.notifications_mailer.see_you_later", GENDER: fablab_gender, FABLAB_NAME: fablab_name) %> 
+                </p>  
+                  # <%= _t(".see_you_later", { GENDER:fablab_gender })
                       # messageFormat
-                  %> <a href="<%= root_url %>" style="color:<%=primary_color%>"> <%=fablab_name%></a>.</p>
-                <p><%= t("layouts.notifications_mailer.sincerely") %><br><%= t("layouts.notifications_mailer.signature") %></p>
+                  # %> <a href="<%= root_url %>" style="color:<%=primary_color%>"> <%=fablab_name%></a>.</p>
+                #<p>
+                  #<%= t("layouts.notifications_mailer.sincerely") %><br>
+                  #<%= t("layouts.notifications_mailer.signature") %>
+                #</p>
+                <p>
+                  <%= t("layouts.notifications_mailer.do_not_reply") %>
+                </p>  
               </td>
             </tr>
-            <tr>
-              <td id="contactTd" style="color:#666; font-size:11px; background-color:#f3f3f3; padding:13px 20px 13px 20px; border-top:2px dashed #ddd;"><%= t('layouts.notifications_mailer.do_not_reply') %></td>
-            </tr>
+            #<tr>
+              #<td id="contactTd" style="color:#666; font-size:11px; background-color:#f3f3f3; padding:13px 20px 13px 20px; border-top:2px dashed #ddd;">
+                # <%= t("layouts.notifications_mailer.do_not_reply", GENDER: fablab_gender, FABLAB_NAME: fablab_name) %>
+                # <p>
+                #  <%= t("layouts.notifications_mailer.see_you_later", GENDER: fablab_gender, FABLAB_NAME: fablab_name) %>
+                #    <a href="<%= root_url %>" style="color:<%=primary_color%>"><%= fablab_name %></a>.
+              #  </p>
+              #</td>
+            #</tr>
           </table>
           <p style="font-size:9px;">&nbsp;</p>
         </td>
