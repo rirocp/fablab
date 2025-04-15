@@ -54,12 +54,12 @@
               <td id="title" style="font-size:14px; color:#fff; font-weight:bold; background-color:<%=primary_color%>"><%= message.subject %></td>
             </tr>
             <tr>
-              <td id="content"> #>
+              <td id="content">
                 <%= yield %>
               </td>
             </tr>
             <tr>
-              <td id = "footer"> #>
+              <td id = "footer">
                 <p>
                   <%= t("layouts.notifications_mailer.see_you_later", GENDER: fablab_gender, FABLAB_NAME: fablab_name) %> <a href="<%= root_url %>" style="color:<%=primary_color%>"><%= fablab_name %></a>
                 </p>  
