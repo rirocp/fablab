@@ -20,13 +20,20 @@ fr:
     signature: "L'équipe du Fab Lab."
     do_not_reply: "Merci de ne pas répondre directement à cet email."
     notify_user_order_in_progress:
-      subject: "Votre commande est prête - Retour requis dans 5 minutes"
+      subject: "Votre commande est prête - Retour requis dans 2 minutes"
       body:
-      order_in_progress: "Votre commande %{REFERENCE} est maintenant au statut \"Prêt effectué\". Veuillez retourner l'article emprunté dans les 5 minutes."
+        order_in_progress: "Votre commande %{REFERENCE} est maintenant au statut \"Prêt effectué\". Veuillez retourner l'article emprunté dans les 2 minutes."
+        see_you_later: "A très bientôt sur {GENDER, select, male{le} female{la} neutral{} other{les}}" #messageFormat interpolation
+        sincerely: "Cordialement,"
+        signature: "L'équipe du Fab Lab."
+    do_not_reply: "Merci de ne pas répondre directement à cet email."
     notify_user_order_reminder:
       subject: "Rappel : Retournez votre article emprunté"
       body:
-        order_reminder: "Ceci est un rappel pour votre commande %{REFERENCE}. Il vous reste 3 minutes pour retourner l’article emprunté."
+        order_reminder: "Ceci est un rappel pour votre commande %{REFERENCE}. Il vous reste 2 minutes pour retourner l’article emprunté."
+        sincerely: "Cordialement,"
+        signature: "L'équipe du Fab Lab."
+        do_not_reply: "Merci de ne pas répondre directement à cet email."
     notify_user_user_group_changed:
       subject: "Vous avez changé de groupe"
       body:
