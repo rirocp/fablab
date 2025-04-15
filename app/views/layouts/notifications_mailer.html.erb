@@ -61,7 +61,7 @@
             <tr>
               <td id = "footer"> #>
                 <p>
-                  <%= t("layouts.notifications_mailer.see_you_later", GENDER: fablab_gender, FABLAB_NAME: fablab_name) %> 
+                  <%= t("layouts.notifications_mailer.see_you_later", GENDER: fablab_gender, FABLAB_NAME: fablab_name) %> <a href="<%= root_url %>" style="color:<%=primary_color%>"><%= fablab_name %></a>
                 </p>  
                   # <%= _t(".see_you_later", { GENDER:fablab_gender })
                       # messageFormat

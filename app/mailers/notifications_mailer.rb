@@ -57,6 +57,7 @@ class NotificationsMailer < BaseMailer
   def notify_user_order_in_progress(order)
     @order = order
     @recipient = order.statistic_profile.user # Utilisateur qui a passé la commande
+    @remaining_time = RETURN_DEADLINE_MINUTES
     mail(
       to: @recipient.email,
       from: 'ne-pas-repondre@fab-manager.fr',

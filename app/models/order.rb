@@ -87,7 +87,7 @@ class Order < PaymentDocument
         # Planification du second email après 2 minutes
         # Commit 15 : effacer new de new.perform_in
         Rails.logger.info "Planification de NotifyUserOrderReminderWorker pour la commande #{id}"
-        NotifyUserOrderReminderWorker.perform_in(2.minutes, id)
+        NotifyUserOrderReminderWorker.perform_in((RETURN_DEADLINE_MINUTES).minutes, id)
       end
 
     when ['in_progress', 'refunded']
