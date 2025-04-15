@@ -46,14 +46,15 @@
             <tr>
               <td>
                 <p>
-                  <%= _t(".see_you_later", { GENDER:fablab_gender })
+                  <%= t("layouts.notifications_mailer.see_you_later", GENDER: fablab_gender) %> 
+                      # <%= _t(".see_you_later", { GENDER:fablab_gender })
                       # messageFormat
                   %> <a href="<%= root_url %>" style="color:<%=primary_color%>"> <%=fablab_name%></a>.</p>
-                <p><%= t(".sincerely") %><br><%= t(".signature") %></p>
+                <p><%= t("layouts.notifications_mailer.sincerely") %><br><%= t("layouts.notifications_mailer.signature") %></p>
               </td>
             </tr>
             <tr>
-              <td id="contactTd" style="color:#666; font-size:11px; background-color:#f3f3f3; padding:13px 20px 13px 20px; border-top:2px dashed #ddd;"><%= t('.do_not_reply') %></td>
+              <td id="contactTd" style="color:#666; font-size:11px; background-color:#f3f3f3; padding:13px 20px 13px 20px; border-top:2px dashed #ddd;"><%= t('layouts.notifications_mailer.do_not_reply') %></td>
             </tr>
           </table>
           <p style="font-size:9px;">&nbsp;</p>

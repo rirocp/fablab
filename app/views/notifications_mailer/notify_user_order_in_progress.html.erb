@@ -2,6 +2,6 @@
 <p>Bonjour <%= @recipient.profile.full_name %>,</p>
 
 <p>Votre commande (référence : <%= @order.reference %>) est maintenant au statut "Prêt effectué".</p>
-<p>Veuillez retourner l'article emprunté dans les <strong>2 minutes</strong> suivant la réception de cet email.</p>
+<p>Veuillez retourner l'article emprunté dans les <strong><%= RETURN_DEADLINE_MINUTES %> minutes</strong> suivant la réception de cet email.</p>
 <p>Cordialement,<br>L’équipe <%= Setting.get('fablab_name') %></p>
 <p><small>Ceci est un message automatique, merci de ne pas y répondre.</small></p>
