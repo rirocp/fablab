@@ -1830,7 +1830,7 @@ fr:
         trainings_info_html: "<p>Les formations sont entièrement intégrées dans l'agenda de Fab-manager. Si elles sont activées, vos membres pourrons réserver et payer des formations.</p><p>Les formations fournissent une solution pour éviter que des membres ne réservent des machines, sans avoir suivi la formation préalable.</p>"
         enable_trainings: "Activer les formations"
         trainings_module: "module formations"
-        store: "Gérer le matériel nomade"
+        store: "Matériel Nomade"
         store_info_html: "Vous pouvez activer le module boutique qui fournit un moyen facile de <strong>vendre différents produits et consommables</strong> à vos membres. Ce module vous permet également de <strong>gérer les stocks</strong> et de suivre les commandes."
         enable_store: "Activer la boutique"
         store_module: "module boutique"
