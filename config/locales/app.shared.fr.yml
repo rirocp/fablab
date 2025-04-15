@@ -538,8 +538,8 @@ fr:
         confirmation_button: "Oui, ne pas enregistrer"
       active_filters_tags:
         keyword: "Mot-clef : {KEYWORD}"
-        stock_internal: "Stock interne"
-        stock_external: "Stock externe"
+        stock_internal: ""
+        stock_external: "Stock"
       calendar:
         calendar: "Agenda"
         show_unavailables: "Afficher les créneaux complets"
