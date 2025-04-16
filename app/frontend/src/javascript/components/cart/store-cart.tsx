@@ -203,7 +203,6 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
               <p>Si votre prêt est annulé pour une raison quelconque, vous serez immédiatement informé par email.</p>
           </div>
           }
-
       </div>
       
       <aside>
@@ -214,8 +213,8 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
         {cart && !cartIsEmpty() && <>
           <div className="checkout">
             {/*<h3>{t('app.public.store_cart.checkout_header')}</h3>*/}
+            {/*
             <span>{t('app.public.store_cart.checkout_products_COUNT', { COUNT: cart?.order_items_attributes.length })}</span>
-             {/*
              <div className="list">
               <p>{t('app.public.store_cart.checkout_products_total')} <span>{FormatLib.price(OrderLib.totalBeforeOfferedAmount(cart))}</span></p>
               {OrderLib.hasOfferedItem(cart) &&
