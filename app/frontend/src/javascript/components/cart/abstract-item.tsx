@@ -66,22 +66,24 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
 
   return (
     <article className={`item ${className || ''} ${errors.length > 0 ? 'error' : ''}`}>
+      <div> </div>
+      <div> </div>
       <div className='picture'>
         <img alt='' src={item.orderable_main_image_url || noImage} />
       </div>
       {children}
       <div className="actions">
         {actions}
-        {/* Commit*/}
+        {/* Commit
         <div className='total'>
           <span>{t('app.public.abstract_item.total')}</span>
           <p>{FormatLib.price(OrderLib.itemAmount(item))}</p>
-        </div>
+        </div>*/}
         <FabButton className="is-alert" onClick={handleRemoveItem(item)}>
           <i className="fa fa-trash" />
         </FabButton>
       </div>
-      {/* Commit */}
+      {/* Commit 
        {privilegedOperator &&
         <div className='offer'>
           <label>
@@ -97,7 +99,7 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
             />
           </label>
         </div>  
-      }
+      }*/}
     </article>
   );
 };
