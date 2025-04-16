@@ -154,12 +154,8 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
                 <p><a className="text-black" href={itemOrderableUrl(item)}>{item.orderable_name}</a></p>
               </div>
               <div className="actions">
-                <div>
-                </div>
-                <div>
-                </div>
-                <div>
-                </div>
+              <span className="count">{item.quantity}</span>
+              </div>
                 {/* Commit
                 <div className='price'>
                   <p>{FormatLib.price(item.amount)}</p>
@@ -172,9 +168,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
                   <span>{t('app.shared.store.show_order.item_total')}</span>
                   <p>{FormatLib.price(OrderLib.itemAmount(item))}</p>
                 </div>
-                */}
-                <span className="count">{item.quantity}</span>
-              </div>
+              </div>*/}
             </article>
           ))}
         </div>
