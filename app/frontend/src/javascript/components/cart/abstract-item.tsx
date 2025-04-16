@@ -81,7 +81,7 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
           <i className="fa fa-trash" />
         </FabButton>
       </div>
-      {privilegedOperator {/*&&
+      {/*{privilegedOperator &&
         <div className='offer'>
           <label>
           { Commit <span>{offerItemLabel || t('app.public.abstract_item.offer_product')}</span>
@@ -94,8 +94,8 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
               checkedIcon={false}
               handleDiameter={15} />
           </label>
-        </div> */}
-      }
+        </div>  
+      }*/}
     </article>
   );
 };
