@@ -483,7 +483,7 @@ fr:
           reference_short: "réf. :"
           unit: "Unité"
           item_total: "Total"
-          payment_informations: "Informations de paiement"
+          payment_informations: "Informations de réservation"
           amount: "Montant"
           products_total: "Total des produits"
           gift_total: "Total remise"
