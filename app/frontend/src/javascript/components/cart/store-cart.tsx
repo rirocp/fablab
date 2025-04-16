@@ -195,14 +195,12 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
         {cart && !cartIsEmpty() &&
           <div className="store-cart-info">
             <h3>Déroulement du prêt :</h3>
-            <ul>
-              <li><p>Confirmation du prêt :</p></li>
+              <ul><li><p>Confirmation du prêt :</p></li></ul>
               <p>Une fois votre commande passée et votre prêt validé lors du rendez-vous, vous recevrez un email de confirmation pour vous assurer que tout est en ordre.</p>
-              <li><p>Rappel avant la fin du délai :</p></li>
+              <ul><li><p>Rappel avant la fin du délai :</p></li></ul>
               <p>Une semaine avant l’écoulement du délai de prêt, nous vous enverrons un email pour vous rappeler de retourner l’article.</p>
-              <li><p>Notification en cas d’annulation:</p></li>
+              <ul><li><p>Notification en cas d’annulation:</p></li></ul>
               <p>Si votre prêt est annulé pour une raison quelconque, vous serez immédiatement informé par email.</p>
-            </ul>
           </div>
           }
 
