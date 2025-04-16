@@ -191,6 +191,13 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
             <CouponInput user={cart.user as User} amount={cart.total} onChange={applyCoupon} />
           </div>
         }*/}
+      <div className="store-cart-coupon">
+        <h3>Déroulement du prêt avec nous</h3>
+        <p><strong>Confirmation du prêt</strong> : Une fois votre commande passée et votre prêt validé lors du rendez-vous, vous recevrez un email de confirmation pour vous assurer que tout est en ordre.</p>
+        <p><strong>Rappel avant la fin du délai</strong> : Une semaine avant l’écoulement du délai de prêt, nous vous enverrons un email pour vous rappeler de retourner l’article.</p>
+        <p><strong>Notification en cas d’annulation</strong> : Si votre prêt est annulé pour une raison quelconque, vous serez immédiatement informé par email.</p>
+      </div>
+
       </div>
       
 
