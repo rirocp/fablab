@@ -63,7 +63,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       DATE: FormatLib.date(order.payment_date),
       TIME: FormatLib.time(order.payment_date)
     });
-    if (order.payment_method !== 'wallet') {
+    /*if (order.payment_method !== 'wallet') {
       paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.paid_total) });
     }
     if (order.wallet_amount) {
@@ -73,7 +73,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
         paymentVerbose += ' ' + t('app.shared.store.show_order.payment.and') + ' ' + t('app.shared.store.show_order.payment.by_wallet') + ' ' +
                                  t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.wallet_amount) });
       }
-    }
+    }*/
     return paymentVerbose;
   };
 
@@ -154,17 +154,22 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
                 <p><a className="text-black" href={itemOrderableUrl(item)}>{item.orderable_name}</a></p>
               </div>
               <div className="actions">
-                <div></div>
-                <div></div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
+                <div>
+
+                </div>
                 {/* Commit
                 <div className='price'>
                   <p>{FormatLib.price(item.amount)}</p>
                   <span>/ {t('app.shared.store.show_order.unit')}</span>
                 </div>
                 */}
-
                 <span className="count">{item.quantity}</span>
-
                 {/* Commit
                 <div className='total'>
                   <span>{t('app.shared.store.show_order.item_total')}</span>
@@ -182,6 +187,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           <label>{t('app.shared.store.show_order.payment_informations')}</label>
           {order.invoice_id && <p>{paymentInfo()}</p>}
         </div>
+        {/* Commit
         <div className="amount">
           <label>{t('app.shared.store.show_order.amount')}</label>
           {/* Commit
@@ -194,12 +200,13 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           }
           {/*
           <p className='total'>{t('app.shared.store.show_order.cart_total')} <span>{FormatLib.price(OrderLib.paidTotal(order))}</span></p>
-          */}
         </div>
+
         <div className="withdrawal-instructions">
           <label>{t('app.shared.store.show_order.pickup')}</label>
           <p dangerouslySetInnerHTML={{ __html: withdrawalInstructions }} />
         </div>
+        */}
       </div>
     </div>
   );

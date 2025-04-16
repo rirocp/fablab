@@ -504,7 +504,7 @@ fr:
             settlement_by_debit_card: "Paiement par carte bancaire"
             settlement_done_at_the_reception: "Règlement effectué"
             settlement_by_wallet: "Règlement effectué par porte-monnaie"
-            on_DATE_at_TIME: "le {DATE} à {TIME},"
+            on_DATE_at_TIME: "le {DATE} à {TIME}." #Commit . à la place de .
             for_an_amount_of_AMOUNT: "pour un montant de {AMOUNT}"
             and: 'et'
         order_actions:
