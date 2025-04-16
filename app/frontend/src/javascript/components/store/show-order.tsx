@@ -154,17 +154,23 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
                 <p><a className="text-black" href={itemOrderableUrl(item)}>{item.orderable_name}</a></p>
               </div>
               <div className="actions">
+                <div></div>
+                <div></div>
+                {/* Commit
                 <div className='price'>
                   <p>{FormatLib.price(item.amount)}</p>
                   <span>/ {t('app.shared.store.show_order.unit')}</span>
                 </div>
+                */}
 
                 <span className="count">{item.quantity}</span>
 
+                {/* Commit
                 <div className='total'>
                   <span>{t('app.shared.store.show_order.item_total')}</span>
                   <p>{FormatLib.price(OrderLib.itemAmount(item))}</p>
                 </div>
+                */}
               </div>
             </article>
           ))}
@@ -178,6 +184,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
         </div>
         <div className="amount">
           <label>{t('app.shared.store.show_order.amount')}</label>
+          {/* Commit
           <p>{t('app.shared.store.show_order.products_total')}<span>{FormatLib.price(OrderLib.totalBeforeOfferedAmount(order))}</span></p>
           {OrderLib.hasOfferedItem(order) &&
             <p className='gift'>{t('app.shared.store.show_order.gift_total')}<span>-{FormatLib.price(OrderLib.offeredAmount(order))}</span></p>
@@ -185,7 +192,9 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           {order.coupon &&
             <p>{t('app.shared.store.show_order.coupon')}<span>-{FormatLib.price(OrderLib.couponAmount(order))}</span></p>
           }
+          {/*
           <p className='total'>{t('app.shared.store.show_order.cart_total')} <span>{FormatLib.price(OrderLib.paidTotal(order))}</span></p>
+          */}
         </div>
         <div className="withdrawal-instructions">
           <label>{t('app.shared.store.show_order.pickup')}</label>

@@ -2110,7 +2110,7 @@ fr:
         report_removed: "Le rapport a bien été supprimé"
         failed_to_remove: "Une erreur est survenue, impossible de supprimer le rapport"
       local_payment_form:
-        about_to_cash: "Vous êtes sur le point de confirmer l'encaissement par un moyen de paiement externe. Veuillez ne pas cliquer sur le bouton ci-dessous tant que vous n'avez pas encaissé le paiement demandé."
+        about_to_cash: "Etes-vous sûr(e) de vouloir valider votre panier ?" #par un moyen de paiement externe. Veuillez ne pas cliquer sur le bouton ci-dessous tant que vous n'avez pas encaissé le paiement demandé."
         about_to_confirm: "Vous êtes sur le point de confirmer votre {ITEM, select, subscription{abonnement} other{réservation}}."
         payment_method: "Moyen de paiement"
         method_card: "Carte bancaire en ligne"
