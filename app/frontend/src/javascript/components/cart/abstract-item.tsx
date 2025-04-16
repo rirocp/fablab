@@ -68,6 +68,9 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
     <article className={`item ${className || ''} ${errors.length > 0 ? 'error' : ''}`}>
       <div className='picture'>
         <img alt='' src={item.orderable_main_image_url || noImage} />
+        <FabButton className="is-alert" onClick={handleRemoveItem(item)}>
+          <i className="fa fa-trash" />
+        </FabButton>
       </div>
       {children}
       <div className="actions">

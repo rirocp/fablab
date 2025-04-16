@@ -154,7 +154,8 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
                 <p><a className="text-black" href={itemOrderableUrl(item)}>{item.orderable_name}</a></p>
                 <span className="count">{item.quantity}</span>
               </div>
-              {/* Commit<div className="actions">
+              {/* Commit
+              <div className="actions">
               <span className="count">{item.quantity}</span>
               </div>
                 {/* Commit
