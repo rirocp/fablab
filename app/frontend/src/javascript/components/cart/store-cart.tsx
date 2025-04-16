@@ -210,8 +210,8 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           <div> <MemberSelect onSelected={handleChangeMember} defaultUser={cart.user as User} hasError={noMemberError} /></div>
         }
 
-        {cart && !cartIsEmpty() && <>
-          <div className="checkout">
+         {cart && !cartIsEmpty() && <>
+           {/*<div className="checkout">
             {/*<h3>{t('app.public.store_cart.checkout_header')}</h3>*/}
             {/*
             <span>{t('app.public.store_cart.checkout_products_COUNT', { COUNT: cart?.order_items_attributes.length })}</span>
@@ -225,8 +225,8 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
               }
             </div>
             <p className='total'>{t('app.public.store_cart.checkout_total')} <span>{FormatLib.price(OrderLib.paidTotal(cart))}</span></p>
-            */}
-          </div>
+            
+          </div>*/}
           <FabButton className='checkout-btn' onClick={checkout}>
             {t('app.public.store_cart.checkout')}
           </FabButton>
