@@ -185,12 +185,14 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           </div>
         }
 
+        {/* Commit
         {cart && !cartIsEmpty() &&
           <div className='store-cart-coupon'>
             <CouponInput user={cart.user as User} amount={cart.total} onChange={applyCoupon} />
           </div>
-        }
+        }*/}
       </div>
+      
 
       <aside>
         {cart && !cartIsEmpty() && isPrivileged() &&
