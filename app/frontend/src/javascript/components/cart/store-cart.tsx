@@ -213,9 +213,10 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
 
         {cart && !cartIsEmpty() && <>
           <div className="checkout">
-            <h3>{t('app.public.store_cart.checkout_header')}</h3>
+            {/*<h3>{t('app.public.store_cart.checkout_header')}</h3>*/}
             <span>{t('app.public.store_cart.checkout_products_COUNT', { COUNT: cart?.order_items_attributes.length })}</span>
-            <div className="list">
+             {/*
+             <div className="list">
               <p>{t('app.public.store_cart.checkout_products_total')} <span>{FormatLib.price(OrderLib.totalBeforeOfferedAmount(cart))}</span></p>
               {OrderLib.hasOfferedItem(cart) &&
                 <p className='gift'>{t('app.public.store_cart.checkout_gift_total')} <span>-{FormatLib.price(OrderLib.offeredAmount(cart))}</span></p>
@@ -225,6 +226,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
               }
             </div>
             <p className='total'>{t('app.public.store_cart.checkout_total')} <span>{FormatLib.price(OrderLib.paidTotal(cart))}</span></p>
+            */}
           </div>
           <FabButton className='checkout-btn' onClick={checkout}>
             {t('app.public.store_cart.checkout')}
