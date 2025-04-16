@@ -83,7 +83,7 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
           <i className="fa fa-trash" />
         </FabButton>
       </div>
-      { <div> </div>
+      {
       /* Commit
        {privilegedOperator &&
         <div className='offer'>
