@@ -72,7 +72,9 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
       {children}
       <div className="actions">
         {actions}
-        {/* Commit
+        {
+          <div> </div>
+        /* Commit
         <div className='total'>
           <span>{t('app.public.abstract_item.total')}</span>
           <p>{FormatLib.price(OrderLib.itemAmount(item))}</p>
@@ -81,7 +83,8 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
           <i className="fa fa-trash" />
         </FabButton>
       </div>
-      {/* Commit
+      { <div> </div>
+      /* Commit
        {privilegedOperator &&
         <div className='offer'>
           <label>
