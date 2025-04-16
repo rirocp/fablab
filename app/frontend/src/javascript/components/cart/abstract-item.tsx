@@ -72,16 +72,18 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
       {children}
       <div className="actions">
         {actions}
+        {/* Commit
         <div className='total'>
           <span>{t('app.public.abstract_item.total')}</span>
           <p>{FormatLib.price(OrderLib.itemAmount(item))}</p>
-        </div>
+        </div>*/}
         <FabButton className="is-alert" onClick={handleRemoveItem(item)}>
           <i className="fa fa-trash" />
         </FabButton>
       </div>
       {privilegedOperator &&
-        <div className='offer'>
+        {/* Commit
+          <div className='offer'>
           <label>
             <span>{offerItemLabel || t('app.public.abstract_item.offer_product')}</span>
             <Switch
@@ -94,6 +96,7 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
               handleDiameter={15} />
           </label>
         </div>
+        */}
       }
     </article>
   );
