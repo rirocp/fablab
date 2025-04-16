@@ -95,8 +95,7 @@ export const CouponInput: React.FC<CouponInputProps> = ({ user, amount, onChange
     }
   };
 
-  return (
-    {/* Commit
+  {/* Commit return (
       <div className="coupon-input">
       <label htmlFor="coupon-input_input">{t('app.shared.coupon_input.i_have_a_coupon')}</label>
       <FabInput id="coupon-input_input"
@@ -111,7 +110,6 @@ export const CouponInput: React.FC<CouponInputProps> = ({ user, amount, onChange
           </FabAlert>
         );
       })}
-    </div>
-    */}
-  );
+    </div>  
+  );*/}
 };
