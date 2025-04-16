@@ -84,7 +84,7 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
       {privilegedOperator &&
         <div className='offer'>
           <label>
-          {/* Commit <span>{offerItemLabel || t('app.public.abstract_item.offer_product')}</span>*/}
+          {/* Commit <span>{offerItemLabel || t('app.public.abstract_item.offer_product')}</span>
             <Switch
               checked={item.is_offered || false}
               onChange={handleToggleOffer(item)}
@@ -92,7 +92,7 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
               height={19}
               uncheckedIcon={false}
               checkedIcon={false}
-              handleDiameter={15} />
+              handleDiameter={15} />*/}
           </label>
         </div>
       }
