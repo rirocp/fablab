@@ -66,7 +66,6 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
 
   return (
     <article className={`item ${className || ''} ${errors.length > 0 ? 'error' : ''}`}>
-      <div></div>
       <div className='picture'>
         <img alt='' src={item.orderable_main_image_url || noImage} />
       </div>
@@ -83,9 +82,7 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
           <i className="fa fa-trash" />
         </FabButton>
       </div>
-      {
-      
-      /* Commit
+      {/* Commit
        {privilegedOperator &&
         <div className='offer'>
           <label>
