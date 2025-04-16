@@ -73,7 +73,6 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
       <div className="actions">
         {actions}
         {
-          <div> </div>
         /* Commit
         <div className='total'>
           <span>{t('app.public.abstract_item.total')}</span>
@@ -84,6 +83,7 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
         </FabButton>
       </div>
       {
+      <div> </div>
       /* Commit
        {privilegedOperator &&
         <div className='offer'>
