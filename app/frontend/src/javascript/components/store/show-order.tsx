@@ -155,13 +155,10 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
               </div>
               <div className="actions">
                 <div>
-
                 </div>
                 <div>
-
                 </div>
                 <div>
-
                 </div>
                 {/* Commit
                 <div className='price'>
@@ -169,13 +166,14 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
                   <span>/ {t('app.shared.store.show_order.unit')}</span>
                 </div>
                 */}
-                <span className="count">{item.quantity}</span>
                 {/* Commit
+                <span className="count">{item.quantity}</span>
                 <div className='total'>
                   <span>{t('app.shared.store.show_order.item_total')}</span>
                   <p>{FormatLib.price(OrderLib.itemAmount(item))}</p>
                 </div>
                 */}
+                <span className="count">{item.quantity}</span>
               </div>
             </article>
           ))}
