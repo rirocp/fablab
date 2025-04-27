@@ -41,7 +41,8 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
   const [noMemberError, setNoMemberError] = useState<boolean>(false);
   const [paymentModal, setPaymentModal] = useState<boolean>(false);
   const [withdrawalInstructions, setWithdrawalInstructions] = useState<string>(null);
-
+  const [selectedProject, setSelectedProject] = useState<string>(null); // État pour le projet sélectionné
+  
   useEffect(() => {
     if (cart) {
       checkCart();
@@ -117,9 +118,20 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
 
   /**
    * Change cart's customer by admin/manager
+   * Commit : Include the selected project
    */
-  const handleChangeMember = (user: User): void => {
-    CartAPI.setCustomer(cart, user.id).then(setCart).catch(onError);
+  // Old code
+  // const handleChangeMember = (user: User): void => {
+  // CartAPI.setCustomer(cart, user.id).then(setCart).catch(onError); };
+
+  const handleChangeMember = (user: { id: number, name: string, project?: string }): void => {
+    CartAPI.setCustomer(cart, user.id).then(data => {
+      // Ajouter le projet au panier
+      const updatedCart = { ...data, project: user.project };
+      setCart(updatedCart);
+      // Stocker le projet sélectionné
+      setSelectedProject(user.project);
+    }).catch(onError);
   };
 
   /**
@@ -238,7 +250,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           toggleModal={togglePaymentModal}
           afterSuccess={handlePaymentSuccess}
           onError={onError}
-          cart={{ customer_id: cart.user.id, items: [], payment_method: PaymentMethod.Card }}
+          cart={{ customer_id: cart.user.id, items: [], payment_method: PaymentMethod.Card, project: selectedProject }}
           order={cart}
           operator={currentUser}
           customer={cart.user as User}

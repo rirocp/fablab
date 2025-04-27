@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
 import AsyncSelect from 'react-select/async';
+import Select from 'react-select'; // Commit ajout de la bibliothèque Select pour la liste déroulante
 import { useTranslation } from 'react-i18next';
 import MemberAPI from '../../api/member';
 import { User } from '../../models/user';
@@ -9,10 +10,19 @@ import { SelectOption } from '../../models/select';
 interface MemberSelectProps {
   defaultUser?: User,
   value?: User,
-  onSelected?: (user: { id: number, name: string }) => void,
+  //Commit modifié pour inclure le projet
+  onSelected?: (user: { id: number, name: string, project?: string}) => void,
   noHeader?: boolean,
   hasError?: boolean
 }
+
+/**
+ * Commit options de projet pour la liste déroulante
+ */
+const projectOptions: Array<SelectOption<string>> = [
+  { value: 'projet_ingenieur_10_mois', label: 'Projet ingénieur (10 mois)' },
+  { value: 'projet_personnel_1_mois', label: 'Projet personnel (1 mois)' }
+];
 
 /**
  * This component allows privileged users (managers/admins) to select a user on whose behalf to act.
@@ -20,6 +30,9 @@ interface MemberSelectProps {
 export const MemberSelect: React.FC<MemberSelectProps> = ({ defaultUser, value, onSelected, noHeader, hasError }) => {
   const { t } = useTranslation('public');
   const [option, setOption] = useState<SelectOption<number>>();
+
+  // Commit état pour le projet sélectionné
+  const [selectedProject, setSelectedProject] = useState<SelectOption<string>>(null);
 
   useEffect(() => {
     if (defaultUser) {
@@ -29,7 +42,7 @@ export const MemberSelect: React.FC<MemberSelectProps> = ({ defaultUser, value, 
 
   useEffect(() => {
     if (!defaultUser && option) {
-      onSelected({ id: option.value, name: option.label });
+      onSelected({ id: option.value, name: option.label, project: selectedProject?.value });
     }
     if (!option && defaultUser) {
       setOption({ value: defaultUser.id, label: defaultUser.name });
@@ -42,6 +55,8 @@ export const MemberSelect: React.FC<MemberSelectProps> = ({ defaultUser, value, 
     }
     if (!value) {
       setOption(null);
+      // Commit réinitialiser le projet si aucun utilisateur n’est sélectionné
+      setSelectedProject(null);
     }
   }, [value]);
 
@@ -59,11 +74,22 @@ export const MemberSelect: React.FC<MemberSelectProps> = ({ defaultUser, value, 
   };
 
   /**
-   * callback for handle select changed
+   * Commit renaming the callback for handle select changed
    */
-  const onChange = (v: SelectOption<number>) => {
+  const onChangeMember = (v: SelectOption<number>) => {
     setOption(v);
-    onSelected({ id: v.value, name: v.label });
+    // Commit
+    onSelected({ id: v.value, name: v.label, project: selectedProject?.value });
+  };
+
+  /**
+   * Commit callback for handle project selection changed
+   */
+  const onChangeProject = (v: SelectOption<string>) => {
+    setSelectedProject(v);
+    if (option) {
+      onSelected({ id: option.value, name: option.label, project: v.value });
+    }
   };
 
   return (
@@ -78,10 +104,22 @@ export const MemberSelect: React.FC<MemberSelectProps> = ({ defaultUser, value, 
                    cacheOptions
                    loadOptions={loadMembers}
                    defaultOptions
-                   onChange={onChange}
+                   onChange={onChangeMember}
                    value={option}
                    defaultInputValue={defaultUser?.name}
       />
+
+      {/*Commit */}
+      <div style={{ marginTop: '10px' }}>
+        <Select
+          placeholder={t('app.public.member_select.select_project')} // Ajout d'une clé de traduction pour le placeholder
+          className="select-input"
+          options={projectOptions}
+          onChange={onChangeProject}
+          value={selectedProject}
+          isDisabled={!option} // Désactiver la liste déroulante si aucun membre n’est sélectionné
+        />
+      </div>
     </div>
   );
 };
