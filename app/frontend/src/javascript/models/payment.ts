@@ -30,6 +30,7 @@ export interface ShoppingCart {
   coupon_code?: string,
   payment_schedule?: boolean,
   payment_method: PaymentMethod
+  project?: string // Commit 28/04 ajout de la propriété project comme optionnelle
 }
 
 export interface UpdateCardResponse {

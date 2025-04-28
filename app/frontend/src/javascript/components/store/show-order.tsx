@@ -12,6 +12,11 @@ import { Order } from '../../models/order';
 import FormatLib from '../../lib/format';
 import OrderLib from '../../lib/order';
 import { OrderActions } from './order-actions';
+import { OrderItem, OrderProduct } from '../../models/order'; //Commit
+
+function isOrderProduct(item: OrderItem): item is OrderProduct {
+  return item.orderable_type === 'Product';
+}
 
 declare const Application: IApplication;
 
@@ -150,7 +155,9 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
                 <img alt='' src={item.orderable_main_image_url || noImage} />
               </div>
               <div className="ref">
-                <span>{t('app.shared.store.show_order.reference_short')} {item.orderable_ref || ''}</span>
+                {isOrderProduct(item) && (
+                  <span>{t('app.shared.store.show_order.reference_short')} {item.orderable_ref || ''}</span>
+                )}
                 <p><a className="text-black" href={itemOrderableUrl(item)}>{item.orderable_name}</a></p>
                 <span className="count">{item.quantity}</span>
               </div>

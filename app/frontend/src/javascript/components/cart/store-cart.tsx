@@ -51,7 +51,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
   const [noMemberError, setNoMemberError] = useState<boolean>(false);
   const [paymentModal, setPaymentModal] = useState<boolean>(false);
   const [withdrawalInstructions, setWithdrawalInstructions] = useState<string>(null);
-  const [selectedProject, setSelectedProject] = useState<string>(null); // État pour le projet sélectionné
+  const [selectedProject, setSelectedProject] = useState<SelectOption<string>>(null); // État pour le projet sélectionné
   const [noProjectError, setNoProjectError] = useState<boolean>(false); // État pour l'erreur de projet non sélectionné
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
         setNoProjectError(false);
         checkCart().then(errors => {
           if (!hasCartErrors(errors)) {
-            const updatedCart = { ...cart, project: selectedProject?.value }; // Commit ajout du projet au panier
+            const updatedCart = { ...cart, project: selectedProject?.valueOf }; // Commit ajout du projet au panier
             setCart(updatedCart);
             setPaymentModal(true);
           }
@@ -289,7 +289,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           toggleModal={togglePaymentModal}
           afterSuccess={handlePaymentSuccess}
           onError={onError}
-          cart={{ customer_id: cart.user.id, items: [], payment_method: PaymentMethod.Card, project: selectedProject }}
+          cart={{ customer_id: cart.user.id, items: [], payment_method: PaymentMethod.Card, project: selectedProject.value }}
           order={cart}
           operator={currentUser}
           customer={cart.user as User}
