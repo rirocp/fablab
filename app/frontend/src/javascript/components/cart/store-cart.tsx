@@ -253,11 +253,14 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       
       <aside>
         {cart && !cartIsEmpty() && isPrivileged() &&
-          <div> <MemberSelect onSelected={handleChangeMember} defaultUser={cart.user as User} hasError={noMemberError} /></div>
+          <MemberSelect onSelected={handleChangeMember} defaultUser={cart.user as User} hasError={noMemberError} />
         }
 
         {cart && !cartIsEmpty() && //isPrivileged() && // Commit liste déroulante pour les utilisateurs admin
           <div className={`project-select ${noProjectError ? 'error' : ''}`} style={{ marginBottom: '20px' }}>
+            <div className="project-select-header">
+              <h3 className="project-select-title">{t('app.public.member_select.select_project')}</h3>
+            </div>
             <Select
               placeholder={t('app.public.member_select.select_project')}
               className="select-input"
@@ -268,34 +271,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           </div>
         }
 
-        {/*{cart && !cartIsEmpty() && !isPrivileged() && // Commit liste déroulante pour les utilisateurs normaux
-          <div className={`project-select ${noProjectError ? 'error' : ''}`} style={{ marginBottom: '20px' }}>
-            <Select
-              placeholder={t('app.public.member_select.select_project')}
-              className="select-input"
-              options={projectOptions}
-              onChange={onChangeProject}
-              value={selectedProject}
-            />
-          </div>
-        }*/}
-
          {cart && !cartIsEmpty() && <>
-           {/*<div className="checkout">
-            {/*<h3>{t('app.public.store_cart.checkout_header')}</h3>
-            <span>{t('app.public.store_cart.checkout_products_COUNT', { COUNT: cart?.order_items_attributes.length })}</span>
-             <div className="list">
-              <p>{t('app.public.store_cart.checkout_products_total')} <span>{FormatLib.price(OrderLib.totalBeforeOfferedAmount(cart))}</span></p>
-              {OrderLib.hasOfferedItem(cart) &&
-                <p className='gift'>{t('app.public.store_cart.checkout_gift_total')} <span>-{FormatLib.price(OrderLib.offeredAmount(cart))}</span></p>
-              }
-              {cart.coupon &&
-                <p>{t('app.public.store_cart.checkout_coupon')} <span>-{FormatLib.price(OrderLib.couponAmount(cart))}</span></p>
-              }
-            </div>
-            <p className='total'>{t('app.public.store_cart.checkout_total')} <span>{FormatLib.price(OrderLib.paidTotal(cart))}</span></p>
-            
-          </div>*/}
           <FabButton className='checkout-btn' onClick={checkout}>
             {t('app.public.store_cart.checkout')}
           </FabButton>

@@ -108,18 +108,6 @@ export const MemberSelect: React.FC<MemberSelectProps> = ({ defaultUser, value, 
                    value={option}
                    defaultInputValue={defaultUser?.name}
       />
-
-      {/*Commit
-      <div style={{ marginTop: '10px' }}>
-        <Select
-          placeholder={t('app.public.member_select.select_project')} // Ajout d'une clé de traduction pour le placeholder
-          className="select-input"
-          options={projectOptions}
-          onChange={onChangeProject}
-          value={selectedProject}
-          isDisabled={!option} // Désactiver la liste déroulante si aucun membre n’est sélectionné
-        /> 
-      </div> */}
     </div>
   );
 };
