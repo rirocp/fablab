@@ -14,6 +14,7 @@ import PriceAPI from '../../../api/price';
 import { ComputePriceResult } from '../../../models/price';
 import { Order } from '../../../models/order';
 import { computePriceWithCoupon } from '../../../lib/coupon';
+import { on } from 'process';
 
 interface PaymentModalProps {
   isOpen: boolean,
@@ -39,23 +40,39 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, toggleModal,
   // the remaining price to pay, after the wallet was changed
   const [remainingPrice, setRemainingPrice] = useState<number>(null);
 
-  // refresh the wallet when the customer changes
+  // Commit refresh the wallet when the customer changes
+  /* Old
   useEffect(() => {
     WalletAPI.getByUser(customer.id).then(wallet => {
       setWallet(wallet);
     });
   }, [customer]);
+  */
+  
+  useEffect(() => {
+    if (customer) {
+      WalletAPI.getByUser(customer.id).then(wallet => {
+        setWallet(wallet);
+      }).catch(error => {
+        onError('Failed to fetch wallet: ' + error.message);
+      });
+    } else {
+      setWallet(null); // Reset wallet if customer is null
+    }
+  }, [customer, onError]);
 
-  // refresh the price when the cart changes
+  // Commit refresh the price when the cart changes
   useEffect(() => {
     if (order) {
       setPrice({ price: computePriceWithCoupon(order.total, order.coupon), price_without_coupon: order.total });
     } else {
       PriceAPI.compute(cart).then(price => {
         setPrice(price);
+        }).catch(error => {
+        onError('Failed to compute price: ' + error.message);
       });
     }
-  }, [cart, order]);
+  }, [cart, order, onError]);
 
   // refresh the remaining price when the cart price was computed and the wallet was retrieved
   useEffect(() => {
@@ -68,6 +85,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, toggleModal,
    * Check the conditions for the local payment
    */
   const isLocalPayment = (): boolean => {
+    //Commit null check
+    if (!operator || !customer) return false;
     return (new UserLib(operator).isPrivileged(customer) || remainingPrice === 0);
   };
 

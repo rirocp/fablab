@@ -70,7 +70,14 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       setPaymentModal(false);
     }
   }, [cart]);
-  
+
+  /**
+   * Check if the current cart is empty ?
+   */
+  const cartIsEmpty = (): boolean => {
+    return cart && cart.order_items_attributes.length === 0;
+  };
+
   /**
    * Check the current cart's items (available, price, stock, quantity_min)
    */
@@ -168,13 +175,6 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
   };
 
   /**
-   * Check if the current cart is empty ?
-   */
-  const cartIsEmpty = (): boolean => {
-    return cart && cart.order_items_attributes.length === 0;
-  };
-
-  /**
    * Apply coupon to current cart
    */
   const applyCoupon = (coupon?: Coupon): void => {
@@ -184,9 +184,9 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
   };
 
   /**
-   * 28/04 new handle project selection for normal users
+   * Commit 28/04 new handle project selection for normal users
    */
-  const onChangeProject = (v: SelectOption<string>) => {
+  const onChangeProject = (v: SelectOption<string> | null) => {
     setSelectedProject(v);
     setNoProjectError(false); // Réinitialiser l'erreur si un projet est sélectionné
   };
@@ -195,7 +195,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
     <div className='store-cart'>
       <div className="store-cart-list">
         {cart && cartIsEmpty() && <p>{t('app.public.store_cart.cart_is_empty')}</p>}
-        {cart && cart.order_items_attributes.map(item => {
+        {cart && cart.order_items_attributes && cart.order_items_attributes.map(item => {
           if (item.orderable_type === 'Product') {
             return (
               <CartOrderProduct item={item as OrderProduct}
