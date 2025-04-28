@@ -20,6 +20,8 @@ import _ from 'lodash';
 import OrderAPI from '../../api/order';
 import { CartOrderProduct } from './cart-order-product';
 import { CartOrderReservation } from './cart-order-reservation';
+import Select from 'react-select'; // Commit ajout de la bibliothèque Select pour la liste déroulante
+import { SelectOption } from '../../models/select';
 
 declare const Application: IApplication;
 
@@ -29,6 +31,14 @@ interface StoreCartProps {
   userLogin: () => void,
   currentUser?: User
 }
+
+/**
+ * Options de projet pour la liste déroulante
+ */
+const projectOptions: Array<SelectOption<string>> = [
+  { value: 'projet_ingenieur_10_mois', label: 'Projet ingénieur (10 mois)' },
+  { value: 'projet_personnel_1_mois', label: 'Projet personnel (1 mois)' }
+];
 
 /**
  * This component shows user's cart
@@ -42,7 +52,8 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
   const [paymentModal, setPaymentModal] = useState<boolean>(false);
   const [withdrawalInstructions, setWithdrawalInstructions] = useState<string>(null);
   const [selectedProject, setSelectedProject] = useState<string>(null); // État pour le projet sélectionné
-  
+  const [noProjectError, setNoProjectError] = useState<boolean>(false); // État pour l'erreur de projet non sélectionné
+
   useEffect(() => {
     if (cart) {
       checkCart();
@@ -73,10 +84,17 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       if (!cart.user) {
         setNoMemberError(true);
         onError(t('app.public.store_cart.select_user'));
+      } else if (!isPrivileged() && !selectedProject) { 
+        // Commit vérification pour les utilisateurs
+        setNoProjectError(true);
+        onError(t('app.public.store_cart.select_project_required'));
       } else {
         setNoMemberError(false);
+        setNoProjectError(false);
         checkCart().then(errors => {
           if (!hasCartErrors(errors)) {
+            const updatedCart = { ...cart, project: selectedProject?.value }; // Commit ajout du projet au panier
+            setCart(updatedCart);
             setPaymentModal(true);
           }
         });
@@ -130,7 +148,8 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       const updatedCart = { ...data, project: user.project };
       setCart(updatedCart);
       // Stocker le projet sélectionné
-      setSelectedProject(user.project);
+      //28/04 old -> setSelectedProject(user.project);
+      setSelectedProject(projectOptions.find(option => option.value === user.project) || null); // Commit maj du projet sélectionné
     }).catch(onError);
   };
 
@@ -155,6 +174,14 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
     if (coupon !== cart.coupon) {
       setCart({ ...cart, coupon });
     }
+  };
+
+  /**
+   * 28/04 new handle project selection for normal users
+   */
+  const onChangeProject = (v: SelectOption<string>) => {
+    setSelectedProject(v);
+    setNoProjectError(false); // Réinitialiser l'erreur si un projet est sélectionné
   };
 
   return (
@@ -220,6 +247,18 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       <aside>
         {cart && !cartIsEmpty() && isPrivileged() &&
           <div> <MemberSelect onSelected={handleChangeMember} defaultUser={cart.user as User} hasError={noMemberError} /></div>
+        }
+
+        {cart && !cartIsEmpty() && !isPrivileged() && // Commit liste déroulante pour les utilisateurs normaux
+          <div className={`project-select ${noProjectError ? 'error' : ''}`} style={{ marginBottom: '20px' }}>
+            <Select
+              placeholder={t('app.public.member_select.select_project')}
+              className="select-input"
+              options={projectOptions}
+              onChange={onChangeProject}
+              value={selectedProject}
+            />
+          </div>
         }
 
          {cart && !cartIsEmpty() && <>
