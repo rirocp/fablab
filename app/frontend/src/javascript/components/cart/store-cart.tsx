@@ -78,13 +78,14 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
    * Checkout cart
    */
   const checkout = () => {
+    console.log('selectedProject:', selectedProject);
     if (!currentUser) {
       userLogin();
     } else {
       if (!cart.user) {
         setNoMemberError(true);
         onError(t('app.public.store_cart.select_user'));
-      } else if (!isPrivileged() && !selectedProject) { 
+      } else if (!selectedProject) { 
         // Commit vérification pour les utilisateurs
         setNoProjectError(true);
         onError(t('app.public.store_cart.select_project_required'));
@@ -93,7 +94,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
         setNoProjectError(false);
         checkCart().then(errors => {
           if (!hasCartErrors(errors)) {
-            const updatedCart = { ...cart, project: selectedProject?.valueOf }; // Commit ajout du projet au panier
+            const updatedCart = { ...cart, project: selectedProject?.value }; // Commit ajout du projet au panier
             setCart(updatedCart);
             setPaymentModal(true);
           }
@@ -249,6 +250,18 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           <div> <MemberSelect onSelected={handleChangeMember} defaultUser={cart.user as User} hasError={noMemberError} /></div>
         }
 
+        {cart && !cartIsEmpty() && isPrivileged() &&
+          <div className={`project-select ${noProjectError ? 'error' : ''}`} style={{ marginBottom: '20px' }}>
+            <Select
+              placeholder={t('app.public.member_select.select_project')}
+              className="select-input"
+              options={projectOptions}
+              onChange={onChangeProject}
+              value={selectedProject}
+            />
+          </div>
+        }
+
         {cart && !cartIsEmpty() && !isPrivileged() && // Commit liste déroulante pour les utilisateurs normaux
           <div className={`project-select ${noProjectError ? 'error' : ''}`} style={{ marginBottom: '20px' }}>
             <Select
@@ -289,7 +302,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           toggleModal={togglePaymentModal}
           afterSuccess={handlePaymentSuccess}
           onError={onError}
-          cart={{ customer_id: cart.user.id, items: [], payment_method: PaymentMethod.Card, project: selectedProject.value }}
+          cart={{ customer_id: cart.user.id, items: [], payment_method: PaymentMethod.Card, project: selectedProject?.value || '' }}
           order={cart}
           operator={currentUser}
           customer={cart.user as User}
