@@ -170,7 +170,7 @@ fr:
         select_a_member: "Sélectionnez un membre"
         start_typing: "Commencez à écrire..."
         member_not_validated: "Attention :<br> Le compte du membre n'a pas été validé."
-        select_project: "Sélectionnez un projet" # Commit nouvelle clé
+        select_project: "Sélectionnez le type de projet" # Commit nouvelle clé
       #payment modal
       abstract_payment_modal:
         online_payment: "Paiement en ligne"

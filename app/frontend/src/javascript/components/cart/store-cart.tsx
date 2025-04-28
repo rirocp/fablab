@@ -256,7 +256,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           <div> <MemberSelect onSelected={handleChangeMember} defaultUser={cart.user as User} hasError={noMemberError} /></div>
         }
 
-        {cart && !cartIsEmpty() && isPrivileged() &&
+        {cart && !cartIsEmpty() && //isPrivileged() && // Commit liste déroulante pour les utilisateurs admin
           <div className={`project-select ${noProjectError ? 'error' : ''}`} style={{ marginBottom: '20px' }}>
             <Select
               placeholder={t('app.public.member_select.select_project')}
@@ -268,7 +268,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           </div>
         }
 
-        {cart && !cartIsEmpty() && !isPrivileged() && // Commit liste déroulante pour les utilisateurs normaux
+        {/*{cart && !cartIsEmpty() && !isPrivileged() && // Commit liste déroulante pour les utilisateurs normaux
           <div className={`project-select ${noProjectError ? 'error' : ''}`} style={{ marginBottom: '20px' }}>
             <Select
               placeholder={t('app.public.member_select.select_project')}
@@ -278,12 +278,11 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
               value={selectedProject}
             />
           </div>
-        }
+        }*/}
 
          {cart && !cartIsEmpty() && <>
            {/*<div className="checkout">
-            {/*<h3>{t('app.public.store_cart.checkout_header')}</h3>*/}
-            {/*
+            {/*<h3>{t('app.public.store_cart.checkout_header')}</h3>
             <span>{t('app.public.store_cart.checkout_products_COUNT', { COUNT: cart?.order_items_attributes.length })}</span>
              <div className="list">
               <p>{t('app.public.store_cart.checkout_products_total')} <span>{FormatLib.price(OrderLib.totalBeforeOfferedAmount(cart))}</span></p>

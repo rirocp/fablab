@@ -451,7 +451,7 @@ fr:
       cart_button:
         my_cart: "Mon panier"
       store_cart:
-        select_project_required: "Veuillez sélectionner un projet"
+        select_project_required: "Veuillez sélectionner le type de projet"
         checkout: "Valider mon panier"
         cart_is_empty: "Votre panier est vide"
         pickup: "Retirer vos produits"
@@ -494,7 +494,7 @@ fr:
       member_select:
         select_a_member: "Sélectionnez un membre"
         start_typing: "Commencez à écrire..."
-        select_project: "Sélectionnez un projet" # Commit nouvelle clé
+        select_project: "Sélectionnez le type de projet" # Commit nouvelle clé
       children_dashboard:
         heading: "Enfants"
         member_heading: "Mes enfants"
