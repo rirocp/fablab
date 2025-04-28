@@ -65,6 +65,12 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
     }
   }, [cart]);
 
+  useEffect(() => {
+    if (!cart?.user) {
+      setPaymentModal(false);
+    }
+  }, [cart]);
+  
   /**
    * Check the current cart's items (available, price, stock, quantity_min)
    */
