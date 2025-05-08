@@ -2159,7 +2159,8 @@ CREATE TABLE public.orders (
     paid_at timestamp(6) without time zone,
     in_progress_at timestamp(6) without time zone,
     canceled_at timestamp(6) without time zone,
-    refunded_at timestamp(6) without time zone
+    refunded_at timestamp(6) without time zone,
+    project character varying
 );
 
 
@@ -9339,6 +9340,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240220140225'),
 ('20240327095614'),
 ('20240605085829'),
-('20250505125422');
+('20250505125422'),
+('20250508145115');
 
 

@@ -68,6 +68,20 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       DATE: FormatLib.date(order.payment_date),
       TIME: FormatLib.time(order.payment_date)
     });
+
+    // Commit add project type to payment info
+    let projectLabel = '';
+    if (order.project === 'projet_ingenieur_10_mois') {
+      projectLabel = t('app.public.store_cart.project_engineer_10_months', { defaultValue: 'Projet ingénieur (10 mois)' });
+    } else if (order.project === 'projet_personnel_1_mois') {
+      projectLabel = t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
+    }
+    if (projectLabel) {
+      paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_project_PROJECT', {
+        PROJECT: projectLabel,
+        defaultValue: `for project: ${projectLabel}`
+      });
+    }
     /*if (order.payment_method !== 'wallet') {
       paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.paid_total) });
     }
@@ -140,6 +154,14 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
             <span>{t('app.shared.store.show_order.last_update')}</span>
             <p>{FormatLib.date(order.updated_at)}</p>
           </div>
+          <div className='group'>
+            <span>{t('app.shared.store.show_order.project')}</span>
+            <p>
+              {order.project === 'projet_ingenieur_10_mois' && t('app.public.store_cart.project_engineer_10_months', { defaultValue: 'Projet ingénieur (10 mois)' })}
+              {order.project === 'projet_personnel_1_mois' && t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' })}
+              {!order.project && t('app.shared.store.show_order.no_project', { defaultValue: 'No project specified' })}
+            </p>
+          </div>
           <FabStateLabel status={OrderLib.statusColor(order)} background>
             {t(`app.shared.store.show_order.state.${OrderLib.statusText(order)}`)}
           </FabStateLabel>
@@ -188,26 +210,6 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           <label>{t('app.shared.store.show_order.payment_informations')}</label>
           {order.invoice_id && <p>{paymentInfo()}</p>}
         </div>
-        {/* Commit
-        <div className="amount">
-          <label>{t('app.shared.store.show_order.amount')}</label>
-          {/* Commit
-          <p>{t('app.shared.store.show_order.products_total')}<span>{FormatLib.price(OrderLib.totalBeforeOfferedAmount(order))}</span></p>
-          {OrderLib.hasOfferedItem(order) &&
-            <p className='gift'>{t('app.shared.store.show_order.gift_total')}<span>-{FormatLib.price(OrderLib.offeredAmount(order))}</span></p>
-          }
-          {order.coupon &&
-            <p>{t('app.shared.store.show_order.coupon')}<span>-{FormatLib.price(OrderLib.couponAmount(order))}</span></p>
-          }
-          {/*
-          <p className='total'>{t('app.shared.store.show_order.cart_total')} <span>{FormatLib.price(OrderLib.paidTotal(order))}</span></p>
-        </div>
-
-        <div className="withdrawal-instructions">
-          <label>{t('app.shared.store.show_order.pickup')}</label>
-          <p dangerouslySetInnerHTML={{ __html: withdrawalInstructions }} />
-        </div>
-        */}
       </div>
     </div>
   );
