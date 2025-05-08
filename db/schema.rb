@@ -673,6 +673,11 @@ ActiveRecord::Schema[6.1].define(version: 2023_03_31_132506) do
     t.index ["invoice_id"], name: "index_orders_on_invoice_id"
     t.index ["operator_profile_id"], name: "index_orders_on_operator_profile_id"
     t.index ["statistic_profile_id"], name: "index_orders_on_statistic_profile_id"
+    t.datetime "paid_at", precision: 6
+    t.datetime "in_progress_at", precision: 6
+    t.datetime "canceled_at", precision: 6
+    t.datetime "refunded_at", precision: 6
+    t.string "project" 
   end
 
   create_table "organizations", id: :serial, force: :cascade do |t|
