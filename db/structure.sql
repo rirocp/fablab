@@ -1,6 +1,7 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -2154,7 +2155,11 @@ CREATE TABLE public.orders (
     environment character varying,
     coupon_id bigint,
     paid_total integer,
-    invoice_id bigint
+    invoice_id bigint,
+    paid_at timestamp(6) without time zone,
+    in_progress_at timestamp(6) without time zone,
+    canceled_at timestamp(6) without time zone,
+    refunded_at timestamp(6) without time zone
 );
 
 
@@ -9333,6 +9338,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240126192110'),
 ('20240220140225'),
 ('20240327095614'),
-('20240605085829');
+('20240605085829'),
+('20250505125422');
 
 
