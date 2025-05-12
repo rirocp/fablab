@@ -1,7 +1,7 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
+-- SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -63,7 +63,7 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 -- Name: f_unaccent(text); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.f_unaccent(text) RETURNS text
+CREATE OR REPLACE FUNCTION public.f_unaccent(text) RETURNS text
     LANGUAGE sql IMMUTABLE
     AS $_$
              SELECT public.unaccent('public.unaccent', $1)
@@ -74,7 +74,7 @@ CREATE FUNCTION public.f_unaccent(text) RETURNS text
 -- Name: fill_search_vector_for_project(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.fill_search_vector_for_project() RETURNS trigger
+CREATE OR REPLACE FUNCTION public.fill_search_vector_for_project() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
       declare
@@ -101,7 +101,7 @@ CREATE FUNCTION public.fill_search_vector_for_project() RETURNS trigger
 -- Name: pg_search_dmetaphone(text); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.pg_search_dmetaphone(text) RETURNS text
+CREATE OR REPLACE FUNCTION public.pg_search_dmetaphone(text) RETURNS text
     LANGUAGE sql IMMUTABLE STRICT
     AS $_$
   SELECT array_to_string(ARRAY(SELECT dmetaphone(unnest(regexp_split_to_array($1, E'\\s+')))), ' ')
@@ -114,7 +114,7 @@ SET default_tablespace = '';
 -- Name: abuses; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.abuses (
+CREATE TABLE IF NOT EXISTS public.abuses (
     id integer NOT NULL,
     signaled_type character varying,
     signaled_id integer,
@@ -131,7 +131,7 @@ CREATE TABLE public.abuses (
 -- Name: abuses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.abuses_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.abuses_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -150,7 +150,7 @@ ALTER SEQUENCE public.abuses_id_seq OWNED BY public.abuses.id;
 -- Name: accounting_lines; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.accounting_lines (
+CREATE TABLE IF NOT EXISTS public.accounting_lines (
     id bigint NOT NULL,
     line_type character varying,
     journal_code character varying,
@@ -173,7 +173,7 @@ CREATE TABLE public.accounting_lines (
 -- Name: accounting_lines_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.accounting_lines_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.accounting_lines_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -192,7 +192,7 @@ ALTER SEQUENCE public.accounting_lines_id_seq OWNED BY public.accounting_lines.i
 -- Name: accounting_periods; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.accounting_periods (
+CREATE TABLE IF NOT EXISTS public.accounting_periods (
     id integer NOT NULL,
     start_at date,
     end_at date,
@@ -210,7 +210,7 @@ CREATE TABLE public.accounting_periods (
 -- Name: accounting_periods_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.accounting_periods_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.accounting_periods_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -229,7 +229,7 @@ ALTER SEQUENCE public.accounting_periods_id_seq OWNED BY public.accounting_perio
 -- Name: addresses; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.addresses (
+CREATE TABLE IF NOT EXISTS public.addresses (
     id integer NOT NULL,
     address character varying,
     street_number character varying,
@@ -248,7 +248,7 @@ CREATE TABLE public.addresses (
 -- Name: addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.addresses_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.addresses_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -267,7 +267,7 @@ ALTER SEQUENCE public.addresses_id_seq OWNED BY public.addresses.id;
 -- Name: advanced_accountings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.advanced_accountings (
+CREATE TABLE IF NOT EXISTS public.advanced_accountings (
     id bigint NOT NULL,
     code character varying,
     analytical_section character varying,
@@ -282,7 +282,7 @@ CREATE TABLE public.advanced_accountings (
 -- Name: advanced_accountings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.advanced_accountings_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.advanced_accountings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -301,7 +301,7 @@ ALTER SEQUENCE public.advanced_accountings_id_seq OWNED BY public.advanced_accou
 -- Name: age_ranges; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.age_ranges (
+CREATE TABLE IF NOT EXISTS public.age_ranges (
     id integer NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -314,7 +314,7 @@ CREATE TABLE public.age_ranges (
 -- Name: age_ranges_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.age_ranges_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.age_ranges_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -333,7 +333,7 @@ ALTER SEQUENCE public.age_ranges_id_seq OWNED BY public.age_ranges.id;
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.ar_internal_metadata (
+CREATE TABLE IF NOT EXISTS public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
     created_at timestamp(6) without time zone NOT NULL,
@@ -345,7 +345,7 @@ CREATE TABLE public.ar_internal_metadata (
 -- Name: assets; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.assets (
+CREATE TABLE IF NOT EXISTS public.assets (
     id integer NOT NULL,
     viewable_type character varying,
     viewable_id integer,
@@ -361,7 +361,7 @@ CREATE TABLE public.assets (
 -- Name: assets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.assets_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.assets_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -380,7 +380,7 @@ ALTER SEQUENCE public.assets_id_seq OWNED BY public.assets.id;
 -- Name: auth_provider_mappings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.auth_provider_mappings (
+CREATE TABLE IF NOT EXISTS public.auth_provider_mappings (
     id integer NOT NULL,
     local_field character varying,
     api_field character varying,
@@ -398,7 +398,7 @@ CREATE TABLE public.auth_provider_mappings (
 -- Name: auth_provider_mappings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.auth_provider_mappings_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.auth_provider_mappings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -417,7 +417,7 @@ ALTER SEQUENCE public.auth_provider_mappings_id_seq OWNED BY public.auth_provide
 -- Name: auth_providers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.auth_providers (
+CREATE TABLE IF NOT EXISTS public.auth_providers (
     id integer NOT NULL,
     name character varying,
     status character varying,
@@ -432,7 +432,7 @@ CREATE TABLE public.auth_providers (
 -- Name: auth_providers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.auth_providers_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.auth_providers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -451,7 +451,7 @@ ALTER SEQUENCE public.auth_providers_id_seq OWNED BY public.auth_providers.id;
 -- Name: availabilities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.availabilities (
+CREATE TABLE IF NOT EXISTS public.availabilities (
     id integer NOT NULL,
     start_at timestamp without time zone,
     end_at timestamp without time zone,
@@ -474,7 +474,7 @@ CREATE TABLE public.availabilities (
 -- Name: availabilities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.availabilities_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.availabilities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -493,7 +493,7 @@ ALTER SEQUENCE public.availabilities_id_seq OWNED BY public.availabilities.id;
 -- Name: availability_tags; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.availability_tags (
+CREATE TABLE IF NOT EXISTS public.availability_tags (
     id integer NOT NULL,
     availability_id integer,
     tag_id integer,
@@ -506,7 +506,7 @@ CREATE TABLE public.availability_tags (
 -- Name: availability_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.availability_tags_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.availability_tags_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -525,7 +525,7 @@ ALTER SEQUENCE public.availability_tags_id_seq OWNED BY public.availability_tags
 -- Name: booking_users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.booking_users (
+CREATE TABLE IF NOT EXISTS public.booking_users (
     id bigint NOT NULL,
     name character varying,
     reservation_id bigint,
@@ -541,7 +541,7 @@ CREATE TABLE public.booking_users (
 -- Name: booking_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.booking_users_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.booking_users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -560,7 +560,7 @@ ALTER SEQUENCE public.booking_users_id_seq OWNED BY public.booking_users.id;
 -- Name: cart_item_coupons; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_coupons (
+CREATE TABLE IF NOT EXISTS public.cart_item_coupons (
     id bigint NOT NULL,
     coupon_id bigint,
     customer_profile_id bigint,
@@ -574,7 +574,7 @@ CREATE TABLE public.cart_item_coupons (
 -- Name: cart_item_coupons_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_coupons_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_coupons_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -593,7 +593,7 @@ ALTER SEQUENCE public.cart_item_coupons_id_seq OWNED BY public.cart_item_coupons
 -- Name: cart_item_event_reservation_booking_users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_event_reservation_booking_users (
+CREATE TABLE IF NOT EXISTS public.cart_item_event_reservation_booking_users (
     id bigint NOT NULL,
     name character varying,
     cart_item_event_reservation_id bigint,
@@ -609,7 +609,7 @@ CREATE TABLE public.cart_item_event_reservation_booking_users (
 -- Name: cart_item_event_reservation_booking_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_event_reservation_booking_users_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_event_reservation_booking_users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -628,7 +628,7 @@ ALTER SEQUENCE public.cart_item_event_reservation_booking_users_id_seq OWNED BY 
 -- Name: cart_item_event_reservation_tickets; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_event_reservation_tickets (
+CREATE TABLE IF NOT EXISTS public.cart_item_event_reservation_tickets (
     id bigint NOT NULL,
     booked integer,
     event_price_category_id bigint,
@@ -642,7 +642,7 @@ CREATE TABLE public.cart_item_event_reservation_tickets (
 -- Name: cart_item_event_reservation_tickets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_event_reservation_tickets_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_event_reservation_tickets_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -661,7 +661,7 @@ ALTER SEQUENCE public.cart_item_event_reservation_tickets_id_seq OWNED BY public
 -- Name: cart_item_event_reservations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_event_reservations (
+CREATE TABLE IF NOT EXISTS public.cart_item_event_reservations (
     id bigint NOT NULL,
     normal_tickets integer,
     event_id bigint,
@@ -676,7 +676,7 @@ CREATE TABLE public.cart_item_event_reservations (
 -- Name: cart_item_event_reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_event_reservations_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_event_reservations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -695,7 +695,7 @@ ALTER SEQUENCE public.cart_item_event_reservations_id_seq OWNED BY public.cart_i
 -- Name: cart_item_free_extensions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_free_extensions (
+CREATE TABLE IF NOT EXISTS public.cart_item_free_extensions (
     id bigint NOT NULL,
     subscription_id bigint,
     new_expiration_date timestamp without time zone,
@@ -709,7 +709,7 @@ CREATE TABLE public.cart_item_free_extensions (
 -- Name: cart_item_free_extensions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_free_extensions_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_free_extensions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -728,7 +728,7 @@ ALTER SEQUENCE public.cart_item_free_extensions_id_seq OWNED BY public.cart_item
 -- Name: cart_item_payment_schedules; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_payment_schedules (
+CREATE TABLE IF NOT EXISTS public.cart_item_payment_schedules (
     id bigint NOT NULL,
     plan_id bigint,
     coupon_id bigint,
@@ -744,7 +744,7 @@ CREATE TABLE public.cart_item_payment_schedules (
 -- Name: cart_item_payment_schedules_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_payment_schedules_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_payment_schedules_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -763,7 +763,7 @@ ALTER SEQUENCE public.cart_item_payment_schedules_id_seq OWNED BY public.cart_it
 -- Name: cart_item_prepaid_packs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_prepaid_packs (
+CREATE TABLE IF NOT EXISTS public.cart_item_prepaid_packs (
     id bigint NOT NULL,
     prepaid_pack_id bigint,
     customer_profile_id bigint,
@@ -776,7 +776,7 @@ CREATE TABLE public.cart_item_prepaid_packs (
 -- Name: cart_item_prepaid_packs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_prepaid_packs_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_prepaid_packs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -795,7 +795,7 @@ ALTER SEQUENCE public.cart_item_prepaid_packs_id_seq OWNED BY public.cart_item_p
 -- Name: cart_item_reservation_slots; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_reservation_slots (
+CREATE TABLE IF NOT EXISTS public.cart_item_reservation_slots (
     id bigint NOT NULL,
     cart_item_type character varying,
     cart_item_id bigint,
@@ -811,7 +811,7 @@ CREATE TABLE public.cart_item_reservation_slots (
 -- Name: cart_item_reservation_slots_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_reservation_slots_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_reservation_slots_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -830,7 +830,7 @@ ALTER SEQUENCE public.cart_item_reservation_slots_id_seq OWNED BY public.cart_it
 -- Name: cart_item_reservations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_reservations (
+CREATE TABLE IF NOT EXISTS public.cart_item_reservations (
     id bigint NOT NULL,
     reservable_type character varying,
     reservable_id bigint,
@@ -849,7 +849,7 @@ CREATE TABLE public.cart_item_reservations (
 -- Name: cart_item_reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_reservations_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_reservations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -868,7 +868,7 @@ ALTER SEQUENCE public.cart_item_reservations_id_seq OWNED BY public.cart_item_re
 -- Name: cart_item_subscriptions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.cart_item_subscriptions (
+CREATE TABLE IF NOT EXISTS public.cart_item_subscriptions (
     id bigint NOT NULL,
     plan_id bigint,
     start_at timestamp without time zone,
@@ -882,7 +882,7 @@ CREATE TABLE public.cart_item_subscriptions (
 -- Name: cart_item_subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.cart_item_subscriptions_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.cart_item_subscriptions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -901,7 +901,7 @@ ALTER SEQUENCE public.cart_item_subscriptions_id_seq OWNED BY public.cart_item_s
 -- Name: categories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.categories (
+CREATE TABLE IF NOT EXISTS public.categories (
     id integer NOT NULL,
     name character varying,
     created_at timestamp without time zone,
@@ -914,7 +914,7 @@ CREATE TABLE public.categories (
 -- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.categories_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.categories_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -933,7 +933,7 @@ ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
 -- Name: chained_elements; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.chained_elements (
+CREATE TABLE IF NOT EXISTS public.chained_elements (
     id bigint NOT NULL,
     element_type character varying NOT NULL,
     element_id bigint NOT NULL,
@@ -949,7 +949,7 @@ CREATE TABLE public.chained_elements (
 -- Name: chained_elements_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.chained_elements_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.chained_elements_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -968,7 +968,7 @@ ALTER SEQUENCE public.chained_elements_id_seq OWNED BY public.chained_elements.i
 -- Name: children; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.children (
+CREATE TABLE IF NOT EXISTS public.children (
     id bigint NOT NULL,
     user_id bigint,
     first_name character varying,
@@ -986,7 +986,7 @@ CREATE TABLE public.children (
 -- Name: children_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.children_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.children_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1005,7 +1005,7 @@ ALTER SEQUENCE public.children_id_seq OWNED BY public.children.id;
 -- Name: components; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.components (
+CREATE TABLE IF NOT EXISTS public.components (
     id integer NOT NULL,
     name character varying NOT NULL
 );
@@ -1015,7 +1015,7 @@ CREATE TABLE public.components (
 -- Name: components_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.components_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.components_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1034,7 +1034,7 @@ ALTER SEQUENCE public.components_id_seq OWNED BY public.components.id;
 -- Name: coupons; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.coupons (
+CREATE TABLE IF NOT EXISTS public.coupons (
     id integer NOT NULL,
     name character varying,
     code character varying,
@@ -1053,7 +1053,7 @@ CREATE TABLE public.coupons (
 -- Name: coupons_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.coupons_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.coupons_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1072,7 +1072,7 @@ ALTER SEQUENCE public.coupons_id_seq OWNED BY public.coupons.id;
 -- Name: credits; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.credits (
+CREATE TABLE IF NOT EXISTS public.credits (
     id integer NOT NULL,
     creditable_type character varying,
     creditable_id integer,
@@ -1087,7 +1087,7 @@ CREATE TABLE public.credits (
 -- Name: credits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.credits_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.credits_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1106,7 +1106,7 @@ ALTER SEQUENCE public.credits_id_seq OWNED BY public.credits.id;
 -- Name: custom_assets; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.custom_assets (
+CREATE TABLE IF NOT EXISTS public.custom_assets (
     id integer NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -1118,7 +1118,7 @@ CREATE TABLE public.custom_assets (
 -- Name: custom_assets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.custom_assets_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.custom_assets_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1137,7 +1137,7 @@ ALTER SEQUENCE public.custom_assets_id_seq OWNED BY public.custom_assets.id;
 -- Name: database_providers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.database_providers (
+CREATE TABLE IF NOT EXISTS public.database_providers (
     id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1148,7 +1148,7 @@ CREATE TABLE public.database_providers (
 -- Name: database_providers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.database_providers_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.database_providers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1167,7 +1167,7 @@ ALTER SEQUENCE public.database_providers_id_seq OWNED BY public.database_provide
 -- Name: event_price_categories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.event_price_categories (
+CREATE TABLE IF NOT EXISTS public.event_price_categories (
     id integer NOT NULL,
     event_id integer,
     price_category_id integer,
@@ -1181,7 +1181,7 @@ CREATE TABLE public.event_price_categories (
 -- Name: event_price_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.event_price_categories_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.event_price_categories_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1200,7 +1200,7 @@ ALTER SEQUENCE public.event_price_categories_id_seq OWNED BY public.event_price_
 -- Name: event_themes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.event_themes (
+CREATE TABLE IF NOT EXISTS public.event_themes (
     id integer NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -1213,7 +1213,7 @@ CREATE TABLE public.event_themes (
 -- Name: event_themes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.event_themes_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.event_themes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1232,7 +1232,7 @@ ALTER SEQUENCE public.event_themes_id_seq OWNED BY public.event_themes.id;
 -- Name: events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.events (
+CREATE TABLE IF NOT EXISTS public.events (
     id integer NOT NULL,
     title character varying,
     description text,
@@ -1256,7 +1256,7 @@ CREATE TABLE public.events (
 -- Name: events_event_themes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.events_event_themes (
+CREATE TABLE IF NOT EXISTS public.events_event_themes (
     id integer NOT NULL,
     event_id integer,
     event_theme_id integer
@@ -1267,7 +1267,7 @@ CREATE TABLE public.events_event_themes (
 -- Name: events_event_themes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.events_event_themes_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.events_event_themes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1286,7 +1286,7 @@ ALTER SEQUENCE public.events_event_themes_id_seq OWNED BY public.events_event_th
 -- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.events_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.events_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1305,7 +1305,7 @@ ALTER SEQUENCE public.events_id_seq OWNED BY public.events.id;
 -- Name: exports; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.exports (
+CREATE TABLE IF NOT EXISTS public.exports (
     id integer NOT NULL,
     category character varying,
     export_type character varying,
@@ -1322,7 +1322,7 @@ CREATE TABLE public.exports (
 -- Name: exports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.exports_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.exports_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1341,7 +1341,7 @@ ALTER SEQUENCE public.exports_id_seq OWNED BY public.exports.id;
 -- Name: friendly_id_slugs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.friendly_id_slugs (
+CREATE TABLE IF NOT EXISTS public.friendly_id_slugs (
     id integer NOT NULL,
     slug character varying NOT NULL,
     sluggable_id integer NOT NULL,
@@ -1355,7 +1355,7 @@ CREATE TABLE public.friendly_id_slugs (
 -- Name: friendly_id_slugs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.friendly_id_slugs_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.friendly_id_slugs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1374,7 +1374,7 @@ ALTER SEQUENCE public.friendly_id_slugs_id_seq OWNED BY public.friendly_id_slugs
 -- Name: groups; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.groups (
+CREATE TABLE IF NOT EXISTS public.groups (
     id integer NOT NULL,
     name character varying,
     created_at timestamp without time zone,
@@ -1388,7 +1388,7 @@ CREATE TABLE public.groups (
 -- Name: groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.groups_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.groups_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1407,7 +1407,7 @@ ALTER SEQUENCE public.groups_id_seq OWNED BY public.groups.id;
 -- Name: history_values; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.history_values (
+CREATE TABLE IF NOT EXISTS public.history_values (
     id integer NOT NULL,
     setting_id integer,
     value character varying,
@@ -1421,7 +1421,7 @@ CREATE TABLE public.history_values (
 -- Name: history_values_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.history_values_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.history_values_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1440,7 +1440,7 @@ ALTER SEQUENCE public.history_values_id_seq OWNED BY public.history_values.id;
 -- Name: i_calendar_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.i_calendar_events (
+CREATE TABLE IF NOT EXISTS public.i_calendar_events (
     id integer NOT NULL,
     uid character varying,
     dtstart timestamp without time zone,
@@ -1458,7 +1458,7 @@ CREATE TABLE public.i_calendar_events (
 -- Name: i_calendar_events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.i_calendar_events_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.i_calendar_events_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1477,7 +1477,7 @@ ALTER SEQUENCE public.i_calendar_events_id_seq OWNED BY public.i_calendar_events
 -- Name: i_calendars; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.i_calendars (
+CREATE TABLE IF NOT EXISTS public.i_calendars (
     id integer NOT NULL,
     url character varying,
     name character varying,
@@ -1493,7 +1493,7 @@ CREATE TABLE public.i_calendars (
 -- Name: i_calendars_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.i_calendars_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.i_calendars_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1512,7 +1512,7 @@ ALTER SEQUENCE public.i_calendars_id_seq OWNED BY public.i_calendars.id;
 -- Name: imports; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.imports (
+CREATE TABLE IF NOT EXISTS public.imports (
     id integer NOT NULL,
     user_id integer,
     attachment character varying,
@@ -1528,7 +1528,7 @@ CREATE TABLE public.imports (
 -- Name: imports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.imports_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.imports_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1547,7 +1547,7 @@ ALTER SEQUENCE public.imports_id_seq OWNED BY public.imports.id;
 -- Name: invoice_items; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.invoice_items (
+CREATE TABLE IF NOT EXISTS public.invoice_items (
     id integer NOT NULL,
     invoice_id integer,
     amount integer,
@@ -1565,7 +1565,7 @@ CREATE TABLE public.invoice_items (
 -- Name: invoice_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.invoice_items_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.invoice_items_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1584,7 +1584,7 @@ ALTER SEQUENCE public.invoice_items_id_seq OWNED BY public.invoice_items.id;
 -- Name: invoices; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.invoices (
+CREATE TABLE IF NOT EXISTS public.invoices (
     id integer NOT NULL,
     total integer,
     created_at timestamp without time zone,
@@ -1611,7 +1611,7 @@ CREATE TABLE public.invoices (
 -- Name: invoices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.invoices_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.invoices_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1630,7 +1630,7 @@ ALTER SEQUENCE public.invoices_id_seq OWNED BY public.invoices.id;
 -- Name: invoicing_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.invoicing_profiles (
+CREATE TABLE IF NOT EXISTS public.invoicing_profiles (
     id integer NOT NULL,
     user_id integer,
     first_name character varying,
@@ -1646,7 +1646,7 @@ CREATE TABLE public.invoicing_profiles (
 -- Name: invoicing_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.invoicing_profiles_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.invoicing_profiles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1665,7 +1665,7 @@ ALTER SEQUENCE public.invoicing_profiles_id_seq OWNED BY public.invoicing_profil
 -- Name: licences; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.licences (
+CREATE TABLE IF NOT EXISTS public.licences (
     id integer NOT NULL,
     name character varying NOT NULL,
     description text
@@ -1676,7 +1676,7 @@ CREATE TABLE public.licences (
 -- Name: licences_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.licences_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.licences_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1695,7 +1695,7 @@ ALTER SEQUENCE public.licences_id_seq OWNED BY public.licences.id;
 -- Name: machine_categories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.machine_categories (
+CREATE TABLE IF NOT EXISTS public.machine_categories (
     id bigint NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -1707,7 +1707,7 @@ CREATE TABLE public.machine_categories (
 -- Name: machine_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.machine_categories_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.machine_categories_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1726,7 +1726,7 @@ ALTER SEQUENCE public.machine_categories_id_seq OWNED BY public.machine_categori
 -- Name: machines; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.machines (
+CREATE TABLE IF NOT EXISTS public.machines (
     id integer NOT NULL,
     name character varying NOT NULL,
     description text,
@@ -1746,7 +1746,7 @@ CREATE TABLE public.machines (
 -- Name: machines_availabilities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.machines_availabilities (
+CREATE TABLE IF NOT EXISTS public.machines_availabilities (
     id integer NOT NULL,
     machine_id integer,
     availability_id integer
@@ -1757,7 +1757,7 @@ CREATE TABLE public.machines_availabilities (
 -- Name: machines_availabilities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.machines_availabilities_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.machines_availabilities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1776,7 +1776,7 @@ ALTER SEQUENCE public.machines_availabilities_id_seq OWNED BY public.machines_av
 -- Name: machines_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.machines_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.machines_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1795,7 +1795,7 @@ ALTER SEQUENCE public.machines_id_seq OWNED BY public.machines.id;
 -- Name: machines_products; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.machines_products (
+CREATE TABLE IF NOT EXISTS public.machines_products (
     product_id bigint NOT NULL,
     machine_id bigint NOT NULL
 );
@@ -1805,7 +1805,7 @@ CREATE TABLE public.machines_products (
 -- Name: notification_preferences; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.notification_preferences (
+CREATE TABLE IF NOT EXISTS public.notification_preferences (
     id bigint NOT NULL,
     user_id bigint NOT NULL,
     notification_type_id bigint NOT NULL,
@@ -1820,7 +1820,7 @@ CREATE TABLE public.notification_preferences (
 -- Name: notification_preferences_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.notification_preferences_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.notification_preferences_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1839,7 +1839,7 @@ ALTER SEQUENCE public.notification_preferences_id_seq OWNED BY public.notificati
 -- Name: notification_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.notification_types (
+CREATE TABLE IF NOT EXISTS public.notification_types (
     id bigint NOT NULL,
     name character varying NOT NULL,
     category character varying NOT NULL,
@@ -1854,7 +1854,7 @@ CREATE TABLE public.notification_types (
 -- Name: notification_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.notification_types_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.notification_types_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1873,7 +1873,7 @@ ALTER SEQUENCE public.notification_types_id_seq OWNED BY public.notification_typ
 -- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.notifications (
+CREATE TABLE IF NOT EXISTS public.notifications (
     id integer NOT NULL,
     receiver_id integer,
     attached_object_type character varying,
@@ -1892,7 +1892,7 @@ CREATE TABLE public.notifications (
 -- Name: notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.notifications_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.notifications_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1911,7 +1911,7 @@ ALTER SEQUENCE public.notifications_id_seq OWNED BY public.notifications.id;
 -- Name: o_auth2_providers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.o_auth2_providers (
+CREATE TABLE IF NOT EXISTS public.o_auth2_providers (
     id integer NOT NULL,
     base_url character varying,
     token_endpoint character varying,
@@ -1929,7 +1929,7 @@ CREATE TABLE public.o_auth2_providers (
 -- Name: o_auth2_providers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.o_auth2_providers_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.o_auth2_providers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1948,7 +1948,7 @@ ALTER SEQUENCE public.o_auth2_providers_id_seq OWNED BY public.o_auth2_providers
 -- Name: offer_days; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.offer_days (
+CREATE TABLE IF NOT EXISTS public.offer_days (
     id integer NOT NULL,
     subscription_id integer,
     start_at timestamp without time zone,
@@ -1962,7 +1962,7 @@ CREATE TABLE public.offer_days (
 -- Name: offer_days_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.offer_days_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.offer_days_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1981,7 +1981,7 @@ ALTER SEQUENCE public.offer_days_id_seq OWNED BY public.offer_days.id;
 -- Name: open_api_clients; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.open_api_clients (
+CREATE TABLE IF NOT EXISTS public.open_api_clients (
     id integer NOT NULL,
     name character varying,
     calls_count integer DEFAULT 0,
@@ -1995,7 +1995,7 @@ CREATE TABLE public.open_api_clients (
 -- Name: open_api_clients_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.open_api_clients_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.open_api_clients_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2014,7 +2014,7 @@ ALTER SEQUENCE public.open_api_clients_id_seq OWNED BY public.open_api_clients.i
 -- Name: open_id_connect_providers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.open_id_connect_providers (
+CREATE TABLE IF NOT EXISTS public.open_id_connect_providers (
     id bigint NOT NULL,
     issuer character varying,
     discovery boolean,
@@ -2049,7 +2049,7 @@ CREATE TABLE public.open_id_connect_providers (
 -- Name: open_id_connect_providers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.open_id_connect_providers_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.open_id_connect_providers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2068,7 +2068,7 @@ ALTER SEQUENCE public.open_id_connect_providers_id_seq OWNED BY public.open_id_c
 -- Name: order_activities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.order_activities (
+CREATE TABLE IF NOT EXISTS public.order_activities (
     id bigint NOT NULL,
     order_id bigint,
     operator_profile_id bigint,
@@ -2083,7 +2083,7 @@ CREATE TABLE public.order_activities (
 -- Name: order_activities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.order_activities_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.order_activities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2102,7 +2102,7 @@ ALTER SEQUENCE public.order_activities_id_seq OWNED BY public.order_activities.i
 -- Name: order_items; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.order_items (
+CREATE TABLE IF NOT EXISTS public.order_items (
     id bigint NOT NULL,
     order_id bigint,
     orderable_type character varying,
@@ -2119,7 +2119,7 @@ CREATE TABLE public.order_items (
 -- Name: order_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.order_items_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.order_items_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2138,7 +2138,7 @@ ALTER SEQUENCE public.order_items_id_seq OWNED BY public.order_items.id;
 -- Name: orders; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.orders (
+CREATE TABLE IF NOT EXISTS public.orders (
     id bigint NOT NULL,
     statistic_profile_id bigint,
     operator_profile_id integer,
@@ -2168,7 +2168,7 @@ CREATE TABLE public.orders (
 -- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.orders_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.orders_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2187,7 +2187,7 @@ ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
 -- Name: organizations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.organizations (
+CREATE TABLE IF NOT EXISTS public.organizations (
     id integer NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -2200,7 +2200,7 @@ CREATE TABLE public.organizations (
 -- Name: organizations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.organizations_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.organizations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2219,7 +2219,7 @@ ALTER SEQUENCE public.organizations_id_seq OWNED BY public.organizations.id;
 -- Name: payment_gateway_objects; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.payment_gateway_objects (
+CREATE TABLE IF NOT EXISTS public.payment_gateway_objects (
     id bigint NOT NULL,
     gateway_object_id character varying,
     gateway_object_type character varying,
@@ -2233,7 +2233,7 @@ CREATE TABLE public.payment_gateway_objects (
 -- Name: payment_gateway_objects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.payment_gateway_objects_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.payment_gateway_objects_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2252,7 +2252,7 @@ ALTER SEQUENCE public.payment_gateway_objects_id_seq OWNED BY public.payment_gat
 -- Name: payment_schedule_items; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.payment_schedule_items (
+CREATE TABLE IF NOT EXISTS public.payment_schedule_items (
     id bigint NOT NULL,
     amount integer,
     due_date timestamp without time zone,
@@ -2271,7 +2271,7 @@ CREATE TABLE public.payment_schedule_items (
 -- Name: payment_schedule_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.payment_schedule_items_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.payment_schedule_items_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2290,7 +2290,7 @@ ALTER SEQUENCE public.payment_schedule_items_id_seq OWNED BY public.payment_sche
 -- Name: payment_schedule_objects; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.payment_schedule_objects (
+CREATE TABLE IF NOT EXISTS public.payment_schedule_objects (
     id bigint NOT NULL,
     object_type character varying,
     object_id bigint,
@@ -2305,7 +2305,7 @@ CREATE TABLE public.payment_schedule_objects (
 -- Name: payment_schedule_objects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.payment_schedule_objects_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.payment_schedule_objects_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2324,7 +2324,7 @@ ALTER SEQUENCE public.payment_schedule_objects_id_seq OWNED BY public.payment_sc
 -- Name: payment_schedules; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.payment_schedules (
+CREATE TABLE IF NOT EXISTS public.payment_schedules (
     id bigint NOT NULL,
     total integer,
     reference character varying,
@@ -2347,7 +2347,7 @@ CREATE TABLE public.payment_schedules (
 -- Name: payment_schedules_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.payment_schedules_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.payment_schedules_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2366,7 +2366,7 @@ ALTER SEQUENCE public.payment_schedules_id_seq OWNED BY public.payment_schedules
 -- Name: plan_categories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.plan_categories (
+CREATE TABLE IF NOT EXISTS public.plan_categories (
     id bigint NOT NULL,
     name character varying,
     weight integer,
@@ -2380,7 +2380,7 @@ CREATE TABLE public.plan_categories (
 -- Name: plan_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.plan_categories_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.plan_categories_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2399,7 +2399,7 @@ ALTER SEQUENCE public.plan_categories_id_seq OWNED BY public.plan_categories.id;
 -- Name: plan_limitations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.plan_limitations (
+CREATE TABLE IF NOT EXISTS public.plan_limitations (
     id bigint NOT NULL,
     plan_id bigint NOT NULL,
     limitable_type character varying NOT NULL,
@@ -2414,7 +2414,7 @@ CREATE TABLE public.plan_limitations (
 -- Name: plan_limitations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.plan_limitations_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.plan_limitations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2433,7 +2433,7 @@ ALTER SEQUENCE public.plan_limitations_id_seq OWNED BY public.plan_limitations.i
 -- Name: plans; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.plans (
+CREATE TABLE IF NOT EXISTS public.plans (
     id integer NOT NULL,
     name character varying,
     amount integer,
@@ -2462,7 +2462,7 @@ CREATE TABLE public.plans (
 -- Name: plans_availabilities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.plans_availabilities (
+CREATE TABLE IF NOT EXISTS public.plans_availabilities (
     id integer NOT NULL,
     plan_id integer,
     availability_id integer
@@ -2473,7 +2473,7 @@ CREATE TABLE public.plans_availabilities (
 -- Name: plans_availabilities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.plans_availabilities_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.plans_availabilities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2492,7 +2492,7 @@ ALTER SEQUENCE public.plans_availabilities_id_seq OWNED BY public.plans_availabi
 -- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.plans_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.plans_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2511,7 +2511,7 @@ ALTER SEQUENCE public.plans_id_seq OWNED BY public.plans.id;
 -- Name: prepaid_pack_reservations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.prepaid_pack_reservations (
+CREATE TABLE IF NOT EXISTS public.prepaid_pack_reservations (
     id bigint NOT NULL,
     statistic_profile_prepaid_pack_id bigint,
     reservation_id bigint,
@@ -2525,7 +2525,7 @@ CREATE TABLE public.prepaid_pack_reservations (
 -- Name: prepaid_pack_reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.prepaid_pack_reservations_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.prepaid_pack_reservations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2544,7 +2544,7 @@ ALTER SEQUENCE public.prepaid_pack_reservations_id_seq OWNED BY public.prepaid_p
 -- Name: prepaid_packs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.prepaid_packs (
+CREATE TABLE IF NOT EXISTS public.prepaid_packs (
     id bigint NOT NULL,
     priceable_type character varying,
     priceable_id bigint,
@@ -2563,7 +2563,7 @@ CREATE TABLE public.prepaid_packs (
 -- Name: prepaid_packs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.prepaid_packs_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.prepaid_packs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2582,7 +2582,7 @@ ALTER SEQUENCE public.prepaid_packs_id_seq OWNED BY public.prepaid_packs.id;
 -- Name: price_categories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.price_categories (
+CREATE TABLE IF NOT EXISTS public.price_categories (
     id integer NOT NULL,
     name character varying,
     conditions text,
@@ -2595,7 +2595,7 @@ CREATE TABLE public.price_categories (
 -- Name: price_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.price_categories_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.price_categories_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2614,7 +2614,7 @@ ALTER SEQUENCE public.price_categories_id_seq OWNED BY public.price_categories.i
 -- Name: prices; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.prices (
+CREATE TABLE IF NOT EXISTS public.prices (
     id integer NOT NULL,
     group_id integer,
     plan_id integer,
@@ -2631,7 +2631,7 @@ CREATE TABLE public.prices (
 -- Name: prices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.prices_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.prices_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2650,7 +2650,7 @@ ALTER SEQUENCE public.prices_id_seq OWNED BY public.prices.id;
 -- Name: product_categories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.product_categories (
+CREATE TABLE IF NOT EXISTS public.product_categories (
     id bigint NOT NULL,
     name character varying,
     slug character varying,
@@ -2665,7 +2665,7 @@ CREATE TABLE public.product_categories (
 -- Name: product_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.product_categories_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.product_categories_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2684,7 +2684,7 @@ ALTER SEQUENCE public.product_categories_id_seq OWNED BY public.product_categori
 -- Name: product_stock_movements; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.product_stock_movements (
+CREATE TABLE IF NOT EXISTS public.product_stock_movements (
     id bigint NOT NULL,
     product_id bigint,
     quantity integer,
@@ -2702,7 +2702,7 @@ CREATE TABLE public.product_stock_movements (
 -- Name: product_stock_movements_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.product_stock_movements_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.product_stock_movements_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2721,7 +2721,7 @@ ALTER SEQUENCE public.product_stock_movements_id_seq OWNED BY public.product_sto
 -- Name: products; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.products (
+CREATE TABLE IF NOT EXISTS public.products (
     id bigint NOT NULL,
     name character varying,
     slug character varying,
@@ -2743,7 +2743,7 @@ CREATE TABLE public.products (
 -- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.products_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.products_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2762,7 +2762,7 @@ ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
 -- Name: profile_custom_fields; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.profile_custom_fields (
+CREATE TABLE IF NOT EXISTS public.profile_custom_fields (
     id bigint NOT NULL,
     label character varying,
     required boolean DEFAULT false,
@@ -2776,7 +2776,7 @@ CREATE TABLE public.profile_custom_fields (
 -- Name: profile_custom_fields_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.profile_custom_fields_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.profile_custom_fields_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2795,7 +2795,7 @@ ALTER SEQUENCE public.profile_custom_fields_id_seq OWNED BY public.profile_custo
 -- Name: profiles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.profiles (
+CREATE TABLE IF NOT EXISTS public.profiles (
     id integer NOT NULL,
     user_id integer,
     first_name character varying,
@@ -2830,7 +2830,7 @@ CREATE TABLE public.profiles (
 -- Name: profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.profiles_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.profiles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2849,7 +2849,7 @@ ALTER SEQUENCE public.profiles_id_seq OWNED BY public.profiles.id;
 -- Name: project_categories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.project_categories (
+CREATE TABLE IF NOT EXISTS public.project_categories (
     id bigint NOT NULL,
     name character varying,
     created_at timestamp(6) without time zone NOT NULL,
@@ -2861,7 +2861,7 @@ CREATE TABLE public.project_categories (
 -- Name: project_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.project_categories_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.project_categories_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2880,7 +2880,7 @@ ALTER SEQUENCE public.project_categories_id_seq OWNED BY public.project_categori
 -- Name: project_steps; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.project_steps (
+CREATE TABLE IF NOT EXISTS public.project_steps (
     id integer NOT NULL,
     description text,
     project_id integer,
@@ -2895,7 +2895,7 @@ CREATE TABLE public.project_steps (
 -- Name: project_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.project_steps_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.project_steps_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2914,7 +2914,7 @@ ALTER SEQUENCE public.project_steps_id_seq OWNED BY public.project_steps.id;
 -- Name: project_users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.project_users (
+CREATE TABLE IF NOT EXISTS public.project_users (
     id integer NOT NULL,
     project_id integer,
     user_id integer,
@@ -2929,7 +2929,7 @@ CREATE TABLE public.project_users (
 -- Name: project_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.project_users_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.project_users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2948,7 +2948,7 @@ ALTER SEQUENCE public.project_users_id_seq OWNED BY public.project_users.id;
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.projects (
+CREATE TABLE IF NOT EXISTS public.projects (
     id integer NOT NULL,
     name character varying,
     description text,
@@ -2969,7 +2969,7 @@ CREATE TABLE public.projects (
 -- Name: projects_components; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.projects_components (
+CREATE TABLE IF NOT EXISTS public.projects_components (
     id integer NOT NULL,
     project_id integer,
     component_id integer
@@ -2980,7 +2980,7 @@ CREATE TABLE public.projects_components (
 -- Name: projects_components_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.projects_components_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.projects_components_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2999,7 +2999,7 @@ ALTER SEQUENCE public.projects_components_id_seq OWNED BY public.projects_compon
 -- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.projects_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.projects_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3018,7 +3018,7 @@ ALTER SEQUENCE public.projects_id_seq OWNED BY public.projects.id;
 -- Name: projects_machines; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.projects_machines (
+CREATE TABLE IF NOT EXISTS public.projects_machines (
     id integer NOT NULL,
     project_id integer,
     machine_id integer
@@ -3029,7 +3029,7 @@ CREATE TABLE public.projects_machines (
 -- Name: projects_machines_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.projects_machines_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.projects_machines_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3048,7 +3048,7 @@ ALTER SEQUENCE public.projects_machines_id_seq OWNED BY public.projects_machines
 -- Name: projects_project_categories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.projects_project_categories (
+CREATE TABLE IF NOT EXISTS public.projects_project_categories (
     id bigint NOT NULL,
     project_id bigint NOT NULL,
     project_category_id bigint NOT NULL,
@@ -3061,7 +3061,7 @@ CREATE TABLE public.projects_project_categories (
 -- Name: projects_project_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.projects_project_categories_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.projects_project_categories_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3080,7 +3080,7 @@ ALTER SEQUENCE public.projects_project_categories_id_seq OWNED BY public.project
 -- Name: projects_spaces; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.projects_spaces (
+CREATE TABLE IF NOT EXISTS public.projects_spaces (
     id integer NOT NULL,
     project_id integer,
     space_id integer
@@ -3091,7 +3091,7 @@ CREATE TABLE public.projects_spaces (
 -- Name: projects_spaces_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.projects_spaces_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.projects_spaces_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3110,7 +3110,7 @@ ALTER SEQUENCE public.projects_spaces_id_seq OWNED BY public.projects_spaces.id;
 -- Name: projects_themes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.projects_themes (
+CREATE TABLE IF NOT EXISTS public.projects_themes (
     id integer NOT NULL,
     project_id integer,
     theme_id integer
@@ -3121,7 +3121,7 @@ CREATE TABLE public.projects_themes (
 -- Name: projects_themes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.projects_themes_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.projects_themes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3140,7 +3140,7 @@ ALTER SEQUENCE public.projects_themes_id_seq OWNED BY public.projects_themes.id;
 -- Name: reservation_contexts; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.reservation_contexts (
+CREATE TABLE IF NOT EXISTS public.reservation_contexts (
     id bigint NOT NULL,
     name character varying,
     applicable_on character varying[] DEFAULT '{}'::character varying[],
@@ -3153,7 +3153,7 @@ CREATE TABLE public.reservation_contexts (
 -- Name: reservation_contexts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.reservation_contexts_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.reservation_contexts_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3172,7 +3172,7 @@ ALTER SEQUENCE public.reservation_contexts_id_seq OWNED BY public.reservation_co
 -- Name: reservations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.reservations (
+CREATE TABLE IF NOT EXISTS public.reservations (
     id integer NOT NULL,
     message text,
     created_at timestamp without time zone,
@@ -3189,7 +3189,7 @@ CREATE TABLE public.reservations (
 -- Name: reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.reservations_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.reservations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3208,7 +3208,7 @@ ALTER SEQUENCE public.reservations_id_seq OWNED BY public.reservations.id;
 -- Name: roles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.roles (
+CREATE TABLE IF NOT EXISTS public.roles (
     id integer NOT NULL,
     name character varying,
     resource_type character varying,
@@ -3222,7 +3222,7 @@ CREATE TABLE public.roles (
 -- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.roles_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.roles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3241,7 +3241,7 @@ ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
 -- Name: saml_providers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.saml_providers (
+CREATE TABLE IF NOT EXISTS public.saml_providers (
     id bigint NOT NULL,
     sp_entity_id character varying,
     idp_sso_service_url character varying,
@@ -3263,7 +3263,7 @@ CREATE TABLE public.saml_providers (
 -- Name: saml_providers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.saml_providers_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.saml_providers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3282,7 +3282,7 @@ ALTER SEQUENCE public.saml_providers_id_seq OWNED BY public.saml_providers.id;
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.schema_migrations (
+CREATE TABLE IF NOT EXISTS public.schema_migrations (
     version character varying NOT NULL
 );
 
@@ -3291,7 +3291,7 @@ CREATE TABLE public.schema_migrations (
 -- Name: settings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.settings (
+CREATE TABLE IF NOT EXISTS public.settings (
     id integer NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -3303,7 +3303,7 @@ CREATE TABLE public.settings (
 -- Name: settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.settings_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.settings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3322,7 +3322,7 @@ ALTER SEQUENCE public.settings_id_seq OWNED BY public.settings.id;
 -- Name: slots; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.slots (
+CREATE TABLE IF NOT EXISTS public.slots (
     id integer NOT NULL,
     start_at timestamp without time zone,
     end_at timestamp without time zone,
@@ -3337,7 +3337,7 @@ CREATE TABLE public.slots (
 -- Name: slots_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.slots_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.slots_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3356,7 +3356,7 @@ ALTER SEQUENCE public.slots_id_seq OWNED BY public.slots.id;
 -- Name: slots_reservations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.slots_reservations (
+CREATE TABLE IF NOT EXISTS public.slots_reservations (
     id integer NOT NULL,
     slot_id integer NOT NULL,
     reservation_id integer NOT NULL,
@@ -3373,7 +3373,7 @@ CREATE TABLE public.slots_reservations (
 -- Name: slots_reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.slots_reservations_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.slots_reservations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3392,7 +3392,7 @@ ALTER SEQUENCE public.slots_reservations_id_seq OWNED BY public.slots_reservatio
 -- Name: spaces; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.spaces (
+CREATE TABLE IF NOT EXISTS public.spaces (
     id integer NOT NULL,
     name character varying,
     default_places integer,
@@ -3412,7 +3412,7 @@ CREATE TABLE public.spaces (
 -- Name: spaces_availabilities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.spaces_availabilities (
+CREATE TABLE IF NOT EXISTS public.spaces_availabilities (
     id integer NOT NULL,
     space_id integer,
     availability_id integer,
@@ -3425,7 +3425,7 @@ CREATE TABLE public.spaces_availabilities (
 -- Name: spaces_availabilities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.spaces_availabilities_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.spaces_availabilities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3444,7 +3444,7 @@ ALTER SEQUENCE public.spaces_availabilities_id_seq OWNED BY public.spaces_availa
 -- Name: spaces_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.spaces_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.spaces_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3463,7 +3463,7 @@ ALTER SEQUENCE public.spaces_id_seq OWNED BY public.spaces.id;
 -- Name: statistic_custom_aggregations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_custom_aggregations (
+CREATE TABLE IF NOT EXISTS public.statistic_custom_aggregations (
     id integer NOT NULL,
     query text,
     statistic_type_id integer,
@@ -3479,7 +3479,7 @@ CREATE TABLE public.statistic_custom_aggregations (
 -- Name: statistic_custom_aggregations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_custom_aggregations_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_custom_aggregations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3498,7 +3498,7 @@ ALTER SEQUENCE public.statistic_custom_aggregations_id_seq OWNED BY public.stati
 -- Name: statistic_fields; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_fields (
+CREATE TABLE IF NOT EXISTS public.statistic_fields (
     id integer NOT NULL,
     statistic_index_id integer,
     key character varying,
@@ -3514,7 +3514,7 @@ CREATE TABLE public.statistic_fields (
 -- Name: statistic_fields_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_fields_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_fields_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3533,7 +3533,7 @@ ALTER SEQUENCE public.statistic_fields_id_seq OWNED BY public.statistic_fields.i
 -- Name: statistic_graphs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_graphs (
+CREATE TABLE IF NOT EXISTS public.statistic_graphs (
     id integer NOT NULL,
     statistic_index_id integer,
     chart_type character varying,
@@ -3547,7 +3547,7 @@ CREATE TABLE public.statistic_graphs (
 -- Name: statistic_graphs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_graphs_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_graphs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3566,7 +3566,7 @@ ALTER SEQUENCE public.statistic_graphs_id_seq OWNED BY public.statistic_graphs.i
 -- Name: statistic_indices; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_indices (
+CREATE TABLE IF NOT EXISTS public.statistic_indices (
     id integer NOT NULL,
     es_type_key character varying,
     label character varying,
@@ -3582,7 +3582,7 @@ CREATE TABLE public.statistic_indices (
 -- Name: statistic_indices_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_indices_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_indices_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3601,7 +3601,7 @@ ALTER SEQUENCE public.statistic_indices_id_seq OWNED BY public.statistic_indices
 -- Name: statistic_profile_prepaid_packs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_profile_prepaid_packs (
+CREATE TABLE IF NOT EXISTS public.statistic_profile_prepaid_packs (
     id bigint NOT NULL,
     prepaid_pack_id bigint,
     statistic_profile_id bigint,
@@ -3616,7 +3616,7 @@ CREATE TABLE public.statistic_profile_prepaid_packs (
 -- Name: statistic_profile_prepaid_packs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_profile_prepaid_packs_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_profile_prepaid_packs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3635,7 +3635,7 @@ ALTER SEQUENCE public.statistic_profile_prepaid_packs_id_seq OWNED BY public.sta
 -- Name: statistic_profile_trainings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_profile_trainings (
+CREATE TABLE IF NOT EXISTS public.statistic_profile_trainings (
     id integer NOT NULL,
     statistic_profile_id integer,
     training_id integer,
@@ -3648,7 +3648,7 @@ CREATE TABLE public.statistic_profile_trainings (
 -- Name: statistic_profile_trainings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_profile_trainings_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_profile_trainings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3667,7 +3667,7 @@ ALTER SEQUENCE public.statistic_profile_trainings_id_seq OWNED BY public.statist
 -- Name: statistic_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_profiles (
+CREATE TABLE IF NOT EXISTS public.statistic_profiles (
     id integer NOT NULL,
     gender boolean,
     birthday date,
@@ -3683,7 +3683,7 @@ CREATE TABLE public.statistic_profiles (
 -- Name: statistic_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_profiles_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_profiles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3702,7 +3702,7 @@ ALTER SEQUENCE public.statistic_profiles_id_seq OWNED BY public.statistic_profil
 -- Name: statistic_sub_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_sub_types (
+CREATE TABLE IF NOT EXISTS public.statistic_sub_types (
     id integer NOT NULL,
     key character varying,
     label character varying,
@@ -3716,7 +3716,7 @@ CREATE TABLE public.statistic_sub_types (
 -- Name: statistic_sub_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_sub_types_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_sub_types_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3735,7 +3735,7 @@ ALTER SEQUENCE public.statistic_sub_types_id_seq OWNED BY public.statistic_sub_t
 -- Name: statistic_type_sub_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_type_sub_types (
+CREATE TABLE IF NOT EXISTS public.statistic_type_sub_types (
     id integer NOT NULL,
     statistic_type_id integer,
     statistic_sub_type_id integer,
@@ -3748,7 +3748,7 @@ CREATE TABLE public.statistic_type_sub_types (
 -- Name: statistic_type_sub_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_type_sub_types_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_type_sub_types_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3767,7 +3767,7 @@ ALTER SEQUENCE public.statistic_type_sub_types_id_seq OWNED BY public.statistic_
 -- Name: statistic_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statistic_types (
+CREATE TABLE IF NOT EXISTS public.statistic_types (
     id integer NOT NULL,
     statistic_index_id integer,
     key character varying,
@@ -3784,7 +3784,7 @@ CREATE TABLE public.statistic_types (
 -- Name: statistic_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statistic_types_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statistic_types_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3803,7 +3803,7 @@ ALTER SEQUENCE public.statistic_types_id_seq OWNED BY public.statistic_types.id;
 -- Name: statuses; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.statuses (
+CREATE TABLE IF NOT EXISTS public.statuses (
     id bigint NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -3815,7 +3815,7 @@ CREATE TABLE public.statuses (
 -- Name: statuses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.statuses_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.statuses_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3834,7 +3834,7 @@ ALTER SEQUENCE public.statuses_id_seq OWNED BY public.statuses.id;
 -- Name: stylesheets; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.stylesheets (
+CREATE TABLE IF NOT EXISTS public.stylesheets (
     id integer NOT NULL,
     contents text,
     created_at timestamp without time zone NOT NULL,
@@ -3847,7 +3847,7 @@ CREATE TABLE public.stylesheets (
 -- Name: stylesheets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.stylesheets_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.stylesheets_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3866,7 +3866,7 @@ ALTER SEQUENCE public.stylesheets_id_seq OWNED BY public.stylesheets.id;
 -- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.subscriptions (
+CREATE TABLE IF NOT EXISTS public.subscriptions (
     id integer NOT NULL,
     plan_id integer,
     created_at timestamp without time zone,
@@ -3882,7 +3882,7 @@ CREATE TABLE public.subscriptions (
 -- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.subscriptions_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.subscriptions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3901,7 +3901,7 @@ ALTER SEQUENCE public.subscriptions_id_seq OWNED BY public.subscriptions.id;
 -- Name: supporting_document_files; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.supporting_document_files (
+CREATE TABLE IF NOT EXISTS public.supporting_document_files (
     id bigint NOT NULL,
     supporting_document_type_id bigint,
     supportable_id bigint,
@@ -3916,7 +3916,7 @@ CREATE TABLE public.supporting_document_files (
 -- Name: supporting_document_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.supporting_document_files_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.supporting_document_files_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3935,7 +3935,7 @@ ALTER SEQUENCE public.supporting_document_files_id_seq OWNED BY public.supportin
 -- Name: supporting_document_refusals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.supporting_document_refusals (
+CREATE TABLE IF NOT EXISTS public.supporting_document_refusals (
     id bigint NOT NULL,
     supportable_id bigint,
     operator_id integer,
@@ -3950,7 +3950,7 @@ CREATE TABLE public.supporting_document_refusals (
 -- Name: supporting_document_refusals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.supporting_document_refusals_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.supporting_document_refusals_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3969,7 +3969,7 @@ ALTER SEQUENCE public.supporting_document_refusals_id_seq OWNED BY public.suppor
 -- Name: supporting_document_refusals_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.supporting_document_refusals_types (
+CREATE TABLE IF NOT EXISTS public.supporting_document_refusals_types (
     supporting_document_type_id bigint NOT NULL,
     supporting_document_refusal_id bigint NOT NULL
 );
@@ -3979,7 +3979,7 @@ CREATE TABLE public.supporting_document_refusals_types (
 -- Name: supporting_document_types; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.supporting_document_types (
+CREATE TABLE IF NOT EXISTS public.supporting_document_types (
     id bigint NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -3992,7 +3992,7 @@ CREATE TABLE public.supporting_document_types (
 -- Name: supporting_document_types_groups; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.supporting_document_types_groups (
+CREATE TABLE IF NOT EXISTS public.supporting_document_types_groups (
     id bigint NOT NULL,
     supporting_document_type_id bigint,
     group_id bigint,
@@ -4005,7 +4005,7 @@ CREATE TABLE public.supporting_document_types_groups (
 -- Name: supporting_document_types_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.supporting_document_types_groups_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.supporting_document_types_groups_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4024,7 +4024,7 @@ ALTER SEQUENCE public.supporting_document_types_groups_id_seq OWNED BY public.su
 -- Name: supporting_document_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.supporting_document_types_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.supporting_document_types_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4043,7 +4043,7 @@ ALTER SEQUENCE public.supporting_document_types_id_seq OWNED BY public.supportin
 -- Name: tags; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.tags (
+CREATE TABLE IF NOT EXISTS public.tags (
     id integer NOT NULL,
     name character varying,
     created_at timestamp without time zone NOT NULL,
@@ -4055,7 +4055,7 @@ CREATE TABLE public.tags (
 -- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.tags_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.tags_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4074,7 +4074,7 @@ ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 -- Name: themes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.themes (
+CREATE TABLE IF NOT EXISTS public.themes (
     id integer NOT NULL,
     name character varying NOT NULL
 );
@@ -4084,7 +4084,7 @@ CREATE TABLE public.themes (
 -- Name: themes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.themes_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.themes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4103,7 +4103,7 @@ ALTER SEQUENCE public.themes_id_seq OWNED BY public.themes.id;
 -- Name: tickets; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.tickets (
+CREATE TABLE IF NOT EXISTS public.tickets (
     id integer NOT NULL,
     reservation_id integer,
     event_price_category_id integer,
@@ -4117,7 +4117,7 @@ CREATE TABLE public.tickets (
 -- Name: tickets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.tickets_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.tickets_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4136,7 +4136,7 @@ ALTER SEQUENCE public.tickets_id_seq OWNED BY public.tickets.id;
 -- Name: trainings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.trainings (
+CREATE TABLE IF NOT EXISTS public.trainings (
     id integer NOT NULL,
     name character varying,
     created_at timestamp without time zone,
@@ -4160,7 +4160,7 @@ CREATE TABLE public.trainings (
 -- Name: trainings_availabilities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.trainings_availabilities (
+CREATE TABLE IF NOT EXISTS public.trainings_availabilities (
     id integer NOT NULL,
     training_id integer,
     availability_id integer,
@@ -4173,7 +4173,7 @@ CREATE TABLE public.trainings_availabilities (
 -- Name: trainings_availabilities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.trainings_availabilities_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.trainings_availabilities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4192,7 +4192,7 @@ ALTER SEQUENCE public.trainings_availabilities_id_seq OWNED BY public.trainings_
 -- Name: trainings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.trainings_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.trainings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4211,7 +4211,7 @@ ALTER SEQUENCE public.trainings_id_seq OWNED BY public.trainings.id;
 -- Name: trainings_machines; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.trainings_machines (
+CREATE TABLE IF NOT EXISTS public.trainings_machines (
     id integer NOT NULL,
     training_id integer,
     machine_id integer
@@ -4222,7 +4222,7 @@ CREATE TABLE public.trainings_machines (
 -- Name: trainings_machines_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.trainings_machines_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.trainings_machines_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4241,7 +4241,7 @@ ALTER SEQUENCE public.trainings_machines_id_seq OWNED BY public.trainings_machin
 -- Name: trainings_pricings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.trainings_pricings (
+CREATE TABLE IF NOT EXISTS public.trainings_pricings (
     id integer NOT NULL,
     group_id integer,
     amount integer,
@@ -4255,7 +4255,7 @@ CREATE TABLE public.trainings_pricings (
 -- Name: trainings_pricings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.trainings_pricings_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.trainings_pricings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4274,7 +4274,7 @@ ALTER SEQUENCE public.trainings_pricings_id_seq OWNED BY public.trainings_pricin
 -- Name: user_profile_custom_fields; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.user_profile_custom_fields (
+CREATE TABLE IF NOT EXISTS public.user_profile_custom_fields (
     id bigint NOT NULL,
     invoicing_profile_id bigint,
     profile_custom_field_id bigint,
@@ -4288,7 +4288,7 @@ CREATE TABLE public.user_profile_custom_fields (
 -- Name: user_profile_custom_fields_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.user_profile_custom_fields_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.user_profile_custom_fields_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4307,7 +4307,7 @@ ALTER SEQUENCE public.user_profile_custom_fields_id_seq OWNED BY public.user_pro
 -- Name: user_tags; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.user_tags (
+CREATE TABLE IF NOT EXISTS public.user_tags (
     id integer NOT NULL,
     user_id integer,
     tag_id integer,
@@ -4320,7 +4320,7 @@ CREATE TABLE public.user_tags (
 -- Name: user_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.user_tags_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.user_tags_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4339,7 +4339,7 @@ ALTER SEQUENCE public.user_tags_id_seq OWNED BY public.user_tags.id;
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.users (
+CREATE TABLE IF NOT EXISTS public.users (
     id integer NOT NULL,
     email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
@@ -4380,7 +4380,7 @@ CREATE TABLE public.users (
 -- Name: users_credits; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.users_credits (
+CREATE TABLE IF NOT EXISTS public.users_credits (
     id integer NOT NULL,
     user_id integer,
     credit_id integer,
@@ -4394,7 +4394,7 @@ CREATE TABLE public.users_credits (
 -- Name: users_credits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.users_credits_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.users_credits_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4413,7 +4413,7 @@ ALTER SEQUENCE public.users_credits_id_seq OWNED BY public.users_credits.id;
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.users_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4432,7 +4432,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 -- Name: users_roles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.users_roles (
+CREATE TABLE IF NOT EXISTS public.users_roles (
     user_id integer,
     role_id integer
 );
@@ -4442,7 +4442,7 @@ CREATE TABLE public.users_roles (
 -- Name: wallet_transactions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.wallet_transactions (
+CREATE TABLE IF NOT EXISTS public.wallet_transactions (
     id integer NOT NULL,
     wallet_id integer,
     transaction_type character varying,
@@ -4457,7 +4457,7 @@ CREATE TABLE public.wallet_transactions (
 -- Name: wallet_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.wallet_transactions_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.wallet_transactions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4476,7 +4476,7 @@ ALTER SEQUENCE public.wallet_transactions_id_seq OWNED BY public.wallet_transact
 -- Name: wallets; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.wallets (
+CREATE TABLE IF NOT EXISTS public.wallets (
     id integer NOT NULL,
     amount integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
@@ -4489,7 +4489,7 @@ CREATE TABLE public.wallets (
 -- Name: wallets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.wallets_id_seq
+CREATE SEQUENCE IF NOT EXISTS public.wallets_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -5376,8 +5376,9 @@ ALTER TABLE ONLY public.wallets ALTER COLUMN id SET DEFAULT nextval('public.wall
 -- Name: abuses abuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.abuses
-    ADD CONSTRAINT abuses_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.abuses 
+    DROP CONSTRAINT IF EXISTS abuses_pkey;
+    ALTER TABLE ONLY public.abuses ADD CONSTRAINT abuses_pkey PRIMARY KEY (id);
 
 
 --
