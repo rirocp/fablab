@@ -16,7 +16,8 @@ import { useForm } from 'react-hook-form';
 import ProductLib from '../../lib/product';
 
 type reasonSelectOption = { value: StockMovementReason, label: string };
-type typeSelectOption = { value: StockType, label: string };
+// Commit
+// type typeSelectOption = { value: StockType, label: string };
 
 interface ProductStockModalProps {
   onSuccess: (movement: ProductStockMovement) => void,
@@ -32,7 +33,17 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
 
   const [movement, setMovement] = useState<'in' | 'out'>('in');
 
-  const { handleSubmit, register, control, formState } = useForm<ProductStockMovement>();
+  const { handleSubmit, register, control, formState, setValue } = 
+  useForm<ProductStockMovement>({
+    defaultValues: {
+      stock_type: 'external' // Commit set stock_type to "external" by default
+    }
+  });
+
+  // Commit set stock_type to "external" when the component mounts
+  React.useEffect(() => {
+    setValue('stock_type', 'external');
+  }, [setValue]);
 
   /**
    * Toggle between adding or removing product from stock
@@ -52,7 +63,7 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
       event.preventDefault();
     }
     return handleSubmit((data: ProductStockMovement) => {
-      onSuccess(data);
+      onSuccess({...data,stock_type: 'external'}); // Commit set stock_type to "external" when submitting
       toggleModal();
     })(event);
   };
@@ -68,12 +79,15 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
   /**
    * Creates sorting options to the react-select format
    */
+  
+  /* Commit
   const buildStocksOptions = (): Array<typeSelectOption> => {
     return [
       // Commit { value: 'internal', label: t('app.admin.store.product_stock_modal.internal') },
       { value: 'external', label: t('app.admin.store.product_stock_modal.external') }
     ];
   };
+  */
 
   return (
     <FabModal title={t('app.admin.store.product_stock_modal.modal_title')}
@@ -92,12 +106,14 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
             {t('app.admin.store.product_stock_modal.withdrawal')}
           </button>
         </div>
+        {/* Commit
         <FormSelect options={buildStocksOptions()}
                     control={control}
                     id="stock_type"
                     rules={{ required: true }}
                     formState={formState}
                     label={t('app.admin.store.product_stock_modal.stocks')} />
+                    */}
         <FormInput id="quantity"
                     type="number"
                     register={register}
