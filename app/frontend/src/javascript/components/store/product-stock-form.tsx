@@ -86,8 +86,7 @@ export const ProductStockForm = <TContext extends object> ({ currentFormValues, 
       // Commit
       // { value: 'internal', label: t('app.admin.store.product_stock_form.internal') },
       { value: 'external', label: t('app.admin.store.product_stock_form.external') },
-      // Commit
-      // { value: 'all', label: t('app.admin.store.product_stock_form.all') }
+      //Commit { value: 'all', label: t('app.admin.store.product_stock_form.all') }
     ];
   };
 
