@@ -14,7 +14,7 @@ export interface ProductIndexFilter {
   categories?: ProductCategory[],
   machines?: Machine[],
   keywords?: string[],
-  stock_type?: 'internal' | 'external',
+  stock_type?: 'external', /* Commit 'internal' | 'external',*/
   stock_from?: number,
   stock_to?: number,
   sort?: ProductSortOption
@@ -66,7 +66,7 @@ export const initialResources: ProductResourcesFetching = {
   }
 };
 
-export type StockType = 'internal' | 'external' | 'all';
+export type StockType = 'external'; /* Commit 'internal' | 'external' | 'all';*/
 
 export const stockMovementInReasons = ['inward_stock', 'returned', 'cancelled', 'inventory_fix', 'other_in'] as const;
 export const stockMovementOutReasons = ['sold', 'missing', 'damaged', 'other_out'] as const;

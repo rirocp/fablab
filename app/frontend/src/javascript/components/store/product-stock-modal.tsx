@@ -70,7 +70,7 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
    */
   const buildStocksOptions = (): Array<typeSelectOption> => {
     return [
-      { value: 'internal', label: t('app.admin.store.product_stock_modal.internal') },
+      // Commit { value: 'internal', label: t('app.admin.store.product_stock_modal.internal') },
       { value: 'external', label: t('app.admin.store.product_stock_modal.external') }
     ];
   };

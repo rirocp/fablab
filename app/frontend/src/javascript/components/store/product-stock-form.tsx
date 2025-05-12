@@ -83,9 +83,11 @@ export const ProductStockForm = <TContext extends object> ({ currentFormValues, 
    */
   const buildStocksOptions = (): Array<typeSelectOption> => {
     return [
-      { value: 'internal', label: t('app.admin.store.product_stock_form.internal') },
+      // Commit
+      // { value: 'internal', label: t('app.admin.store.product_stock_form.internal') },
       { value: 'external', label: t('app.admin.store.product_stock_form.external') },
-      { value: 'all', label: t('app.admin.store.product_stock_form.all') }
+      // Commit
+      // { value: 'all', label: t('app.admin.store.product_stock_form.all') }
     ];
   };
 
@@ -190,10 +192,12 @@ export const ProductStockForm = <TContext extends object> ({ currentFormValues, 
       <div></div>
       <div className="stock-item">
         <p className='title'>{currentFormValues?.name}</p>
+        {/* Commit
         <div className="group">
           <span>{t('app.admin.store.product_stock_form.internal')}</span>
           <p>{currentFormValues?.stock?.internal}</p>
         </div>
+        */}
         <div className="group">
           <span>{t('app.admin.store.product_stock_form.external')}</span>
           <p>{currentFormValues?.stock?.external}</p>
