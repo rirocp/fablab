@@ -2155,7 +2155,12 @@ CREATE TABLE public.orders (
     environment character varying,
     coupon_id bigint,
     paid_total integer,
-    invoice_id bigint
+    invoice_id bigint,
+    paid_at timestamp without time zone,
+    in_progress_at timestamp without time zone,
+    canceled_at timestamp without time zone,
+    refunded_at timestamp without time zone,
+    project character varying
 );
 
 
@@ -3233,6 +3238,47 @@ ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
 
 
 --
+-- Name: saml_providers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.saml_providers (
+    id bigint NOT NULL,
+    sp_entity_id character varying,
+    idp_sso_service_url character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    profile_url character varying,
+    idp_cert character varying,
+    idp_cert_fingerprint character varying,
+    idp_slo_service_url character varying,
+    sp_certificate character varying,
+    sp_private_key character varying,
+    authn_requests_signed boolean DEFAULT false,
+    want_assertions_signed boolean DEFAULT false,
+    uid_attribute character varying
+);
+
+
+--
+-- Name: saml_providers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.saml_providers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: saml_providers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.saml_providers_id_seq OWNED BY public.saml_providers.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3459,7 +3505,8 @@ CREATE TABLE public.statistic_fields (
     label character varying,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    data_type character varying
+    data_type character varying,
+    label_i18n_path character varying
 );
 
 
@@ -3526,7 +3573,8 @@ CREATE TABLE public.statistic_indices (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     "table" boolean DEFAULT true,
-    ca boolean DEFAULT true
+    ca boolean DEFAULT true,
+    label_i18n_path character varying
 );
 
 
@@ -3659,7 +3707,8 @@ CREATE TABLE public.statistic_sub_types (
     key character varying,
     label character varying,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    label_i18n_path character varying
 );
 
 
@@ -3726,7 +3775,8 @@ CREATE TABLE public.statistic_types (
     graph boolean,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    simple boolean
+    simple boolean,
+    label_i18n_path character varying
 );
 
 
@@ -5071,6 +5121,13 @@ ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_
 
 
 --
+-- Name: saml_providers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.saml_providers ALTER COLUMN id SET DEFAULT nextval('public.saml_providers_id_seq'::regclass);
+
+
+--
 -- Name: settings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6025,6 +6082,14 @@ ALTER TABLE ONLY public.reservations
 
 ALTER TABLE ONLY public.roles
     ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: saml_providers saml_providers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.saml_providers
+    ADD CONSTRAINT saml_providers_pkey PRIMARY KEY (id);
 
 
 --
@@ -9198,6 +9263,16 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230828073428'),
 ('20230831103208'),
 ('20230901090637'),
-('20230907124230');
+('20230907124230'),
+('20231103093436'),
+('20231108094433'),
+('20240116163703'),
+('20240126145351'),
+('20240126192110'),
+('20240220140225'),
+('20240327095614'),
+('20240605085829'),
+('20250505125422'),
+('20250508145115');
 
 
