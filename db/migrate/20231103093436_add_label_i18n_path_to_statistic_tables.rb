@@ -1,3 +1,5 @@
+
+#Commit
 class AddLabelI18nPathToStatisticTables < ActiveRecord::Migration[5.2] # Commit changed from [7.0] to [5.2]
   def change
     add_column :statistic_indices, :label_i18n_path, :string
