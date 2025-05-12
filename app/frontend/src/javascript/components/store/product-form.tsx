@@ -40,7 +40,14 @@ interface ProductFormProps {
 export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSuccess, onError, uiRouter }) => {
   const { t } = useTranslation('admin');
 
-  const { handleSubmit, register, control, formState, setValue, reset } = useForm<Product>({ defaultValues: { ...product } });
+  const { handleSubmit, register, control, formState, setValue, reset } = useForm<Product>({ defaultValues: {
+    ...product,
+    // Commit
+    amount: 0,
+    quantity_min:1
+  } 
+  });
+
   const output = useWatch<Product>({ control });
   const [isActivePrice, setIsActivePrice] = useState<boolean>(product.id && _.isFinite(product.amount));
   const [productCategories, setProductCategories] = useState<SelectOption<number, string | JSX.Element>[]>([]);
@@ -49,6 +56,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
   const [saving, setSaving] = useState<boolean>(false);
 
   useEffect(() => {
+    // Commit, ensures amount and quantity_min are always 0 and 1, respectively
+    setValue('amount', 0);
+    setValue('quantity_min', 1);
+
     ProductCategoryAPI.index().then(data => {
       setProductCategories(buildSelectOptions(ProductLib.sortCategories(data)));
     }).catch(onError);
@@ -92,23 +103,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
   /**
    * Callback triggered when the user toggles the visibility of the product in the store.
    */
-  const handleIsActiveChanged = (value: boolean): void => {
-    if (value) {
-      setValue('is_active_price', true);
-      setIsActivePrice(true);
-    }
-  };
-
-  /**
-   * Callback triggered when is active price has changed.
-   */
-  const toggleIsActivePrice = (value: boolean) => {
-    if (!value) {
-      setValue('amount', null);
-      setValue('is_active', false);
-    }
-    setIsActivePrice(value);
-  };
 
   /**
    * Callback triggered when the form is submitted: process with the product creation or update.
@@ -122,6 +116,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
    */
   const saveProduct = (data: Product) => {
     setSaving(true);
+    // Commit
+    const updatedData = {
+      ...data,
+      amount: 0, // Ensure price is always 0
+      quantity_min: 1 // Ensure minimum quantity is always 1
+    };
     if (product.id) {
       ProductAPI.update(data).then((res) => {
         reset(res);
@@ -186,13 +186,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
                       limit={6000}
                       id="description"
                       ariaLabel={t('app.admin.store.product_form.description')} />
-          <FormSwitch control={control}
-                      id="is_active"
-                      formState={formState}
-                      label={t('app.admin.store.product_form.is_show_in_store')}
-                      tooltip={t('app.admin.store.product_form.active_price_info')}
-                      onChange={handleIsActiveChanged}
-                      className='span-3' />
         </div>
       </section>
 
@@ -210,34 +203,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
         </div>
       </section>
 
-      <section>
-        <header>
-          <p className="title">{t('app.admin.store.product_form.price_and_rule_of_selling_product')}</p>
-        </header>
-        <div className="content">
-          <FormSwitch control={control}
-                      id="is_active_price"
-                      label={t('app.admin.store.product_form.is_active_price')}
-                      defaultValue={isActivePrice}
-                      onChange={toggleIsActivePrice} />
-          {isActivePrice && <>
-            <FormInput id="amount"
-                      type="number"
-                      register={register}
-                      rules={{ required: isActivePrice, min: 0 }}
-                      step={0.01}
-                      formState={formState}
-                      label={t('app.admin.store.product_form.price')}
-                      nullable />
-            <FormInput id="quantity_min"
-                      type="number"
-                      rules={{ required: true }}
-                      register={register}
-                      formState={formState}
-                      label={t('app.admin.store.product_form.quantity_min')} />
-          </>}
-        </div>
-      </section>
 
       <section>
         <header>
