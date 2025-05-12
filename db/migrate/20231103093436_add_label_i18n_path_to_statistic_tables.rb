@@ -10,31 +10,31 @@ class AddLabelI18nPathToStatisticTables < ActiveRecord::Migration[5.2] # Commit 
     # StatisticIndex
 
     statistic_index_subscription = StatisticIndex.find_by(es_type_key: 'subscription')
-    statistic_index_subscription.update(label: nil, label_i18n_path: 'statistics.subscriptions')
+    statistic_index_subscription&.update(label: nil, label_i18n_path: 'statistics.subscriptions')
 
     statistic_index_machine = StatisticIndex.find_by(es_type_key: 'machine')
-    statistic_index_machine.update(label: nil, label_i18n_path: 'statistics.machines_hours')
+    statistic_index_machine&.update(label: nil, label_i18n_path: 'statistics.machines_hours')
 
     statistic_index_training = StatisticIndex.find_by(es_type_key: 'training')
-    statistic_index_training.update(label: nil, label_i18n_path: 'statistics.trainings')
+    statistic_index_training&.update(label: nil, label_i18n_path: 'statistics.trainings')
 
     statistic_index_event = StatisticIndex.find_by(es_type_key: 'event')
-    statistic_index_event.update(label: nil, label_i18n_path: 'statistics.events')
+    statistic_index_event&.update(label: nil, label_i18n_path: 'statistics.events')
 
     statistic_index_account = StatisticIndex.find_by(es_type_key: 'account')
-    statistic_index_account.update(label: nil, label_i18n_path: 'statistics.registrations')
+    statistic_index_account&.update(label: nil, label_i18n_path: 'statistics.registrations')
 
     statistic_index_project = StatisticIndex.find_by(es_type_key: 'project')
-    statistic_index_project.update(label: nil, label_i18n_path: 'statistics.projects')
+    statistic_index_project&.update(label: nil, label_i18n_path: 'statistics.projects')
 
     statistic_index_user = StatisticIndex.find_by(es_type_key: 'user')
-    statistic_index_user.update(label: nil, label_i18n_path: 'statistics.users')
+    statistic_index_user&.update(label: nil, label_i18n_path: 'statistics.users')
 
     statistic_index_space = StatisticIndex.find_by(es_type_key: 'space')
-    statistic_index_space.update(label: nil, label_i18n_path: 'statistics.spaces')
+    statistic_index_space&.update(label: nil, label_i18n_path: 'statistics.spaces')
 
     statistic_index_order = StatisticIndex.find_by(es_type_key: 'order')
-    statistic_index_order.update(label: nil, label_i18n_path: 'statistics.orders')
+    statistic_index_order&.update(label: nil, label_i18n_path: 'statistics.orders')
 
     # StatisticField
 
