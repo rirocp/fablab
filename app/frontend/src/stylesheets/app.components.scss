@@ -714,3 +714,49 @@ input[type=date].form-control {
 .medium-editor-anchor-preview a:hover {
   color: #ffffff;
 }
+
+// Order activities history
+.order-activities {
+  margin-top: 2rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 1rem;
+  
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .activities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    
+    .activity-item {
+      padding: 10px;
+      border-left: 3px solid $red;
+      background-color: #f9f9f9;
+      
+      p {
+        font-weight: 500;
+        margin: 0 0 5px 0;
+      }
+      
+      .activity-note {
+        padding: 8px;
+        background-color: #fff;
+        border-radius: 4px;
+        border: 1px solid #eaeaea;
+        font-size: 0.9rem;
+        
+        p {
+          font-weight: normal;
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+}

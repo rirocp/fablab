@@ -42,6 +42,21 @@ export interface OrderCartItemReservation extends OrderItem {
   }>
 }
 
+// Interface pour un opérateur qui a effectué une action
+export interface ActivityOperator {
+  id: number;
+  name: string;
+}
+
+// Interface pour une activité de commande
+export interface OrderActivity {
+  id: number;
+  activity_type: string;
+  note?: string;
+  created_at: TDateISO;
+  operator?: ActivityOperator;
+}
+
 export interface Order {
   id: number,
   token: string,
@@ -64,6 +79,15 @@ export interface Order {
   wallet_amount?: number,
   paid_total?: number,
   order_items_attributes: Array<OrderItem>,
+  // Nouveau champ pour le type de projet
+  project?: string,
+  // Timestamps pour les changements d'état
+  paid_at?: TDateISO,
+  in_progress_at?: TDateISO,
+  canceled_at?: TDateISO,
+  refunded_at?: TDateISO,
+  // Historique des activités liées à la commande
+  activities?: Array<OrderActivity>,
 }
 
 export interface OrderPayment {

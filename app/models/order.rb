@@ -50,6 +50,18 @@ class Order < PaymentDocument
   # Nouveau
   private
   def handle_state_change
+    # Commit mettre à jour le timestamp correspondant à l'état actuel
+    case state
+    when 'paid'
+      update_column(:paid_at, Time.current)
+    when 'in_progress'
+      update_column(:in_progress_at, Time.current)
+    when 'canceled'
+      update_column(:canceled_at, Time.current)
+    when 'refunded'
+      update_column(:refunded_at, Time.current)
+    end
+
     case [state_before_last_save, state]
     when ['paid', 'in_progress']
       # Débit du stock lors du passage à "Prêt effectué"
@@ -82,7 +94,7 @@ class Order < PaymentDocument
         )
         # Commit 14
         # Envoi du premier email immédiatement
-        Rails.logger.info "Envoi de l’email notify_user_order_in_progress à #{statistic_profile.user.email}"
+        Rails.logger.info "Envoi de l'email notify_user_order_in_progress à #{statistic_profile.user.email}"
         NotificationsMailer.notify_user_order_in_progress(self).deliver_later
         # Planification du second email après 2 minutes
         # Commit 15 : effacer new de new.perform_in

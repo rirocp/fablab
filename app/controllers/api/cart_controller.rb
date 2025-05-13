@@ -67,6 +67,13 @@ class API::CartController < API::APIController
     render 'api/orders/show'
   end
 
+  def set_project
+    authorize @current_order, policy_class: CartPolicy
+    @current_order.project = params[:project]
+    @current_order.save
+    render 'api/orders/show'
+  end
+
   private
 
   def orderable

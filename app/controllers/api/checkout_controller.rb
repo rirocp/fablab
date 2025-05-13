@@ -16,6 +16,7 @@ class API::CheckoutController < API::APIController
       user = User.find(params[:customer_id])
       @current_order.statistic_profile = user.statistic_profile
     end
+    @current_order.project = params[:project] if params[:project].present?
     res = Checkout::PaymentService.new.payment(@current_order, current_user, params[:coupon_code],
                                                params[:payment_id])
     render json: res

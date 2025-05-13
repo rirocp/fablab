@@ -8,7 +8,7 @@ import { Loader } from '../base/loader';
 import noImage from '../../../../images/no_image.png';
 import { FabStateLabel } from '../base/fab-state-label';
 import OrderAPI from '../../api/order';
-import { Order } from '../../models/order';
+import { Order, OrderActivity } from '../../models/order';
 import FormatLib from '../../lib/format';
 import OrderLib from '../../lib/order';
 import { OrderActions } from './order-actions';
@@ -114,6 +114,38 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
     return `/#!/store/p/${item.orderable_slug}`;
   };
 
+  /**
+   * Commit retourne le libellé d'un type de projet
+   */
+  const getProjectLabel = (projectCode: string): string => {
+    if (projectCode === 'projet_ingenieur_9_mois') {
+      return t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
+    } else if (projectCode === 'projet_personnel_1_mois') {
+      return t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
+    }
+    return t('app.shared.store.show_order.no_project', { defaultValue: 'No project specified' });
+  };
+
+  /**
+   * Retourne le libellé d'une activité
+   */
+  const getActivityLabel = (activity: OrderActivity): string => {
+    const activityType = activity.activity_type;
+    const dateTime = FormatLib.dateTime(activity.created_at);
+    const operator = activity.operator ? activity.operator.name : t('app.shared.store.show_order.unknown_operator');
+    
+    let actionLabel = t(`app.shared.store.show_order.activity.${activityType}`, { 
+      defaultValue: activityType 
+    });
+    
+    return t('app.shared.store.show_order.activity.entry', {
+      ACTION: actionLabel,
+      DATETIME: dateTime,
+      OPERATOR: operator,
+      defaultValue: `${actionLabel} - ${dateTime} by ${operator}`
+    });
+  };
+
   if (!order) {
     return null;
   }
@@ -156,11 +188,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           </div>
           <div className='group'>
             <span>{t('app.shared.store.show_order.project')}</span>
-            <p>
-              {order.project === 'projet_ingenieur_9_mois' && t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' })}
-              {order.project === 'projet_personnel_1_mois' && t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' })}
-              {!order.project && t('app.shared.store.show_order.no_project', { defaultValue: 'No project specified' })}
-            </p>
+            <p>{getProjectLabel(order.project)}</p>
           </div>
           <FabStateLabel status={OrderLib.statusColor(order)} background>
             {t(`app.shared.store.show_order.state.${OrderLib.statusText(order)}`)}
@@ -211,6 +239,23 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           {order.invoice_id && <p>{paymentInfo()}</p>}
         </div>
       </div>
+
+      {/* Ajout de l'historique des activités */}
+      {order.activities && order.activities.length > 0 && (
+        <div className="order-activities">
+          <label>{t('app.shared.store.show_order.order_history', { defaultValue: 'Order History' })}</label>
+          <div className="activities-list">
+            {order.activities.map((activity) => (
+              <div key={activity.id} className="activity-item">
+                <p>{getActivityLabel(activity)}</p>
+                {activity.note && (
+                  <div className="activity-note" dangerouslySetInnerHTML={{ __html: activity.note }} />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -8,7 +8,8 @@ export default class CheckoutAPI {
       order_token: order.token,
       coupon_code: order.coupon?.code,
       payment_id: paymentId,
-      customer_id: order.user.id
+      customer_id: order.user.id,
+      project: order.project
     });
     return res?.data;
   }
@@ -18,7 +19,8 @@ export default class CheckoutAPI {
       order_token: order.token,
       coupon_code: order.coupon?.code,
       payment_id: paymentId,
-      customer_id: order.user.id
+      customer_id: order.user.id,
+      project: order.project
     });
     return res?.data;
   }
