@@ -20,7 +20,7 @@ interface MemberSelectProps {
  * Commit options de projet pour la liste déroulante
  */
 const projectOptions: Array<SelectOption<string>> = [
-  { value: 'projet_ingenieur_10_mois', label: 'Projet ingénieur (10 mois)' },
+  { value: 'projet_ingenieur_9_mois', label: 'Projet ingénieur (9 mois)' },
   { value: 'projet_personnel_1_mois', label: 'Projet personnel (1 mois)' }
 ];
 

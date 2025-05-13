@@ -71,8 +71,8 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
 
     // Commit add project type to payment info
     let projectLabel = '';
-    if (order.project === 'projet_ingenieur_10_mois') {
-      projectLabel = t('app.public.store_cart.project_engineer_10_months', { defaultValue: 'Projet ingénieur (10 mois)' });
+    if (order.project === 'projet_ingenieur_9_mois') {
+      projectLabel = t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
     } else if (order.project === 'projet_personnel_1_mois') {
       projectLabel = t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
     }
@@ -157,7 +157,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           <div className='group'>
             <span>{t('app.shared.store.show_order.project')}</span>
             <p>
-              {order.project === 'projet_ingenieur_10_mois' && t('app.public.store_cart.project_engineer_10_months', { defaultValue: 'Projet ingénieur (10 mois)' })}
+              {order.project === 'projet_ingenieur_9_mois' && t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' })}
               {order.project === 'projet_personnel_1_mois' && t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' })}
               {!order.project && t('app.shared.store.show_order.no_project', { defaultValue: 'No project specified' })}
             </p>
