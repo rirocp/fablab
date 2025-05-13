@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 json.extract! order, :id, :token, :statistic_profile_id, :operator_profile_id, :reference, :state, :created_at, :updated_at, :invoice_id,
-              :payment_method, :project, :paid_at, :in_progress_at, :canceled_at, :refunded_at
+              :payment_method
 json.total order.total / 100.0 if order.total.present?
 json.payment_date order.invoice.created_at if order.invoice_id.present?
 json.wallet_amount order.wallet_amount / 100.0 if order.wallet_amount.present?
@@ -17,20 +17,6 @@ if order&.statistic_profile&.user
     json.id order.statistic_profile.user.id
     json.role order.statistic_profile.user.roles.first.name
     json.name order.statistic_profile.user.profile.full_name
-  end
-end
-
-# Ajouter les activités liées aux changements d'état
-json.activities order.order_activities.order(created_at: :asc) do |activity|
-  json.extract! activity, :id, :activity_type, :note, :created_at
-  if activity.operator_profile_id.present?
-    user = InvoicingProfile.find_by(id: activity.operator_profile_id)&.user
-    if user.present?
-      json.operator do
-        json.id user.id
-        json.name user.profile.full_name
-      end
-    end
   end
 end
 

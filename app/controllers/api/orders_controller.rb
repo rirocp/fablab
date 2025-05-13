@@ -15,8 +15,14 @@ class API::OrdersController < API::APIController
   def update
     authorize @order
 
-    @order = ::Orders::OrderService.update_state(@order, current_user, order_params[:state], order_params[:note])
-    render :show
+    begin
+      @order = ::Orders::OrderService.update_state(@order, current_user, order_params[:state], order_params[:note])
+      render :show
+    rescue UpdateOrderStateError => e
+      render json: { error: 'Transition d\'état invalide' }, status: :unprocessable_entity
+    rescue StandardError => e
+      render json: { error: e.message }, status: :internal_server_error
+    end
   end
 
   def destroy

@@ -86,23 +86,6 @@ export default class FormatLib {
   };
 
   /**
-   * Return the formatted localized date and time for the given date
-   */
-  static dateTime = (date: Date|TDateISO): string => {
-    let tempDate: Date;
-    if (FormatLib.isDateISO(date as string)) {
-      tempDate = moment.utc(date).toDate();
-    } else {
-      tempDate = moment(date).toDate();
-    }
-    return Intl.DateTimeFormat(Fablab.intl_locale, { 
-      dateStyle: 'short', 
-      timeStyle: 'short', 
-      timeZone: Fablab.timezone 
-    }).format(tempDate);
-  };
-
-  /**
    * Return the formatted localized duration
    */
   static duration = (interval: unitOfTime.DurationConstructor, intervalCount: number): string => {

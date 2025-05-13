@@ -41,12 +41,9 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
    * Close the action confirmation modal
    */
   const closeModal = (): void => {
-    // Ne pas fermer le modal pendant la soumission
-    if (isSubmitting) return;
-    
     setModalIsOpen(false);
     setCurrentAction(null);
-    setReadyNote('');
+    setIsSubmitting(false);
   };
 
   /**
@@ -56,21 +53,18 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
     let actions = [];
     switch (order.state) {
       case 'paid':
-        // actions = actions.concat(['in_progress', 'ready', 'delivered', 'canceled', 'refunded']);
         actions = actions.concat(['in_progress', 'canceled']);
         break;
       case 'payment_failed':
         actions = actions.concat(['canceled']);
         break;
       case 'in_progress':
-        // actions = actions.concat(['ready', 'delivered', 'canceled', 'refunded']);
         actions = actions.concat(['refunded']);
         break;
       case 'ready':
         actions = actions.concat(['delivered', 'canceled', 'refunded']);
         break;
       case 'canceled':
-        // actions = actions.concat(['refunded']);
         actions = [];
         break;
       default:
@@ -93,30 +87,36 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
    * Callback after confirm an action
    */
   const handleActionConfirmation = () => {
-    // Empêcher les soumissions multiples
     if (isSubmitting) return;
     
+    // Enregistrer les valeurs actuelles avant de fermer la modale
+    const actionValue = currentAction.value;
+    const noteValue = readyNote;
+    
+    // Fermer la modale immédiatement - cette étape est cruciale
+    setModalIsOpen(false);
+    
+    // Marquer comme en cours de soumission
     setIsSubmitting(true);
     
-    OrderAPI.updateState(order, currentAction.value, readyNote)
-      .then(data => {
-        // Fermer le modal avant d'appeler onSuccess pour éviter les problèmes de rendu
-        setModalIsOpen(false);
-        setCurrentAction(null);
-        setReadyNote('');
-        setIsSubmitting(false);
-        
-        // Déclencher le callback de succès avec un délai pour laisser le temps au modal de se fermer
-        setTimeout(() => {
-          onSuccess(data, t(`app.shared.store.order_actions.order_${currentAction.value}_success`));
-        }, 100);
-      })
-      .catch((e) => {
-        setIsSubmitting(false);
-        
-        // Afficher l'erreur mais garder le modal ouvert
-        onError(e);
-      });
+    // Puis faire l'appel API
+    setTimeout(() => {
+      OrderAPI.updateState(order, actionValue, noteValue)
+        .then(data => {
+          onSuccess(data, t(`app.shared.store.order_actions.order_${actionValue}_success`));
+        })
+        .catch(e => {
+          if (e.response && e.response.data && e.response.data.error) {
+            onError(e.response.data.error);
+          } else {
+            onError(e.message || 'Une erreur est survenue');
+          }
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+          setCurrentAction(null);
+        });
+    }, 100); // Une légère attente pour s'assurer que la modale est bien fermée
   };
 
   return (
@@ -133,28 +133,18 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
       <FabModal title={t('app.shared.store.order_actions.confirmation_required')}
         isOpen={modalIsOpen}
         toggleModal={closeModal}
-        closeButton={!isSubmitting}
+        closeButton={true}
         confirmButton={t('app.shared.store.order_actions.confirm')}
         onConfirm={handleActionConfirmation}
-        isConfirmDisabled={isSubmitting}
+        preventConfirm={isSubmitting}
         className="order-actions-confirmation-modal">
         <HtmlTranslate trKey={`app.shared.store.order_actions.confirm_order_${currentAction?.value}_html`} />
         {currentAction?.value === 'ready' &&
           <FabTextEditor
             content={readyNote}
             placeholder={t('app.shared.store.order_actions.order_ready_note')}
-            onChange={setReadyNote}
-            disabled={isSubmitting}
-          />
+            onChange={setReadyNote} />
         }
-        {isSubmitting && (
-          <div className="text-center mt-3">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <p>{t('app.shared.store.order_actions.processing', { defaultValue: 'Traitement en cours...' })}</p>
-          </div>
-        )}
       </FabModal>
     </>
   );

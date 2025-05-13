@@ -48,9 +48,4 @@ export default class CartAPI {
     const res: AxiosResponse<Order> = await apiClient.put('/api/cart/set_customer', { order_token: order.token, user_id: customerId });
     return res?.data;
   }
-
-  static async setProject (order: Order, project: string): Promise<Order> {
-    const res: AxiosResponse<Order> = await apiClient.put('/api/cart/set_project', { order_token: order.token, project });
-    return res?.data;
-  }
 }
