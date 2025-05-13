@@ -26,6 +26,7 @@ interface FabModalProps {
   onConfirm?: (event: BaseSyntheticEvent) => void,
   onClose?: (event: BaseSyntheticEvent) => void,
   preventConfirm?: boolean,
+  isConfirmDisabled?: boolean,
   onCreation?: () => void,
   onConfirmSendFormId?: string,
 }
@@ -33,7 +34,7 @@ interface FabModalProps {
 /**
  * This component is a template for a modal dialog that wraps the application style
  */
-export const FabModal: React.FC<FabModalProps> = ({ title, isOpen, toggleModal, children, confirmButton, className, width = 'sm', closeButton, customHeader, customFooter, onConfirm, onClose, preventConfirm, onCreation, onConfirmSendFormId }) => {
+export const FabModal: React.FC<FabModalProps> = ({ title, isOpen, toggleModal, children, confirmButton, className, width = 'sm', closeButton, customHeader, customFooter, onConfirm, onClose, preventConfirm, isConfirmDisabled, onCreation, onConfirmSendFormId }) => {
   const { t } = useTranslation('shared');
 
   useEffect(() => {
@@ -50,6 +51,9 @@ export const FabModal: React.FC<FabModalProps> = ({ title, isOpen, toggleModal, 
     toggleModal();
   };
 
+  // Calculer si le bouton de confirmation doit être désactivé
+  const isButtonDisabled = preventConfirm || isConfirmDisabled;
+
   return (
     <Modal isOpen={isOpen}
       className={`fab-modal fab-modal-${width} ${className || ''}`}
@@ -65,8 +69,8 @@ export const FabModal: React.FC<FabModalProps> = ({ title, isOpen, toggleModal, 
       </div>
       {(customFooter || confirmButton) && <div className="fab-modal-footer">
         <Loader>
-          {confirmButton && !onConfirmSendFormId && <FabButton className="modal-btn--confirm" disabled={preventConfirm} onClick={onConfirm}>{confirmButton}</FabButton>}
-          {confirmButton && onConfirmSendFormId && <FabButton className="modal-btn--confirm" disabled={preventConfirm} type="submit" form={onConfirmSendFormId}>{confirmButton}</FabButton>}
+          {confirmButton && !onConfirmSendFormId && <FabButton className="modal-btn--confirm" disabled={isButtonDisabled} onClick={onConfirm}>{confirmButton}</FabButton>}
+          {confirmButton && onConfirmSendFormId && <FabButton className="modal-btn--confirm" disabled={isButtonDisabled} type="submit" form={onConfirmSendFormId}>{confirmButton}</FabButton>}
           {customFooter && customFooter}
         </Loader>
       </div>}

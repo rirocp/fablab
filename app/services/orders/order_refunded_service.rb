@@ -3,7 +3,8 @@
 # Provides a method to refund an order
 class Orders::OrderRefundedService
   def call(order, current_user)
-    raise ::UpdateOrderStateError if %w[cart payment_error refunded delivered].include?(order.state)
+    # N'autoriser que la transition depuis 'in_progress'
+    raise ::UpdateOrderStateError unless order.state == 'in_progress'
 
     order.state = 'refunded'
     ActiveRecord::Base.transaction do

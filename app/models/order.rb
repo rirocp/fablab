@@ -50,7 +50,7 @@ class Order < PaymentDocument
   # Nouveau
   private
   def handle_state_change
-    # Commit mettre à jour le timestamp correspondant à l'état actuel
+    # Mettre à jour le timestamp correspondant à l'état actuel
     case state
     when 'paid'
       update_column(:paid_at, Time.current)

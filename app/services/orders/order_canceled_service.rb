@@ -3,7 +3,8 @@
 # Provides a method to cancel an order
 class Orders::OrderCanceledService
   def call(order, current_user)
-    raise ::UpdateOrderStateError if %w[cart canceled refunded delivered].include?(order.state)
+    # N'autoriser que les transitions depuis 'paid' ou 'ready'
+    raise ::UpdateOrderStateError unless %w[paid ready].include?(order.state)
 
     order.state = 'canceled'
     ActiveRecord::Base.transaction do

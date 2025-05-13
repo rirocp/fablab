@@ -23,6 +23,7 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
   const [currentAction, setCurrentAction] = useState<SelectOption<string>>();
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [readyNote, setReadyNote] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // Styles the React-select component
   const customStyles = {
@@ -40,8 +41,12 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
    * Close the action confirmation modal
    */
   const closeModal = (): void => {
+    // Ne pas fermer le modal pendant la soumission
+    if (isSubmitting) return;
+    
     setModalIsOpen(false);
     setCurrentAction(null);
+    setReadyNote('');
   };
 
   /**
@@ -88,15 +93,30 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
    * Callback after confirm an action
    */
   const handleActionConfirmation = () => {
-    OrderAPI.updateState(order, currentAction.value, readyNote).then(data => {
-      onSuccess(data, t(`app.shared.store.order_actions.order_${currentAction.value}_success`));
-      setCurrentAction(null);
-      setModalIsOpen(false);
-    }).catch((e) => {
-      onError(e);
-      setCurrentAction(null);
-      setModalIsOpen(false);
-    });
+    // Empêcher les soumissions multiples
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    
+    OrderAPI.updateState(order, currentAction.value, readyNote)
+      .then(data => {
+        // Fermer le modal avant d'appeler onSuccess pour éviter les problèmes de rendu
+        setModalIsOpen(false);
+        setCurrentAction(null);
+        setReadyNote('');
+        setIsSubmitting(false);
+        
+        // Déclencher le callback de succès avec un délai pour laisser le temps au modal de se fermer
+        setTimeout(() => {
+          onSuccess(data, t(`app.shared.store.order_actions.order_${currentAction.value}_success`));
+        }, 100);
+      })
+      .catch((e) => {
+        setIsSubmitting(false);
+        
+        // Afficher l'erreur mais garder le modal ouvert
+        onError(e);
+      });
   };
 
   return (
@@ -107,22 +127,34 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
           onChange={option => handleAction(option)}
           value={currentAction}
           styles={customStyles}
+          isDisabled={isSubmitting}
         />
       }
       <FabModal title={t('app.shared.store.order_actions.confirmation_required')}
         isOpen={modalIsOpen}
         toggleModal={closeModal}
-        closeButton={true}
+        closeButton={!isSubmitting}
         confirmButton={t('app.shared.store.order_actions.confirm')}
         onConfirm={handleActionConfirmation}
+        isConfirmDisabled={isSubmitting}
         className="order-actions-confirmation-modal">
         <HtmlTranslate trKey={`app.shared.store.order_actions.confirm_order_${currentAction?.value}_html`} />
         {currentAction?.value === 'ready' &&
           <FabTextEditor
             content={readyNote}
             placeholder={t('app.shared.store.order_actions.order_ready_note')}
-            onChange={setReadyNote} />
+            onChange={setReadyNote}
+            disabled={isSubmitting}
+          />
         }
+        {isSubmitting && (
+          <div className="text-center mt-3">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p>{t('app.shared.store.order_actions.processing', { defaultValue: 'Traitement en cours...' })}</p>
+          </div>
+        )}
       </FabModal>
     </>
   );
