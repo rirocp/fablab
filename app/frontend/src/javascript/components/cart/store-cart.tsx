@@ -224,6 +224,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       </div>
 
       <div className="group">
+        {/* Commit
         {cart && !cartIsEmpty() &&
           <div className='store-cart-info'>
             <h3>{t('app.public.store_cart.pickup')}</h3>
@@ -231,7 +232,6 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           </div>
         }
 
-        {/* Commit
         {cart && !cartIsEmpty() &&
           <div className='store-cart-coupon'>
             <CouponInput user={cart.user as User} amount={cart.total} onChange={applyCoupon} />
