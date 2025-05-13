@@ -760,3 +760,57 @@ input[type=date].form-control {
     }
   }
 }
+
+// Payment information with history
+.payment-info {
+  div {
+    p {
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      
+      .text-primary {
+        color: #428bca;
+        font-weight: 600;
+      }
+      
+      .text-info {
+        color: #5bc0de;
+        font-weight: 600;
+      }
+      
+      .text-danger {
+        color: #d9534f;
+        font-weight: 600;
+      }
+      
+      .text-success {
+        color: #5cb85c;
+        font-weight: 600;
+      }
+      
+      .activity-note {
+        display: block;
+        margin-top: 0.3rem;
+        margin-left: 1rem;
+        padding: 0.3rem 0.5rem;
+        background-color: #f9f9f9;
+        border-left: 2px solid #ddd;
+        font-style: italic;
+        font-size: 0.9rem;
+      }
+    }
+    
+    hr {
+      border-top: 1px dashed #e0e0e0;
+      margin: 0.75rem 0;
+    }
+    
+    h4 {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      color: $red;
+    }
+  }
+}

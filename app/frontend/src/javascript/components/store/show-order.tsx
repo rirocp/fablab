@@ -53,47 +53,134 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
   };
 
   /**
-   * Returns order's payment info
+   * Returns order's payment info with activity history
    */
   const paymentInfo = (): string => {
-    let paymentVerbose = '';
-    if (order.payment_method === 'card') {
-      paymentVerbose = t('app.shared.store.show_order.payment.settlement_by_debit_card');
-    } else if (order.payment_method === 'wallet') {
-      paymentVerbose = t('app.shared.store.show_order.payment.settlement_by_wallet');
-    } else {
-      paymentVerbose = t('app.shared.store.show_order.payment.settlement_done_at_the_reception');
-    }
-    paymentVerbose += ' ' + t('app.shared.store.show_order.payment.on_DATE_at_TIME', {
-      DATE: FormatLib.date(order.payment_date),
-      TIME: FormatLib.time(order.payment_date)
-    });
+    if (!order) return '';
+    
+    let info = [];
+    
+    // Paiement initial
+    if (order.payment_method) {
+      let paymentVerbose = '';
+      if (order.payment_method === 'card') {
+        paymentVerbose = t('app.shared.store.show_order.payment.settlement_by_debit_card');
+      } else if (order.payment_method === 'wallet') {
+        paymentVerbose = t('app.shared.store.show_order.payment.settlement_by_wallet');
+      } else {
+        paymentVerbose = t('app.shared.store.show_order.payment.settlement_done_at_the_reception');
+      }
+      
+      if (order.payment_date) {
+        paymentVerbose += ' ' + t('app.shared.store.show_order.payment.on_DATE_at_TIME', {
+          DATE: FormatLib.date(order.payment_date),
+          TIME: FormatLib.time(order.payment_date)
+        });
+      }
 
-    // Commit add project type to payment info
-    let projectLabel = '';
-    if (order.project === 'projet_ingenieur_9_mois') {
-      projectLabel = t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
-    } else if (order.project === 'projet_personnel_1_mois') {
-      projectLabel = t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
+      // Ajout du type de projet
+      let projectLabel = '';
+      if (order.project === 'projet_ingenieur_9_mois') {
+        projectLabel = t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
+      } else if (order.project === 'projet_personnel_1_mois') {
+        projectLabel = t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
+      }
+      
+      if (projectLabel) {
+        paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_project_PROJECT', {
+          PROJECT: projectLabel,
+          defaultValue: `for project: ${projectLabel}`
+        });
+      }
+      
+      info.push(`<p>${paymentVerbose}</p>`);
     }
-    if (projectLabel) {
-      paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_project_PROJECT', {
-        PROJECT: projectLabel,
-        defaultValue: `for project: ${projectLabel}`
+    
+    // Ajout de l'historique des activités dans les informations de paiement
+    if (order.activities && order.activities.length > 0) {
+      let hasAddedActivities = false;
+      
+      order.activities.forEach(activity => {
+        if (activity.activity_type === 'paid') return; // Le paiement est déjà inclus ci-dessus
+        
+        const activityInfo = getActivityDescription(activity);
+        if (activityInfo) {
+          if (!hasAddedActivities && info.length > 0) {
+            // Ajouter un séparateur avant le premier élément d'historique
+            info.push('<hr />');
+            info.push(`<h4>${t('app.shared.store.show_order.activity.history', { defaultValue: 'Historique des changements' })}</h4>`);
+            hasAddedActivities = true;
+          }
+          info.push(`<p>${activityInfo}</p>`);
+        }
       });
     }
-    /*if (order.payment_method !== 'wallet') {
-      paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.paid_total) });
+    
+    return info.join('');
+  };
+  
+  /**
+   * Obtient une description formatée pour une activité
+   */
+  const getActivityDescription = (activity: OrderActivity): string => {
+    const activityDate = FormatLib.dateTime(activity.created_at);
+    const operator = activity.operator ? activity.operator.name : t('app.shared.store.show_order.unknown_operator');
+    
+    let actionLabel = '';
+    let actionClass = '';
+    
+    switch (activity.activity_type) {
+      case 'in_progress':
+        actionLabel = t('app.shared.store.show_order.activity.loan_started', { defaultValue: 'Prêt démarré' });
+        actionClass = 'text-primary';
+        break;
+      case 'ready':
+        actionLabel = t('app.shared.store.show_order.activity.ready_for_pickup', { defaultValue: 'Prêt pour retrait' });
+        actionClass = 'text-info';
+        break;
+      case 'canceled':
+        actionLabel = t('app.shared.store.show_order.activity.order_canceled', { defaultValue: 'Commande annulée' });
+        actionClass = 'text-danger';
+        break;
+      case 'refunded':
+        actionLabel = t('app.shared.store.show_order.activity.items_returned', { defaultValue: 'Articles retournés' });
+        actionClass = 'text-success';
+        break;
+      case 'delivered':
+        actionLabel = t('app.shared.store.show_order.activity.order_delivered', { defaultValue: 'Commande livrée' });
+        actionClass = 'text-success';
+        break;
+      default:
+        actionLabel = t(`app.shared.store.show_order.activity.${activity.activity_type}`, { 
+          defaultValue: activity.activity_type 
+        });
+        actionClass = '';
     }
-    if (order.wallet_amount) {
-      if (order.payment_method === 'wallet') {
-        paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.wallet_amount) });
-      } else {
-        paymentVerbose += ' ' + t('app.shared.store.show_order.payment.and') + ' ' + t('app.shared.store.show_order.payment.by_wallet') + ' ' +
-                                 t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.wallet_amount) });
-      }
-    }*/
-    return paymentVerbose;
+    
+    const description = t('app.shared.store.show_order.activity.description', {
+      ACTION: `<span class="${actionClass}">${actionLabel}</span>`,
+      DATE: `<strong>${activityDate}</strong>`,
+      OPERATOR: `<em>${operator}</em>`,
+      defaultValue: `${actionLabel} le ${activityDate} par ${operator}`
+    });
+    
+    if (activity.note) {
+      return `${description}<br/><span class="activity-note">${t('app.shared.store.show_order.activity.note', { defaultValue: 'Note' })}: "${activity.note}"</span>`;
+    }
+    
+    return description;
+  };
+
+  /**
+   * Commit retourne le libellé d'un type de projet
+   */
+  const getProjectLabel = (projectCode: string): string => {
+    if (projectCode === 'projet_ingenieur_9_mois') {
+      return t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
+    } else if (projectCode === 'projet_personnel_1_mois') {
+      return t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
+    }
+    return t('app.shared.store.show_order.no_project', { defaultValue: 'No project specified' });
   };
 
   /**
@@ -112,18 +199,6 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       return `/#!/admin/store/products/${item.orderable_id}/edit`;
     }
     return `/#!/store/p/${item.orderable_slug}`;
-  };
-
-  /**
-   * Commit retourne le libellé d'un type de projet
-   */
-  const getProjectLabel = (projectCode: string): string => {
-    if (projectCode === 'projet_ingenieur_9_mois') {
-      return t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
-    } else if (projectCode === 'projet_personnel_1_mois') {
-      return t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
-    }
-    return t('app.shared.store.show_order.no_project', { defaultValue: 'No project specified' });
   };
 
   /**
@@ -236,7 +311,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       <div className="subgrid">
         <div className="payment-info">
           <label>{t('app.shared.store.show_order.payment_informations')}</label>
-          {order.invoice_id && <p>{paymentInfo()}</p>}
+          <div dangerouslySetInnerHTML={{ __html: paymentInfo() }} />
         </div>
       </div>
 
