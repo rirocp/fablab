@@ -39,8 +39,8 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-    config.redis = { url: 'redis://localhost:6379/0' } # Forcer localhost
-  # config.redis = { url: redis_url }
+    #config.redis = { url: 'redis://localhost:6379/0' } # Forcer localhost
+    config.redis = { url: redis_url }
 
   config.client_middleware do |chain|
     chain.add Sidekiq::Middleware::I18n::Client
