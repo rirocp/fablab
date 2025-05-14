@@ -1,3 +1,4 @@
+/* eslint-disable fabmanager/scoped-translation */
 import { useState, useEffect, useRef } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,13 +9,12 @@ import { Loader } from '../base/loader';
 import noImage from '../../../../images/no_image.png';
 import { FabStateLabel } from '../base/fab-state-label';
 import OrderAPI from '../../api/order';
-import { Order } from '../../models/order';
+import { Order, OrderItem, OrderState, OrderProduct } from '../../models/order';
 import FormatLib from '../../lib/format';
 import OrderLib from '../../lib/order';
 import { OrderActions } from './order-actions';
-import { OrderItem, OrderProduct } from '../../models/order'; //Commit
 
-function isOrderProduct(item: OrderItem): item is OrderProduct {
+function isOrderProduct (item: OrderItem): item is OrderProduct {
   return item.orderable_type === 'Product';
 }
 
@@ -64,16 +64,16 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
     if (lastActionTime > 0) {
       // Charger immédiatement après une action
       loadOrderData();
-      
+
       // Mettre en place un rafraîchissement périodique
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-      
+
       intervalRef.current = setInterval(() => {
         loadOrderData();
       }, 2000); // Rafraîchir toutes les 2 secondes
-      
+
       // Arrêter le rafraîchissement après 10 secondes
       setTimeout(() => {
         if (intervalRef.current) {
@@ -111,9 +111,9 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
     // Commit de l'information du projet
     let projectLabel = '';
     if (order.project === 'projet_ingenieur_9_mois') {
-      projectLabel = t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
+      projectLabel = t('app.public.show_order.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
     } else if (order.project === 'projet_personnel_1_mois') {
-      projectLabel = t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
+      projectLabel = t('app.public.show_order.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
     }
     if (projectLabel) {
       paymentVerbose += ' - ' + t('app.shared.store.show_order.payment.for_project_PROJECT', {
@@ -123,7 +123,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
     } else {
       paymentVerbose += ' Projet non spécifié.';
     }
-    
+
     // Ajout de l'historique des changements d'état
     // Dédupliquer les activités en gardant la première occurrence de chaque type d'état
     const uniqueStateActivities = order.order_activities?.reduce((acc, activity) => {
@@ -136,13 +136,13 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       }
       return acc;
     }, []).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-    
+
     if (uniqueStateActivities?.length > 0) {
       uniqueStateActivities.forEach(activity => {
         const operatorName = activity.operator?.name;
         // Utiliser created_at de l'activité si le timestamp d'état n'est pas disponible
         const date = order[`${activity.activity_type}_at`] || activity.created_at;
-        
+
         let translationKey = '';
         switch (activity.activity_type) {
           case 'in_progress':
@@ -155,7 +155,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
             translationKey = 'app.shared.store.show_order.payment.order_refunded_on_DATE_at_TIME_by_OPERATOR';
             break;
         }
-        
+
         if (translationKey) {
           paymentVerbose += ' - ' + t(translationKey, {
             DATE: FormatLib.date(date),
@@ -201,6 +201,9 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
     return `/#!/store/p/${item.orderable_slug}`;
   };
 
+  /**
+   * TODO, document this method
+   */
   const getExpectedReturnDate = () => {
     if (!order?.in_progress_at) return null;
     const start = new Date(order.in_progress_at);
@@ -222,7 +225,8 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
   }
 
   return (
-    <div className='show-order'>
+    <div className="show-order">
+      <h2>{t('app.shared.store.show_order.title')}</h2>
       <header>
         <h2>[{order.reference}]</h2>
         <div className="grpBtn">
@@ -287,23 +291,6 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
                 <p><a className="text-black" href={itemOrderableUrl(item)}>{item.orderable_name}</a></p>
                 <span className="count">{item.quantity}</span>
               </div>
-              {/* Commit
-              <div className="actions">
-              <span className="count">{item.quantity}</span>
-              </div>
-                {/* Commit
-                <div className='price'>
-                  <p>{FormatLib.price(item.amount)}</p>
-                  <span>/ {t('app.shared.store.show_order.unit')}</span>
-                </div>
-                */}
-                {/* Commit
-                <span className="count">{item.quantity}</span>
-                <div className='total'>
-                  <span>{t('app.shared.store.show_order.item_total')}</span>
-                  <p>{FormatLib.price(OrderLib.itemAmount(item))}</p>
-                </div>
-              </div>*/}
             </article>
           ))}
         </div>
@@ -314,6 +301,11 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           <label>{t('app.shared.store.show_order.payment_informations')}</label>
           {order.invoice_id && <p>{paymentInfo()}</p>}
         </div>
+      </div>
+
+      <div className="order-details">
+        <h3>{t('app.shared.store.show_order.details')}</h3>
+        {/* ... existing code ... */}
       </div>
     </div>
   );

@@ -89,17 +89,17 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
    */
   const handleActionConfirmation = () => {
     if (isSubmitting) return;
-    
+
     // Enregistrer les valeurs actuelles avant de fermer la modale
     const actionValue = currentAction.value;
     const noteValue = readyNote;
-    
+
     // Fermer la modale immédiatement - cette étape est cruciale
     setModalIsOpen(false);
-    
+
     // Marquer comme en cours de soumission
     setIsSubmitting(true);
-    
+
     // Puis faire l'appel API
     setTimeout(() => {
       OrderAPI.updateState(order, actionValue, noteValue)

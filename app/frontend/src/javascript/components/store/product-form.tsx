@@ -37,13 +37,20 @@ interface ProductFormProps {
 /**
  * Form component to create or update a product
  */
-export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSuccess, onError, uiRouter }) => {
+export const ProductForm: React.FC<ProductFormProps> = ({
+  product,
+  title,
+  onSuccess,
+  onError,
+  uiRouter
+}) => {
   const { t } = useTranslation('admin');
 
-  const { handleSubmit, register, control, formState, setValue, reset } = useForm<Product>({ defaultValues: {
-    ...product,
-    is_active: product.id ? product.is_active : true
-  } 
+  const { handleSubmit, register, control, formState, setValue, reset } = useForm<Product>({
+    defaultValues: {
+      ...product,
+      is_active: product.id ? product.is_active : true
+    }
   });
 
   const output = useWatch<Product>({ control });
@@ -191,7 +198,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
                                 id="product_images_attributes" />
         </div>
       </section>
-
 
       <section>
         <header>

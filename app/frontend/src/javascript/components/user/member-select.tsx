@@ -10,7 +10,7 @@ import { SelectOption } from '../../models/select';
 interface MemberSelectProps {
   defaultUser?: User,
   value?: User,
-  //Commit modifié pour inclure le projet
+  // Commit modifié pour inclure le projet
   onSelected?: (user: { id: number, name: string, project?: string}) => void,
   noHeader?: boolean,
   hasError?: boolean
@@ -55,7 +55,7 @@ export const MemberSelect: React.FC<MemberSelectProps> = ({ defaultUser, value, 
     }
     if (!value) {
       setOption(null);
-      // Commit réinitialiser le projet si aucun utilisateur n’est sélectionné
+      // Commit réinitialiser le projet si aucun utilisateur n'est sélectionné
       setSelectedProject(null);
     }
   }, [value]);

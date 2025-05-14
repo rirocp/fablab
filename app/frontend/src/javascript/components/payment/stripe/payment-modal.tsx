@@ -48,7 +48,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, toggleModal,
     });
   }, [customer]);
   */
-  
   useEffect(() => {
     if (customer) {
       WalletAPI.getByUser(customer.id).then(wallet => {
@@ -68,7 +67,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, toggleModal,
     } else {
       PriceAPI.compute(cart).then(price => {
         setPrice(price);
-        }).catch(error => {
+      }).catch(error => {
         onError('Failed to compute price: ' + error.message);
       });
     }
@@ -85,7 +84,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, toggleModal,
    * Check the conditions for the local payment
    */
   const isLocalPayment = (): boolean => {
-    //Commit null check
+    // Commit null check
     if (!operator || !customer) return false;
     return (new UserLib(operator).isPrivileged(customer) || remainingPrice === 0);
   };

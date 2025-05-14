@@ -71,19 +71,19 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
       </div>
       {children}
       <div className="actions">
-      <div> </div>
-      <div> </div>
+        <div> </div>
+        <div> </div>
         {actions}
         {/* Commit
         <div className='total'>
           <span>{t('app.public.abstract_item.total')}</span>
           <p>{FormatLib.price(OrderLib.itemAmount(item))}</p>
-        </div>*/}
+        </div> */}
         <FabButton className="is-alert" onClick={handleRemoveItem(item)}>
           <i className="fa fa-trash" />
         </FabButton>
       </div>
-      {/* Commit 
+      {/* Commit
        {privilegedOperator &&
         <div className='offer'>
           <label>
@@ -95,11 +95,11 @@ export const AbstractItem: React.FC<AbstractItemProps> = ({ item, errors, cart, 
               height={19}
               uncheckedIcon={false}
               checkedIcon={false}
-              handleDiameter={15} 
+              handleDiameter={15}
             />
           </label>
-        </div>  
-      }*/}
+        </div>
+      } */}
     </article>
   );
 };

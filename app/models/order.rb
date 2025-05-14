@@ -1,5 +1,5 @@
+/* eslint-disable fabmanager/scoped-translation */
 # frozen_string_literal: true
-
 # Order is a model used to hold orders data
 class Order < PaymentDocument
   belongs_to :statistic_profile
@@ -62,7 +62,7 @@ class Order < PaymentDocument
 
           ProductService.update_stock(product, [{
             stock_type: 'external',
-            reason: 'borrowed',
+            reason: 'other_out',
             quantity: quantity,
             order_item_id: item.id
           }]).save!

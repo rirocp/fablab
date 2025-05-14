@@ -104,7 +104,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       if (!cart.user) {
         setNoMemberError(true);
         onError(t('app.public.store_cart.select_user'));
-      } else if (!selectedProject) { 
+      } else if (!selectedProject) {
         // Commit vérification pour les utilisateurs
         setNoProjectError(true);
         onError(t('app.public.store_cart.select_project_required'));
@@ -168,7 +168,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       const updatedCart = { ...data, project: user.project };
       setCart(updatedCart);
       // Stocker le projet sélectionné
-      //28/04 old -> setSelectedProject(user.project);
+      // 28/04 old -> setSelectedProject(user.project);
       setSelectedProject(projectOptions.find(option => option.value === user.project) || null); // Commit maj du projet sélectionné
     }).catch(onError);
   };
@@ -230,7 +230,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       </div>
 
       <div className="group">
-        {/* Commit
+        { /* Commit
         {cart && !cartIsEmpty() &&
           <div className='store-cart-info'>
             <h3>{t('app.public.store_cart.pickup')}</h3>
@@ -242,33 +242,32 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
           <div className='store-cart-coupon'>
             <CouponInput user={cart.user as User} amount={cart.total} onChange={applyCoupon} />
           </div>
-        }*/}
+        } */}
 
         {cart && !cartIsEmpty() &&
           <div className="store-cart-info">
             <h3>Déroulement du prêt :</h3>
-              <ul><li><p>Confirmation du prêt :</p></li></ul>
-              <p>Une fois votre commande passée et votre prêt validé lors du rendez-vous, vous recevrez un email de confirmation pour vous assurer que tout est en ordre.</p>
-              <ul><li><p>Rappel avant la fin du délai :</p></li></ul>
-              <p>Une semaine avant l'écoulement du délai de prêt, nous vous enverrons un email pour vous rappeler de retourner l'article.</p>
-              <ul><li><p>Notification en cas d'annulation:</p></li></ul>
-              <p>Si votre prêt est annulé pour une raison quelconque, vous serez immédiatement informé par email.</p>
+            <ul><li><p>Confirmation du prêt :</p></li></ul>
+            <p>Une fois votre commande passée et votre prêt validé lors du rendez-vous, vous recevrez un email de confirmation pour vous assurer que tout est en ordre.</p>
+            <ul><li><p>Rappel avant la fin du délai :</p></li></ul>
+            <p>Une semaine avant l&apos;écoulement du délai de prêt, nous vous enverrons un email pour vous rappeler de retourner l&apos;article.</p>
+            <ul><li><p>Notification en cas d&apos;annulation:</p></li></ul>
+            <p>Si votre prêt est annulé pour une raison quelconque, vous serez immédiatement informé par email.</p>
           </div>
-          }
+        }
       </div>
-      
       <aside>
         {cart && !cartIsEmpty() && isPrivileged() &&
           <MemberSelect onSelected={handleChangeMember} defaultUser={cart.user as User} hasError={noMemberError} />
         }
 
-        {cart && !cartIsEmpty() && //isPrivileged() && // Commit liste déroulante pour les utilisateurs admin
+        {cart && !cartIsEmpty() && // isPrivileged() && // Commit liste déroulante pour les utilisateurs admin
           <div className={`project-select ${noProjectError ? 'error' : ''}`} style={{ marginBottom: '20px' }}>
             <div className="project-select-header">
-              <h3 className="project-select-title">{t('app.public.member_select.select_project')}</h3>
+              <h3 className="project-select-title">{t('app.public.store_cart.select_project')}</h3>
             </div>
             <Select
-              placeholder={t('app.public.member_select.select_project')}
+              placeholder={t('app.public.store_cart.select_project')}
               className="select-input"
               options={projectOptions}
               onChange={onChangeProject}

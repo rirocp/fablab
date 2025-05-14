@@ -33,8 +33,7 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
 
   const [movement, setMovement] = useState<'in' | 'out'>('in');
 
-  const { handleSubmit, register, control, formState, setValue } = 
-  useForm<ProductStockMovement>({
+  const { handleSubmit, register, control, formState, setValue } = useForm<ProductStockMovement>({
     defaultValues: {
       stock_type: 'external' // Commit set stock_type to "external" by default
     }
@@ -63,7 +62,7 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
       event.preventDefault();
     }
     return handleSubmit((data: ProductStockMovement) => {
-      onSuccess({...data,stock_type: 'external'}); // Commit set stock_type to "external" when submitting
+      onSuccess({ ...data, stock_type: 'external' }); // Commit set stock_type to "external" when submitting
       toggleModal();
     })(event);
   };
@@ -79,7 +78,6 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
   /**
    * Creates sorting options to the react-select format
    */
-  
   /* Commit
   const buildStocksOptions = (): Array<typeSelectOption> => {
     return [
@@ -127,7 +125,7 @@ export const ProductStockModal: React.FC<ProductStockModalProps> = ({ onSuccess,
                     rules={{ required: true }}
                     formState={formState}
                     label={t('app.admin.store.product_stock_modal.reason_type')} />
-        <FabButton type='submit'>{t('app.admin.store.product_stock_modal.update_stock')} </FabButton>
+        <FabButton type='submit'>{t('app.admin.store.product_stock_modal.update_stock')}</FabButton>
       </form>
     </FabModal>
   );

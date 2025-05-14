@@ -103,7 +103,7 @@ export const CartOrderProduct: React.FC<CartOrderProductProps> = ({ item, cartEr
         <div className='price'>
           <p>{FormatLib.price(item.amount)}</p>
           <span>/ {t('app.public.cart_order_product.unit')}</span>
-        </div>*/}
+        </div> */}
       <div className='quantity'>
         <input type='number'
                onChange={e => changeProductQuantity(e, item)}
