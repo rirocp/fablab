@@ -398,7 +398,7 @@ export const settings: Array<Setting> = [
     name: 'phone_required',
     value: null,
     last_update: '2022-11-28T16:01:00+0200',
-    localized: 'Téléphone requis ?'
+    localized: 'Badge requis ?'
   },
   {
     name: 'book_overlapping_slots',

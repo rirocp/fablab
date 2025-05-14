@@ -446,7 +446,7 @@ unless Setting.find_by(name: 'privacy_draft').try(:value)
     _________ sans communiquer aucune information personnelle vous concernant. En toute hypothèse, vous n’êtes en aucune manière obligé de
     transmettre ces informations à _________.</p><p>Néanmoins, en cas de refus, il se peut que vous ne puissiez pas bénéficier de
     certaines informations ou services que vous avez demandés. À ce titre en effet, _________ peut être amené dans certains cas à vous
-    demander de renseigner votre nom, prénom, pseudonyme, sexe, adresse mail, numéro de téléphone, entreprise et date de naissance (ci-après
+    demander de renseigner votre nom, prénom, pseudonyme, sexe, adresse mail, numéro de badge, entreprise et date de naissance (ci-après
     vos « Informations Personnelles »). En fournissant ces informations, vous acceptez expressément qu’elles soient traitées par
     _________, aux fins indiquées au point 2 ci-dessous.</p><p>Conformément au Règlement Général sur la Protection des Données (General
     Data Protection Regulation) adopté par le Parlement européen le 14 avril 2016, et à la Loi Informatique et Libertés du 6 janvier 1978
