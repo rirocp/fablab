@@ -108,7 +108,7 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       TIME: FormatLib.time(order.payment_date)
     });
 
-    /* Commit add project type to payment info
+    // Commit de l'information du projet
     let projectLabel = '';
     if (order.project === 'projet_ingenieur_9_mois') {
       projectLabel = t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
@@ -116,23 +116,56 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       projectLabel = t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
     }
     if (projectLabel) {
-      paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_project_PROJECT', {
+      paymentVerbose += ' - ' + t('app.shared.store.show_order.payment.for_project_PROJECT', {
         PROJECT: projectLabel,
-        defaultValue: `for project: ${projectLabel}`
+        defaultValue: `Le type de projet : ${projectLabel}`
       });
-    }*/
-   
-    /*if (order.payment_method !== 'wallet') {
-      paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.paid_total) });
+    } else {
+      paymentVerbose += ' Projet non spécifié.';
     }
-    if (order.wallet_amount) {
-      if (order.payment_method === 'wallet') {
-        paymentVerbose += ' ' + t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.wallet_amount) });
-      } else {
-        paymentVerbose += ' ' + t('app.shared.store.show_order.payment.and') + ' ' + t('app.shared.store.show_order.payment.by_wallet') + ' ' +
-                                 t('app.shared.store.show_order.payment.for_an_amount_of_AMOUNT', { AMOUNT: FormatLib.price(order.wallet_amount) });
+    
+    // Ajout de l'historique des changements d'état
+    // Dédupliquer les activités en gardant la première occurrence de chaque type d'état
+    const uniqueStateActivities = order.order_activities?.reduce((acc, activity) => {
+      if (!['in_progress', 'canceled', 'refunded'].includes(activity.activity_type)) {
+        return acc;
       }
-    }*/
+      // Si on n'a pas encore vu cet état, l'ajouter
+      if (!acc.some(a => a.activity_type === activity.activity_type)) {
+        acc.push(activity);
+      }
+      return acc;
+    }, []).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    
+    if (uniqueStateActivities?.length > 0) {
+      uniqueStateActivities.forEach(activity => {
+        const operatorName = activity.operator?.name;
+        // Utiliser created_at de l'activité si le timestamp d'état n'est pas disponible
+        const date = order[`${activity.activity_type}_at`] || activity.created_at;
+        
+        let translationKey = '';
+        switch (activity.activity_type) {
+          case 'in_progress':
+            translationKey = 'app.shared.store.show_order.payment.loan_started_on_DATE_at_TIME_by_OPERATOR';
+            break;
+          case 'canceled':
+            translationKey = 'app.shared.store.show_order.payment.order_canceled_on_DATE_at_TIME_by_OPERATOR';
+            break;
+          case 'refunded':
+            translationKey = 'app.shared.store.show_order.payment.order_refunded_on_DATE_at_TIME_by_OPERATOR';
+            break;
+        }
+        
+        if (translationKey) {
+          paymentVerbose += ' - ' + t(translationKey, {
+            DATE: FormatLib.date(date),
+            TIME: FormatLib.time(date),
+            OPERATOR: operatorName || t('app.shared.store.show_order.payment.unknown_operator', { defaultValue: 'Opérateur inconnu' })
+          });
+        }
+      });
+    }
+
     return paymentVerbose;
   };
 
@@ -166,6 +199,22 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       return `/#!/admin/store/products/${item.orderable_id}/edit`;
     }
     return `/#!/store/p/${item.orderable_slug}`;
+  };
+
+  const getExpectedReturnDate = () => {
+    if (!order?.in_progress_at) return null;
+    const start = new Date(order.in_progress_at);
+    let monthsToAdd = 0;
+    if (order.project === 'projet_ingenieur_9_mois') {
+      monthsToAdd = 9;
+    } else if (order.project === 'projet_personnel_1_mois') {
+      monthsToAdd = 1;
+    } else {
+      return null;
+    }
+    const expected = new Date(start);
+    expected.setMonth(expected.getMonth() + monthsToAdd);
+    return expected;
   };
 
   if (!order) {
@@ -211,14 +260,12 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
             <span>{t('app.shared.store.show_order.last_update')}</span>
             <p>{FormatLib.date(order.updated_at)}</p>
           </div>
-          {/*<div className='group'>
-            <span>{t('app.shared.store.show_order.project')}</span>
+          <div className='group'>
+            <span>{t('app.shared.store.show_order.expected_return_date')}</span>
             <p>
-              {order.project === 'projet_ingenieur_9_mois' && t('app.public.store_cart.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' })}
-              {order.project === 'projet_personnel_1_mois' && t('app.public.store_cart.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' })}
-              {!order.project && t('app.shared.store.show_order.no_project', { defaultValue: 'No project specified' })}
+              {getExpectedReturnDate() ? FormatLib.date(getExpectedReturnDate()) : t('app.shared.store.show_order.no_expected_return')}
             </p>
-          </div>*/}
+          </div>
           <FabStateLabel key={refreshKey} status={OrderLib.statusColor(order)} background>
             {t(`app.shared.store.show_order.state.${OrderLib.statusText(order)}`)}
           </FabStateLabel>

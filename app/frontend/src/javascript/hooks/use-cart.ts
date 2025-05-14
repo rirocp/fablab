@@ -5,7 +5,7 @@ import CartAPI from '../api/cart';
 import { getCartToken, setCartToken } from '../lib/cart-token';
 import { User } from '../models/user';
 
-export default function useCart (user?: User) {
+export default function useCart (user?: User, project?: string) {
   const [cart, setCart] = useState<Order>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState(null);
@@ -13,7 +13,7 @@ export default function useCart (user?: User) {
   useEffect(() => {
     async function createCart () {
       const currentCartToken = getCartToken();
-      const data = await CartAPI.create(currentCartToken);
+      const data = await CartAPI.create(currentCartToken, project);
       _setCart(data);
       setLoading(false);
       setCartToken(data.token);
@@ -25,7 +25,7 @@ export default function useCart (user?: User) {
       setLoading(false);
       setError(e);
     }
-  }, []);
+  }, [project]);
 
   const reloadCart = async () => {
     setLoading(true);

@@ -4,8 +4,8 @@ import { Order, OrderableType, OrderErrors } from '../models/order';
 import { CartItem, CartItemResponse } from '../models/cart_item';
 
 export default class CartAPI {
-  static async create (token?: string): Promise<Order> {
-    const res: AxiosResponse<Order> = await apiClient.post('/api/cart', { order_token: token });
+  static async create (token?: string, project?: string): Promise<Order> {
+    const res: AxiosResponse<Order> = await apiClient.post('/api/cart', { order_token: token, project });
     return res?.data;
   }
 

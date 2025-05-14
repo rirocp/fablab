@@ -42,6 +42,17 @@ export interface OrderCartItemReservation extends OrderItem {
   }>
 }
 
+export interface OrderActivity {
+  id: number,
+  activity_type: string,
+  created_at: TDateISO,
+  note?: string,
+  operator?: {
+    id: number,
+    name: string
+  }
+}
+
 export interface Order {
   id: number,
   token: string,
@@ -63,7 +74,13 @@ export interface Order {
   payment_date?: TDateISO,
   wallet_amount?: number,
   paid_total?: number,
+  project?: string,
   order_items_attributes: Array<OrderItem>,
+  order_activities?: Array<OrderActivity>,
+  paid_at?: TDateISO,
+  in_progress_at?: TDateISO,
+  canceled_at?: TDateISO,
+  refunded_at?: TDateISO,
 }
 
 export interface OrderPayment {

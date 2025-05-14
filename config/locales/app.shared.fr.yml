@@ -502,12 +502,20 @@ fr:
             delivered: "Livrée"
           payment:
             by_wallet: "par porte-monnaie"
-            settlement_by_debit_card: "Paiement par carte bancaire"
-            settlement_done_at_the_reception: "Règlement effectué"
-            settlement_by_wallet: "Règlement effectué par porte-monnaie"
-            on_DATE_at_TIME: "le {DATE} à {TIME}." #Commit . à la place de .
+            settlement_by_debit_card: "Règlement par carte bancaire"
+            settlement_done_at_the_reception: "Règlement effectué à la réception"
+            settlement_by_wallet: "Règlement par portefeuille"
+            on_DATE_at_TIME: "le {DATE} à {TIME}"
+            loan_started_on_DATE_at_TIME: "le prêt a débuté le {DATE} à {TIME}"
+            loan_started_on_DATE_at_TIME_by_OPERATOR: "le prêt a débuté le {DATE} à {TIME} par {OPERATOR}"
+            order_canceled_on_DATE_at_TIME_by_OPERATOR: "la commande a été annulée le {DATE} à {TIME} par {OPERATOR}"
+            order_refunded_on_DATE_at_TIME_by_OPERATOR: "la commande a été retournée le {DATE} à {TIME} par {OPERATOR}"
+            unknown_operator: "un opérateur inconnu"
+            for_project_PROJECT: "Le type de projet : {PROJECT}"
             for_an_amount_of_AMOUNT: "pour un montant de {AMOUNT}"
             and: 'et'
+          expected_return_date: "Date de retour prévue"
+          no_expected_return: "Non calculée"
         order_actions:
           state:
             cart: 'Panier'
@@ -530,7 +538,7 @@ fr:
           confirm_order_canceled_html: "<strong>Voulez-vous vraiment annuler cette commande ?</strong>"
           # confirm_order_canceled_html: "<strong>Voulez-vous vraiment annuler cette commande ?</strong><p>Si cela impacte le stock, veuillez refléter le changement dans <em>modifier le produit &gt; gestion des stocks</em>. Ceci ne sera pas automatique.</p>"
           order_canceled_success: "La commande a été annulée"
-          # confirm_order_refunded_html: "<strong>Voulez-vous vraiment rembourser cette commande ?</strong><p>Si c'est le cas, merci d'effecturer le remboursement et de générer l'avoir depuis l'onglet <em>Factures</em>.</p><p>Si cela impacte les stocks, veuillez modifier votre produit et refléter le changement dans l’onglet <em>gestion des stocks</em>.</p><p>Ces actions ne seront pas automatiques.</p>"
+          # confirm_order_refunded_html: "<strong>Voulez-vous vraiment rembourser cette commande ?</strong><p>Si c'est le cas, merci d'effecturer le remboursement et de générer l'avoir depuis l'onglet <em>Factures</em>.</p><p>Si cela impacte les stocks, veuillez modifier votre produit et refléter le changement dans l'onglet <em>gestion des stocks</em>.</p><p>Ces actions ne seront pas automatiques.</p>"
           confirm_order_refunded_html: "<strong>Voulez-vous vraiment rembourser cette commande ?</strong>"
           order_refunded_success: "Le matériel a été retourné" # "La commande a été remboursée"
       unsaved_form_alert:

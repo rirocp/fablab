@@ -9,7 +9,7 @@ class API::CartController < API::APIController
 
   def create
     authorize :cart, :create?
-    @order ||= Cart::FindOrCreateService.new(current_user).call(order_token)
+    @order ||= Cart::FindOrCreateService.new(current_user).call(order_token, cart_params[:project])
     render 'api/orders/show'
   end
 

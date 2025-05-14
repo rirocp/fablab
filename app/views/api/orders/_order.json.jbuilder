@@ -1,11 +1,26 @@
 # frozen_string_literal: true
 
 json.extract! order, :id, :token, :statistic_profile_id, :operator_profile_id, :reference, :state, :created_at, :updated_at, :invoice_id,
-              :payment_method
+              :payment_method, :project, :paid_at, :in_progress_at, :canceled_at, :refunded_at
 json.total order.total / 100.0 if order.total.present?
 json.payment_date order.invoice.created_at if order.invoice_id.present?
 json.wallet_amount order.wallet_amount / 100.0 if order.wallet_amount.present?
 json.paid_total order.paid_total / 100.0 if order.paid_total.present?
+
+# Ajout des activités d'ordre avec les informations de l'opérateur
+json.order_activities order.order_activities.order(created_at: :asc) do |activity|
+  json.id activity.id
+  json.activity_type activity.activity_type
+  json.created_at activity.created_at
+  json.note activity.note
+  if activity.operator_profile
+    json.operator do
+      json.id activity.operator_profile.user.id
+      json.name activity.operator_profile.user.profile.full_name
+    end
+  end
+end
+
 if order.coupon_id
   json.coupon do
     json.extract! order.coupon, :id, :code, :type, :percent_off, :validity_per_user

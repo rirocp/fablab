@@ -8,8 +8,8 @@ redis_host = ENV.fetch('REDIS_HOST', 'localhost')
 redis_url = "redis://#{redis_host}:6379"
 
 Sidekiq.configure_server do |config|
-    config.redis = { url: 'redis://localhost:6379/0' } # Forcer localhost
-  # config.redis = { url: redis_url }
+  # config.redis = { url: 'redis://localhost:6379/0' } # Forcer localhost
+    config.redis = { url: redis_url }
 
   # client_middleware is also configured in configure_server block
   # because jobs running in the Sidekiq server can themselves push

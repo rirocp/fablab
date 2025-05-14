@@ -44,6 +44,6 @@ class API::OrdersController < API::APIController
   end
 
   def order_params
-    params.require(:order).permit(:state, :note)
+    params.require(:order).permit(:state, :note, :project)
   end
 end

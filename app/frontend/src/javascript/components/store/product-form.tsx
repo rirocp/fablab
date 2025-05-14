@@ -42,9 +42,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
 
   const { handleSubmit, register, control, formState, setValue, reset } = useForm<Product>({ defaultValues: {
     ...product,
-    // Commit
-    amount: 0,
-    quantity_min:1
+    is_active: product.id ? product.is_active : true
   } 
   });
 
@@ -56,10 +54,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
   const [saving, setSaving] = useState<boolean>(false);
 
   useEffect(() => {
-    // Commit, ensures amount and quantity_min are always 0 and 1, respectively
-    setValue('amount', 0);
-    setValue('quantity_min', 1);
-
     ProductCategoryAPI.index().then(data => {
       setProductCategories(buildSelectOptions(ProductLib.sortCategories(data)));
     }).catch(onError);
@@ -116,12 +110,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
    */
   const saveProduct = (data: Product) => {
     setSaving(true);
-    // Commit
-    const updatedData = {
-      ...data,
-      amount: 0, // Ensure price is always 0
-      quantity_min: 1 // Ensure minimum quantity is always 1
-    };
     if (product.id) {
       ProductAPI.update(data).then((res) => {
         reset(res);
@@ -134,6 +122,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
     } else {
       ProductAPI.create(data).then((res) => {
         reset(res);
+        setSaving(false);
         onSuccess(res);
       }).catch(e => {
         setSaving(false);
@@ -244,6 +233,20 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, title, onSucc
                               register={register}
                               id="product_files_attributes"
                               className="product-documents" />
+        </div>
+      </section>
+
+      <section>
+        <header>
+          <p className="title">{t('app.admin.store.product_form.visibility')}</p>
+          <p className="description">{t('app.admin.store.product_form.visibility_info', { defaultValue: 'Choisissez si vous voulez que le produit soit visible' })}</p>
+        </header>
+        <div className="content">
+          <FormSwitch
+            control={control}
+            id="is_active"
+            label={t('app.admin.store.product_form.is_visible', { defaultValue: 'Produit visible' })}
+          />
         </div>
       </section>
 

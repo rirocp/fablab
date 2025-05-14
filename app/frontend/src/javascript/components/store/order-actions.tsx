@@ -24,6 +24,7 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [readyNote, setReadyNote] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [selectedProject, setSelectedProject] = useState<SelectOption<string>>(null);
 
   // Styles the React-select component
   const customStyles = {

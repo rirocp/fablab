@@ -505,6 +505,7 @@ it:
             settlement_done_at_the_reception: "Pagamento effettuato allo sportello"
             settlement_by_wallet: "Pagamento effettuato tramite il portafoglio"
             on_DATE_at_TIME: "il {DATE} alle {TIME},"
+            loan_started_on_DATE_at_TIME: "il prestito è iniziato il {DATE} alle {TIME}"
             for_an_amount_of_AMOUNT: "per un importo di {AMOUNT}"
             and: 'e'
         order_actions:

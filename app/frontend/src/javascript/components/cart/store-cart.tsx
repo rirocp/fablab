@@ -46,12 +46,12 @@ const projectOptions: Array<SelectOption<string>> = [
 const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, userLogin }) => {
   const { t } = useTranslation('public');
 
-  const { cart, setCart, reloadCart } = useCart(currentUser);
+  const [selectedProject, setSelectedProject] = useState<SelectOption<string>>(null); // État pour le projet sélectionné
+  const { cart, setCart, reloadCart } = useCart(currentUser, selectedProject?.value);
   const [cartErrors, setCartErrors] = useState<OrderErrors>(null);
   const [noMemberError, setNoMemberError] = useState<boolean>(false);
   const [paymentModal, setPaymentModal] = useState<boolean>(false);
   const [withdrawalInstructions, setWithdrawalInstructions] = useState<string>(null);
-  const [selectedProject, setSelectedProject] = useState<SelectOption<string>>(null); // État pour le projet sélectionné
   const [noProjectError, setNoProjectError] = useState<boolean>(false); // État pour l'erreur de projet non sélectionné
 
   useEffect(() => {
@@ -68,6 +68,12 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
   useEffect(() => {
     if (!cart?.user) {
       setPaymentModal(false);
+    }
+  }, [cart]);
+
+  useEffect(() => {
+    if (cart?.project && !selectedProject) {
+      setSelectedProject(projectOptions.find(option => option.value === cart.project) || null);
     }
   }, [cart]);
 
@@ -244,8 +250,8 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
               <ul><li><p>Confirmation du prêt :</p></li></ul>
               <p>Une fois votre commande passée et votre prêt validé lors du rendez-vous, vous recevrez un email de confirmation pour vous assurer que tout est en ordre.</p>
               <ul><li><p>Rappel avant la fin du délai :</p></li></ul>
-              <p>Une semaine avant l’écoulement du délai de prêt, nous vous enverrons un email pour vous rappeler de retourner l’article.</p>
-              <ul><li><p>Notification en cas d’annulation:</p></li></ul>
+              <p>Une semaine avant l'écoulement du délai de prêt, nous vous enverrons un email pour vous rappeler de retourner l'article.</p>
+              <ul><li><p>Notification en cas d'annulation:</p></li></ul>
               <p>Si votre prêt est annulé pour une raison quelconque, vous serez immédiatement informé par email.</p>
           </div>
           }

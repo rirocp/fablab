@@ -8,7 +8,7 @@ class Cart::FindOrCreateService
     @customer = operator if @customer.nil? && operator&.member?
   end
 
-  def call(order_token)
+  def call(order_token, project = nil)
     @order = Order.find_by(token: order_token, state: 'cart')
     check_order_authorization
     @order = last_cart if @order.nil?
@@ -20,6 +20,7 @@ class Cart::FindOrCreateService
       clean_old_cart
       @order.update(statistic_profile_id: @customer.statistic_profile.id) if @order.statistic_profile_id.nil? && !@customer.nil?
       @order.update(operator_profile_id: @operator.invoicing_profile.id) if @order.operator_profile_id.nil? && !@operator.nil?
+      @order.update(project: project) if project.present?
       Cart::UpdateTotalService.new.call(@order)
       return @order
     end
@@ -31,7 +32,8 @@ class Cart::FindOrCreateService
       state: 'cart',
       total: 0,
       statistic_profile_id: @customer&.statistic_profile&.id,
-      operator_profile_id: @operator&.invoicing_profile&.id
+      operator_profile_id: @operator&.invoicing_profile&.id,
+      project: project
     }
     Order.create!(order_param)
   end

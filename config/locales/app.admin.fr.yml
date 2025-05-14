@@ -2427,6 +2427,7 @@ fr:
           successfully_updated: "Le produit a été modifié."
           successfully_cloned: "Le produit a été dupliqué."
         product_form:
+          visibility : "Visibilité"
           product_parameters: "Paramètres du produit"
           stock_management: "Gestion des stocks"
           description: "Description"

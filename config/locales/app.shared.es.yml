@@ -505,6 +505,7 @@ es:
             settlement_done_at_the_reception: "Liquidación realizada en la recepción"
             settlement_by_wallet: "Liquidación con cartera"
             on_DATE_at_TIME: "el {DATE} en {TIME},"
+            loan_started_on_DATE_at_TIME: "el préstamo comenzó el {DATE} a las {TIME}"
             for_an_amount_of_AMOUNT: "por una cantidad de {AMOUNT}"
             and: 'y'
         order_actions:

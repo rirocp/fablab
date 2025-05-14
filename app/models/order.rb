@@ -9,7 +9,6 @@ class Order < PaymentDocument
   has_many :order_items, dependent: :destroy
   has_one :payment_gateway_object, as: :item, dependent: :destroy
   has_many :order_activities, dependent: :destroy
-  after_save :handle_state_change, if: :saved_change_to_state?
 
   # paid = commandé
   # canceled = annulé
@@ -17,14 +16,12 @@ class Order < PaymentDocument
   # refunded = retour effectué
   ALL_STATES = %w[cart paid payment_failed refunded in_progress ready canceled delivered].freeze
 
-
   enum state: ALL_STATES.zip(ALL_STATES).to_h
 
   validates :token, :state, presence: true
 
   before_create :add_environment
   after_create :update_reference
-  # Nouveau
   after_save :handle_state_change, if: :saved_change_to_state?
 
   delegate :user, to: :statistic_profile
@@ -47,8 +44,8 @@ class Order < PaymentDocument
     %w[payment_method]
   end
 
-  # Nouveau
   private
+
   def handle_state_change
     case [state_before_last_save, state]
     when ['paid', 'in_progress']
@@ -63,13 +60,6 @@ class Order < PaymentDocument
           available_stock = product.stock['external'] || 0
           raise Cart::OutStockError, "Stock insuffisant pour #{product.name}" if available_stock < quantity
 
-          # order.order_items.each do |item|
-          #  ProductService.update_stock(item.orderable,
-          #                              [{ stock_type: 'external', reason: 'sold', quantity: item.quantity, order_item_id: item.id }]).save
-          # end
-
-          # Débit du stock
-
           ProductService.update_stock(product, [{
             stock_type: 'external',
             reason: 'borrowed',
@@ -79,17 +69,15 @@ class Order < PaymentDocument
         end
         order_activities.create(
           activity_type: 'in_progress',
+          operator_profile_id: operator_profile_id
         )
-        # Commit 14
         # Envoi du premier email immédiatement
-        Rails.logger.info "Envoi de l’email notify_user_order_in_progress à #{statistic_profile.user.email}"
+        Rails.logger.info "Envoi de l'email notify_user_order_in_progress à #{statistic_profile.user.email}"
         NotificationsMailer.notify_user_order_in_progress(self).deliver_later
         # Planification du second email après 2 minutes
-        # Commit 15 : effacer new de new.perform_in
         Rails.logger.info "Planification de NotifyUserOrderReminderWorker pour la commande #{id}"
         NotifyUserOrderReminderWorker.perform_in((RETURN_DEADLINE_MINUTES).minutes, id)
       end
-
     when ['in_progress', 'refunded']
       # Restitution du stock lors du passage à "Retour effectué"
       ActiveRecord::Base.transaction do
@@ -100,17 +88,22 @@ class Order < PaymentDocument
           quantity = item.quantity || 1
           ProductService.update_stock(product, [{
             stock_type: 'external',
-            reason: 'returned',  # Raison valide dans INCOMING_REASONS
-            quantity: quantity,  # Quantité positive pour ajouter au stock
+            reason: 'returned',
+            quantity: quantity,
             order_item_id: item.id
           }]).save!
         end
-        order_activities.create(activity_type: 'refunded')
+        order_activities.create(
+          activity_type: 'refunded',
+          operator_profile_id: operator_profile_id
+        )
       end
-
     when ['paid', 'canceled']
       # Pas de changement de stock, juste une activité
-      order_activities.create(activity_type: 'canceled')
+      order_activities.create(
+        activity_type: 'canceled',
+        operator_profile_id: operator_profile_id
+      )
     end
   end
 

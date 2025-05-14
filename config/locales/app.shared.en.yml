@@ -501,12 +501,19 @@ en:
             delivered: "Delivered"
           payment:
             by_wallet: "by wallet"
-            settlement_by_debit_card: "Settlement by debit card"
-            settlement_done_at_the_reception: "Settlement done at the reception"
-            settlement_by_wallet: "Settlement by wallet"
-            on_DATE_at_TIME: "on {DATE} at {TIME},"
+            settlement_by_debit_card: "Payment by credit card"
+            settlement_done_at_the_reception: "Payment done at reception"
+            settlement_by_wallet: "Payment by wallet"
+            on_DATE_at_TIME: "on {DATE} at {TIME}"
+            for_project_PROJECT: "Project type: {PROJECT}"
+            loan_started_on_DATE_at_TIME_by_OPERATOR: "loan started on {DATE} at {TIME} by {OPERATOR}"
+            order_canceled_on_DATE_at_TIME_by_OPERATOR: "order canceled on {DATE} at {TIME} by {OPERATOR}"
+            order_refunded_on_DATE_at_TIME_by_OPERATOR: "order refunded on {DATE} at {TIME} by {OPERATOR}"
+            unknown_operator: "an unknown operator"
             for_an_amount_of_AMOUNT: "for an amount of {AMOUNT}"
             and: 'and'
+          expected_return_date: "Expected return date"
+          no_expected_return: "Not calculated"
         order_actions:
           state:
             cart: 'Cart'
