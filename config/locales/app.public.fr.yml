@@ -451,6 +451,7 @@ fr:
       cart_button:
         my_cart: "Mon panier"
       store_cart:
+        select_project: "Sélectionnez le type de projet" # Commit nouvelle clé
         select_project_required: "Veuillez sélectionner le type de projet"
         checkout: "Valider mon panier"
         cart_is_empty: "Votre panier est vide"

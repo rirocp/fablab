@@ -226,7 +226,6 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
 
   return (
     <div className="show-order">
-      <h2>{t('app.shared.store.show_order.title')}</h2>
       <header>
         <h2>[{order.reference}]</h2>
         <div className="grpBtn">
@@ -303,10 +302,6 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
         </div>
       </div>
 
-      <div className="order-details">
-        <h3>{t('app.shared.store.show_order.details')}</h3>
-        {/* ... existing code ... */}
-      </div>
     </div>
   );
 };

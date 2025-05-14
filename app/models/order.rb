@@ -1,4 +1,3 @@
-/* eslint-disable fabmanager/scoped-translation */
 # frozen_string_literal: true
 # Order is a model used to hold orders data
 class Order < PaymentDocument
