@@ -13,7 +13,7 @@ class Order < PaymentDocument
   # canceled = annulé
   # in progress = prêt effectué
   # refunded = retour effectué
-  ALL_STATES = %w[cart paid payment_failed refunded in_progress ready canceled delivered].freeze
+  ALL_STATES = %w[cart paid payment_failed refunded in_progress ready canceled delivered late].freeze
 
   enum state: ALL_STATES.zip(ALL_STATES).to_h
 
@@ -41,6 +41,30 @@ class Order < PaymentDocument
 
   def self.columns_out_of_footprint
     %w[payment_method]
+  end
+
+  def check_and_set_late!
+    return unless expected_return_date && !%w[ready delivered canceled refunded].include?(state)
+    if expected_return_date.to_date < Date.today
+      update(state: 'late')
+    elsif state == 'late' && expected_return_date.to_date >= Date.today
+      update(state: 'in_progress')
+    end
+  end
+
+  def expected_return_date
+    return nil unless in_progress_at
+    start = in_progress_at.to_date
+    months_to_add =
+      case project
+      when 'projet_ingenieur_9_mois'
+        9
+      when 'projet_personnel_1_mois'
+        1
+      else
+        0
+      end
+    start.advance(months: months_to_add)
   end
 
   private

@@ -473,6 +473,7 @@ fr:
             ready: "Prête"
             refunded: "Retour effectué"
             delivered: "Livrée"
+            late: "En retard"
         show_order:
           back_to_list: "Retour à la liste"
           see_invoice: "Voir la facture"
@@ -500,6 +501,7 @@ fr:
             ready: "Prête"
             refunded: "Retour effectué"
             delivered: "Livrée"
+            late: "En retard"
           payment:
             by_wallet: "par porte-monnaie"
             settlement_by_debit_card: "Règlement par carte bancaire"
@@ -526,6 +528,7 @@ fr:
             ready: "Prête"
             refunded: "Retour effectué"
             delivered: "Livrée"
+            late: "En retard"
           confirm: 'Confirmer'
           confirmation_required: "Confirmation requise"
           confirm_order_in_progress_html: "Veuillez confirmer que le prêt est effectué, le stock sera déduit."

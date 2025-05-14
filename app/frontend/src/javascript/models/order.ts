@@ -8,7 +8,7 @@ import type { CartItemReservationType, CartItemType } from './cart_item';
 
 export type OrderableType = 'Product' | CartItemType;
 
-export type OrderState = 'cart'|'paid'|'payment_failed'|'refunded'|'in_progress'|'ready'|'canceled'|'delivered';
+export type OrderState = 'cart'|'paid'|'payment_failed'|'refunded'|'in_progress'|'ready'|'canceled'|'delivered'|'late';
 
 export interface OrderItem {
   id: number,

@@ -8,6 +8,7 @@ class API::OrdersController < API::APIController
 
   def index
     @result = ::Orders::OrderService.list(params, current_user)
+    @result[:data].each { |order| order.check_and_set_late! } if @result[:data]
   end
 
   def show; end

@@ -65,6 +65,8 @@ export default class OrderLib {
         return 'canceled';
       case 'in_progress':
         return 'pending';
+      case 'late':
+        return 'late';
       default:
         return 'normal';
     }

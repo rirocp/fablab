@@ -68,6 +68,9 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
       case 'canceled':
         actions = [];
         break;
+      case 'late':
+        actions = actions.concat(['refunded']);
+        break;
       default:
         actions = [];
     }

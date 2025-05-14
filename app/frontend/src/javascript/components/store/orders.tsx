@@ -70,7 +70,8 @@ const Orders: React.FC<OrdersProps> = ({ currentUser, onError }) => {
     { value: 'payment_failed', label: t('app.admin.store.orders.state.payment_failed') },
     { value: 'in_progress', label: t('app.admin.store.orders.state.in_progress') },
     { value: 'ready', label: t('app.admin.store.orders.state.ready') },
-    { value: 'canceled', label: t('app.admin.store.orders.state.canceled') }
+    { value: 'canceled', label: t('app.admin.store.orders.state.canceled') },
+    { value: 'late', label: t('app.admin.store.orders.state.late') }
   ];
 
   /**

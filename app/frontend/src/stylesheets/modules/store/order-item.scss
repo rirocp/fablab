@@ -17,13 +17,14 @@
   }
   .fab-state-label {
     --status-color: var(--success);
-    &.cart { --status-color: var(--information); }
-    &.paid { --status-color: var(--success); }
+    &.cart { --status-color: var(--gray-hard-light); }
+    &.paid { --status-color: var(--gray-soft-dark); }
     &.ready { --status-color: var(--success); }
     &.error { --status-color: var(--alert); }
     &.canceled { --status-color: var(--alert-light); }
     &.pending { --status-color: var(--information); }
     &.normal { --status-color: var(--success); }
+    &.late { --status-color: var(--alert); }
     grid-area: 1 / 2 / 2 / 3;
   }
   .client {
