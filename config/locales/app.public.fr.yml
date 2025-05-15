@@ -463,7 +463,7 @@ fr:
         checkout_coupon: "Code promo"
         checkout_total: "Total du panier"
         checkout_error: "Une erreur inattendue s'est produite. Veuillez contacter l'administrateur."
-        checkout_success: "Achat confirmé. Merci !"
+        checkout_success: "Commande confirmée. Merci !"
         select_user: "Veuillez sélectionner un utilisateur avant de continuer."
       abstract_item:
         offer_product: "Offrir le produit"
