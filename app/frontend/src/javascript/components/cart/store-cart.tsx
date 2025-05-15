@@ -36,8 +36,16 @@ interface StoreCartProps {
  * Commit options de projet pour la liste déroulante
  */
 const projectOptions: Array<SelectOption<string>> = [
-  { value: 'projet_ingenieur_9_mois', label: 'Projet ingénieur (9 mois)' },
-  { value: 'projet_personnel_1_mois', label: 'Projet personnel (1 mois)' }
+  { value: 'projet_personnel_1_mois', label: 'Projet personnel (1 mois)' },
+  { value: 'projet_ingenieur_1_mois', label: 'Projet ingénieur (1 mois)' },
+  { value: 'projet_ingenieur_2_mois', label: 'Projet ingénieur (2 mois)' },
+  { value: 'projet_ingenieur_3_mois', label: 'Projet ingénieur (3 mois)' },
+  { value: 'projet_ingenieur_4_mois', label: 'Projet ingénieur (4 mois)' },
+  { value: 'projet_ingenieur_5_mois', label: 'Projet ingénieur (5 mois)' },
+  { value: 'projet_ingenieur_6_mois', label: 'Projet ingénieur (6 mois)' },
+  { value: 'projet_ingenieur_7_mois', label: 'Projet ingénieur (7 mois)' },
+  { value: 'projet_ingenieur_8_mois', label: 'Projet ingénieur (8 mois)' },
+  { value: 'projet_ingenieur_9_mois', label: 'Projet ingénieur (9 mois)' }
 ];
 
 /**

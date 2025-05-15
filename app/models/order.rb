@@ -45,7 +45,7 @@ class Order < PaymentDocument
 
   def check_and_set_late!
     return unless expected_return_date && !%w[ready delivered canceled refunded].include?(state)
-    if expected_return_date.to_date < Date.today
+    if expected_return_date.to_date <= Date.today
       update(state: 'late')
     elsif state == 'late' && expected_return_date.to_date >= Date.today
       update(state: 'in_progress')
@@ -55,15 +55,17 @@ class Order < PaymentDocument
   def expected_return_date
     return nil unless in_progress_at
     start = in_progress_at.to_date
-    months_to_add =
-      case project
-      when 'projet_ingenieur_9_mois'
-        9
-      when 'projet_personnel_1_mois'
-        1
-      else
-        0
-      end
+    months_to_add = 0
+    
+    if project == 'projet_personnel_1_mois'
+      months_to_add = 1
+    elsif project&.start_with?('projet_ingenieur_')
+      # Extraire le nombre de mois du nom du projet (ex: projet_ingenieur_3_mois -> 3)
+      matches = project.match(/projet_ingenieur_(\d+)_mois/)
+      months_to_add = matches[1].to_i if matches && matches[1]
+    end
+    
+    return nil if months_to_add.zero?
     start.advance(months: months_to_add)
   end
 

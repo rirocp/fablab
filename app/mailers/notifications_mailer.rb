@@ -2,6 +2,13 @@
 
 # Handle most of the emails sent by the platform. Triggered by notifications
 class NotificationsMailer < BaseMailer
+  include Rails.application.routes.url_helpers
+  default from: Proc.new { Setting.get('email_from') }
+  layout 'notifications_mailer'
+
+  # Définir l'URL par défaut pour les liens dans les emails
+  default_url_options[:host] = Setting.get('host_for_emails') || 'localhost:3000'
+
   after_action :mark_notification_as_send, if: -> { @notification.present? } # Ajoutez cette condition
 
   def send_mail_by(notification)
@@ -57,12 +64,10 @@ class NotificationsMailer < BaseMailer
   def notify_user_order_in_progress(order)
     @order = order
     @recipient = order.statistic_profile.user # Utilisateur qui a passé la commande
-    @remaining_time = RETURN_DEADLINE_MINUTES
+    @project = order.project
     mail(
       to: @recipient.email,
-      from: 'ne-pas-repondre@fab-manager.fr',
-      #subject: t('notifications_mailer.notify_user_order_in_progress.subject', minutes: RETURN_DEADLINE_MINUTES),
-      subject: "Votre commande est prête - Retour requis dans #{RETURN_DEADLINE_MINUTES} minutes",
+      subject: "Prêt effectué",
       template_name: 'notify_user_order_in_progress'
     )
   end
@@ -73,7 +78,6 @@ class NotificationsMailer < BaseMailer
     @recipient = order.statistic_profile.user
     mail(
       to: @recipient.email,
-      from: 'ne-pas-repondre@fab-manager.fr',
       subject: t('notifications_mailer.notify_user_order_reminder.subject'),
       template_name: 'notify_user_order_reminder'
     )
@@ -84,7 +88,5 @@ class NotificationsMailer < BaseMailer
   def mark_notification_as_send
     @notification.mark_as_send unless @notification.is_send
   end
-
-
 
 end

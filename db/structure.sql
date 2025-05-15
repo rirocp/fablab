@@ -2160,7 +2160,8 @@ CREATE TABLE public.orders (
     in_progress_at timestamp without time zone,
     canceled_at timestamp without time zone,
     refunded_at timestamp without time zone,
-    project character varying
+    project character varying,
+    admin_comment text
 );
 
 
@@ -9273,6 +9274,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240327095614'),
 ('20240605085829'),
 ('20250505125422'),
-('20250508145115');
+('20250508145115'),
+('20250515131214');
 
 

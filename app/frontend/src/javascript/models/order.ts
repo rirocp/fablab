@@ -81,6 +81,7 @@ export interface Order {
   in_progress_at?: TDateISO,
   canceled_at?: TDateISO,
   refunded_at?: TDateISO,
+  admin_comment?: string,
 }
 
 export interface OrderPayment {

@@ -71,4 +71,14 @@ child_age_will_be_18:
   class: ChildAgeWorker
   queue: default
 
+check_late_orders:
+  cron: "0 * * * *" # every day, every hour
+  class: CheckLateOrdersWorker
+  queue: default
+
+order_return_reminders:
+  cron: "0 0 9 * * *" # every day at 9am
+  class: NotifyUserOrderReminderWorker
+  queue: default
+  
 <%= PluginRegistry.insert_code('yml.schedule') %>

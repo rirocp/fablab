@@ -2,7 +2,43 @@
 <p>Bonjour <%= @recipient.profile.full_name %>,</p>
 
 <p>Ceci est un rappel concernant votre commande (référence : <%= @order.reference %>) marquée comme "Prêt effectué".</p>
-<p>Votre délai de <strong><%= RETURN_DEADLINE_MINUTES %> minutes</strong> de prêt de l’article est écoulé. Merci de le retourner.</p>
 
-<p>Cordialement,<br>L’équipe <%= Setting.get('fablab_name') %></p>
+<% if @order.expected_return_date %>
+  <p><strong>Important :</strong> La date limite de retour des articles est fixée au <%= I18n.l(@order.expected_return_date, format: :long) %>, soit dans 7 jours.</p>
+  
+  <% if @order.project.present? %>
+    <p>Type de projet : 
+    <% if @order.project == 'projet_personnel_1_mois' %>
+      Projet personnel (1 mois)
+    <% elsif @order.project.start_with?('projet_ingenieur_') %>
+      <% matches = @order.project.match(/projet_ingenieur_(\d+)_mois/) %>
+      <% if matches && matches[1] %>
+        Projet ingénieur (<%= matches[1] %> mois)
+      <% else %>
+        <%= @order.project %>
+      <% end %>
+    <% else %>
+      <%= @order.project %>
+    <% end %>
+    </p>
+  <% end %>
+  
+  <h3>Liste des articles à retourner :</h3>
+  <ul>
+    <% @order.order_items.each do |item| %>
+      <li>
+        <% if item.orderable_type == "Product" %>
+          <%= Product.find(item.orderable_id).name %> 
+        <% else %>
+          Article #<%= item.id %>
+        <% end %>
+        - Quantité: <%= item.quantity %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Votre délai de retour de l'article est à une semaine de son arrivée à terme. Merci de le retourner dans les délais.</p>
+<% end %>
+
+<p>Cordialement,<br>L'équipe <%= Setting.get('fablab_name') %></p>
 <p><small>Ceci est un message automatique, merci de ne pas y répondre.</small></p>

@@ -25,4 +25,9 @@ export default class OrderAPI {
     const res: AxiosResponse<string> = await apiClient.get(`/api/orders/${order?.id}/withdrawal_instructions`);
     return res?.data;
   }
+
+  static async update (id: number | string, data: Partial<Order>): Promise<Order> {
+    const res: AxiosResponse<Order> = await apiClient.patch(`/api/orders/${id}`, { order: data });
+    return res?.data;
+  }
 }

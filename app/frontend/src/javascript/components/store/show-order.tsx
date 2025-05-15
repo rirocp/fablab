@@ -13,6 +13,8 @@ import { Order, OrderItem, OrderState, OrderProduct } from '../../models/order';
 import FormatLib from '../../lib/format';
 import OrderLib from '../../lib/order';
 import { OrderActions } from './order-actions';
+import { FormRichText } from '../form/form-rich-text';
+import { useForm } from 'react-hook-form';
 
 function isOrderProduct (item: OrderItem): item is OrderProduct {
   return item.orderable_type === 'Product';
@@ -34,23 +36,28 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
   const { t } = useTranslation('shared');
 
   const [order, setOrder] = useState<Order>();
-  const [withdrawalInstructions, setWithdrawalInstructions] = useState<string>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [lastActionTime, setLastActionTime] = useState(0);
   const intervalRef = useRef(null);
+  const { control, setValue } = useForm();
+  const [adminComment, setAdminComment] = useState('');
+  const [saving, setSaving] = useState(false);
 
   // Fonction pour charger les données de la commande
   const loadOrderData = () => {
     OrderAPI.get(orderId).then(data => {
+      console.log('Order loaded from API:', data);
+      console.log('Admin comment in loaded order:', data.admin_comment);
       setOrder(data);
-      OrderAPI.withdrawalInstructions(data)
-        .then(setWithdrawalInstructions)
-        .catch(onError);
+      // Mettre à jour le commentaire admin quand les données sont chargées
+      setAdminComment(data.admin_comment || '');
+      setValue('admin_comment', data.admin_comment || '');
     }).catch(onError);
   };
 
   // Chargement initial
   useEffect(() => {
+    console.log('Initial load');
     loadOrderData();
     return () => {
       if (intervalRef.current) {
@@ -84,6 +91,16 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
     }
   }, [lastActionTime]);
 
+  // Met à jour le state si la commande change (ex: après reload)
+  useEffect(() => {
+    console.log('Order changed, updating admin comment state');
+    console.log('Admin comment in order:', order?.admin_comment);
+    if (order?.admin_comment !== undefined) {
+      setAdminComment(order.admin_comment || '');
+      setValue('admin_comment', order.admin_comment || '');
+    }
+  }, [order]);
+
   /**
    * Check if the current operator has administrative rights or is a normal member
    */
@@ -110,10 +127,18 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
 
     // Commit de l'information du projet
     let projectLabel = '';
-    if (order.project === 'projet_ingenieur_9_mois') {
-      projectLabel = t('app.public.show_order.project_engineer_9_months', { defaultValue: 'Projet ingénieur (9 mois)' });
-    } else if (order.project === 'projet_personnel_1_mois') {
-      projectLabel = t('app.public.show_order.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
+    if (order.project) {
+      if (order.project === 'projet_personnel_1_mois') {
+        projectLabel = t('app.public.show_order.project_personal_1_month', { defaultValue: 'Projet personnel (1 mois)' });
+      } else if (order.project.startsWith('projet_ingenieur_')) {
+        // Extraire le nombre de mois du nom du projet (ex: projet_ingenieur_3_mois -> 3)
+        const matches = order.project.match(/projet_ingenieur_(\d+)_mois/);
+        if (matches && matches[1]) {
+          const months = matches[1];
+          projectLabel = t('app.public.show_order.project_engineer_x_months',
+            { defaultValue: `Projet ingénieur (${months} mois)`, MONTHS: months });
+        }
+      }
     }
     if (projectLabel) {
       paymentVerbose += ' - ' + t('app.shared.store.show_order.payment.for_project_PROJECT', {
@@ -202,22 +227,36 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
   };
 
   /**
-   * TODO, document this method
+   * Calcule la date de retour prévue en fonction du projet sélectionné
    */
   const getExpectedReturnDate = () => {
     if (!order?.in_progress_at) return null;
     const start = new Date(order.in_progress_at);
+    // Extraire le nombre de mois du projet
+    const projectType = order.project || '';
     let monthsToAdd = 0;
-    if (order.project === 'projet_ingenieur_9_mois') {
-      monthsToAdd = 9;
-    } else if (order.project === 'projet_personnel_1_mois') {
+    if (projectType === 'projet_personnel_1_mois') {
       monthsToAdd = 1;
-    } else {
-      return null;
+    } else if (projectType.startsWith('projet_ingenieur_')) {
+      // Extraire le nombre de mois du nom du projet (ex: projet_ingenieur_3_mois -> 3)
+      const matches = projectType.match(/projet_ingenieur_(\d+)_mois/);
+      if (matches && matches[1]) {
+        monthsToAdd = parseInt(matches[1], 10);
+      }
     }
+
+    if (monthsToAdd === 0) return null;
+
     const expected = new Date(start);
     expected.setMonth(expected.getMonth() + monthsToAdd);
     return expected;
+  };
+
+  // Gestion du changement de commentaire admin
+  const handleAdminCommentChange = (content: string) => {
+    console.log('Admin comment changed:', content);
+    setAdminComment(content);
+    setValue('admin_comment', content);
   };
 
   if (!order) {
@@ -259,10 +298,12 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
             <span>{t('app.shared.store.show_order.created_at')}</span>
             <p>{FormatLib.date(order.created_at)}</p>
           </div>
+          {/*
           <div className='group'>
             <span>{t('app.shared.store.show_order.last_update')}</span>
             <p>{FormatLib.date(order.updated_at)}</p>
           </div>
+          */}
           <div className='group'>
             <span>{t('app.shared.store.show_order.expected_return_date')}</span>
             <p>
@@ -300,10 +341,51 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
           <label>{t('app.shared.store.show_order.payment_informations')}</label>
           {<p>{paymentInfo()}</p>}
         </div>
-        <div className="withdrawal-instructions">
-          <label>{t('app.shared.store.show_order.pickup')}</label>
-          <p dangerouslySetInnerHTML={{ __html: withdrawalInstructions }} />
-        </div>
+        {isPrivileged() && (
+          <div className="admin-comment-section">
+            <label>{t('app.admin.store.orders.admin_comment', { defaultValue: 'Commentaire de l\'administrateur' })}</label>
+            <div className="content">
+              <FormRichText
+                control={control}
+                id="admin_comment"
+                valueDefault={adminComment}
+                limit={400}
+                heading
+                bulletList
+                link
+                onValueChange={handleAdminCommentChange}
+              />
+              <button
+                className="fab-button is-main"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  setSaving(true);
+                  try {
+                    console.log('Sending admin comment:', adminComment);
+                    const updatedOrder = await OrderAPI.update(order.id, { admin_comment: adminComment });
+                    console.log('Server response:', updatedOrder);
+                    console.log('Admin comment in response:', updatedOrder.admin_comment);
+                    // Mettre à jour tout l'état local
+                    setOrder(updatedOrder);
+                    setAdminComment(updatedOrder.admin_comment || '');
+                    setValue('admin_comment', updatedOrder.admin_comment || '');
+                    // Déclencher une mise à jour pour s'assurer que tout est à jour
+                    setLastActionTime(Date.now());
+                    onSuccess('Commentaire enregistré');
+                  } catch (err) {
+                    console.error('Error saving comment:', err);
+                    onError('Erreur lors de la sauvegarde');
+                  } finally {
+                    setSaving(false);
+                  }
+                }}
+                disabled={saving}
+              >
+                {saving ? t('app.shared.saving', { defaultValue: 'Enregistrement...' }) : t('app.shared.save', { defaultValue: 'Enregistrer' })}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -120,6 +120,7 @@ export const MachineCategoriesList: React.FC<MachineCategoriesListProps> = ({ on
                 <td>
                   <div className="buttons">
                     <EditDestroyButtons onDeleteSuccess={onDestroySuccess}
+                                        deleteSuccessMessage={t('app.admin.machine_categories_list.category_deleted', { defaultValue: 'Machine category successfully deleted' })}
                                         onError={onError}
                                         onEdit={editMachineCategory(category)}
                                         itemId={category.id}

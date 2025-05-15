@@ -65,13 +65,14 @@ const Orders: React.FC<OrdersProps> = ({ currentUser, onError }) => {
   }, [filters]);
 
   const statusOptions: ChecklistOption<OrderState>[] = [
-    { value: 'cart', label: t('app.admin.store.orders.state.cart') },
+    // { value: 'cart', label: t('app.admin.store.orders.state.cart') },
     { value: 'paid', label: t('app.admin.store.orders.state.paid') },
-    { value: 'payment_failed', label: t('app.admin.store.orders.state.payment_failed') },
+    // { value: 'payment_failed', label: t('app.admin.store.orders.state.payment_failed') },
     { value: 'in_progress', label: t('app.admin.store.orders.state.in_progress') },
-    { value: 'ready', label: t('app.admin.store.orders.state.ready') },
+    // { value: 'ready', label: t('app.admin.store.orders.state.ready') },
     { value: 'canceled', label: t('app.admin.store.orders.state.canceled') },
-    { value: 'late', label: t('app.admin.store.orders.state.late') }
+    { value: 'late', label: t('app.admin.store.orders.state.late') },
+    { value: 'refunded', label: t('app.admin.store.orders.state.refunded') }
   ];
 
   /**

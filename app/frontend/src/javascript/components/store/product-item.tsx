@@ -69,6 +69,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({ product, onEdit, onDel
       </div>
       <div className='actions'>
         <EditDestroyButtons onDeleteSuccess={onDelete}
+                            deleteSuccessMessage={t('app.admin.store.product_item.delete_success')}
                             onError={onError}
                             onEdit={editProduct(product)}
                             itemId={product.id}

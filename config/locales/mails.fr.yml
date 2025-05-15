@@ -27,7 +27,7 @@ fr:
     notify_user_order_reminder:
       subject: "Rappel : Retournez votre article emprunté"
       body:
-        order_reminder: "Ceci est un rappel pour votre commande %{REFERENCE}. Il vous reste 2 minutes pour retourner l’article emprunté."
+        # order_reminder: "Ceci est un rappel pour votre commande %{REFERENCE}. Il vous reste 2 minutes pour retourner l’article emprunté."
         sincerely: "Cordialement,"
         signature: "L'équipe du Fab Lab."
         do_not_reply: "Merci de ne pas répondre directement à cet email."

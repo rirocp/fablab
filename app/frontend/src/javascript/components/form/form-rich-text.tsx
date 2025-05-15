@@ -18,12 +18,13 @@ type FormRichTextProps<TFieldValues, TContext extends object> = FormControlledCo
   video?: boolean,
   image?: boolean,
   ariaLabel?: string,
+  onValueChange?: (content: string) => void,
 }
 
 /**
  * This component is a rich-text editor to use with react-hook-form.
  */
-export const FormRichText = <TFieldValues extends FieldValues, TContext extends object>({ id, label, tooltip, className, control, valueDefault, error, warning, rules, disabled = false, formState, limit, heading, bulletList, blockquote, video, image, link, ariaLabel }: FormRichTextProps<TFieldValues, TContext>) => {
+export const FormRichText = <TFieldValues extends FieldValues, TContext extends object>({ id, label, tooltip, className, control, valueDefault, error, warning, rules, disabled = false, formState, limit, heading, bulletList, blockquote, video, image, link, ariaLabel, onValueChange }: FormRichTextProps<TFieldValues, TContext>) => {
   const textEditorRef = React.useRef<FabTextEditorRef>();
   const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
 
@@ -56,7 +57,7 @@ export const FormRichText = <TFieldValues extends FieldValues, TContext extends 
                   defaultValue={valueDefault as UnpackNestedValue<FieldPathValue<TFieldValues, Path<TFieldValues>>>}
                   rules={rules}
                   render={({ field: { onChange, value } }) =>
-        <FabTextEditor onChange={onChange}
+        <FabTextEditor onChange={onValueChange || onChange}
                        content={value}
                        limit={limit}
                        heading={heading}
