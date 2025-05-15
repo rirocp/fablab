@@ -455,7 +455,7 @@ fr:
         select_project_required: "Veuillez sélectionner le type de projet"
         checkout: "Valider mon panier"
         cart_is_empty: "Votre panier est vide"
-        pickup: "Retirer vos produits"
+        pickup: "Informations sur le prêt de matériel nomade"
         checkout_header: "Montant total pour votre panier"
         checkout_products_COUNT: "Votre panier contient {COUNT} {COUNT, plural, one {}=1{produit} other{produits}}"
         checkout_products_total: "Total des produits"

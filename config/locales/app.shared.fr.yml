@@ -491,7 +491,7 @@ fr:
           gift_total: "Total remise"
           coupon: "Code promo"
           cart_total: "Total du panier"
-          pickup: "Retirer vos produits"
+          pickup: "Informations complémentaires"
           state:
             cart: 'Panier'
             in_progress: 'Prêt effectué'

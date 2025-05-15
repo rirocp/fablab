@@ -2532,8 +2532,8 @@ fr:
             oldest: "Plus ancienne en premier"
       store_settings:
         title: "Paramètres"
-        withdrawal_instructions: 'Instructions de retrait du produit'
-        withdrawal_info: "Ce texte est affiché sur la page de paiement pour informer le client de la méthode de retrait des produits"
+        withdrawal_instructions: 'Insformations trasmises dans le panier de réservation de matériel nomade'
+        withdrawal_info: "Ce texte est affiché sur la page de réservation de matériel nomade pour informer le client de la méthode de retrait des produits"
         store_hidden_title: "Réservation accessible au public"
         store_hidden_info: "Vous pouvez cacher la réservation aux yeux des membres et des visiteurs."
         store_hidden: "Masquer la réservation"

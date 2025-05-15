@@ -298,10 +298,13 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       <div className="subgrid">
         <div className="payment-info">
           <label>{t('app.shared.store.show_order.payment_informations')}</label>
-          {order.invoice_id && <p>{paymentInfo()}</p>}
+          {<p>{paymentInfo()}</p>}
+        </div>
+        <div className="withdrawal-instructions">
+          <label>{t('app.shared.store.show_order.pickup')}</label>
+          <p dangerouslySetInnerHTML={{ __html: withdrawalInstructions }} />
         </div>
       </div>
-
     </div>
   );
 };

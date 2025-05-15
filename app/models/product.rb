@@ -32,7 +32,15 @@ class Product < ApplicationRecord
 
   scope :active, -> { where(is_active: true) }
 
+  before_validation :set_default_amount, on: :create
+
   def main_image
     product_images.find_by(is_main: true)
+  end
+
+  private
+
+  def set_default_amount
+    self.amount = 0 if amount.nil?
   end
 end

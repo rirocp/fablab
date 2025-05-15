@@ -230,19 +230,18 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
       </div>
 
       <div className="group">
-        { /* Commit
         {cart && !cartIsEmpty() &&
           <div className='store-cart-info'>
             <h3>{t('app.public.store_cart.pickup')}</h3>
             <p dangerouslySetInnerHTML={{ __html: withdrawalInstructions }} />
           </div>
         }
-
+        {/*
         {cart && !cartIsEmpty() &&
           <div className='store-cart-coupon'>
             <CouponInput user={cart.user as User} amount={cart.total} onChange={applyCoupon} />
           </div>
-        } */}
+        }
 
         {cart && !cartIsEmpty() &&
           <div className="store-cart-info">
@@ -255,6 +254,7 @@ const StoreCart: React.FC<StoreCartProps> = ({ onSuccess, onError, currentUser, 
             <p>Si votre prêt est annulé pour une raison quelconque, vous serez immédiatement informé par email.</p>
           </div>
         }
+        */}
       </div>
       <aside>
         {cart && !cartIsEmpty() && isPrivileged() &&
