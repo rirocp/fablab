@@ -3,3 +3,9 @@
 <p>
   <%= t('.body.notify_user_order_is_canceled', REFERENCE: @attached_object.order.reference) %>
 </p>
+
+<% if @attached_object.note.present? %>
+<p>
+  <strong><%= t('app.notification.notify_user_order_is_canceled.reason', default: 'Raison') %>:</strong> <%= @attached_object.note %>
+</p>
+<% end %> 

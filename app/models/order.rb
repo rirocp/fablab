@@ -102,6 +102,9 @@ class Order < PaymentDocument
         # Planification du second email après 2 minutes
         Rails.logger.info "Planification de NotifyUserOrderReminderWorker pour la commande #{id}"
         NotifyUserOrderReminderWorker.perform_in((RETURN_DEADLINE_MINUTES).minutes, id)
+        
+        # Gérer les conflits de stock avec d'autres commandes
+        Orders::StockConflictService.handle_conflicts(self)
       end
     when ['in_progress', 'refunded']
       # Restitution du stock lors du passage à "Retour effectué"
@@ -124,11 +127,17 @@ class Order < PaymentDocument
         )
       end
     when ['paid', 'canceled']
-      # Pas de changement de stock, juste une activité
-      order_activities.create(
-        activity_type: 'canceled',
-        operator_profile_id: operator_profile_id
-      )
+      # Ne pas créer d'activité si l'annulation est faite par StockConflictService
+      # Vérifier si une activité d'annulation a déjà été créée dans les dernières secondes
+      unless order_activities.where(activity_type: 'canceled')
+                           .where('created_at > ?', 5.seconds.ago)
+                           .exists?
+        # Pas de changement de stock, juste une activité
+        order_activities.create(
+          activity_type: 'canceled',
+          operator_profile_id: operator_profile_id
+        )
+      end
     end
   end
 

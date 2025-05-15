@@ -13,6 +13,9 @@ class Orders::SetInProgressService
         operator_profile_id: current_user.invoicing_profile.id
       )
       order.save!
+      
+      # Cancel other orders for products with limited stock
+      Orders::StockConflictService.handle_conflicts(order)
     end
     order.reload
   end

@@ -149,21 +149,73 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
       paymentVerbose += ' Projet non spécifié.';
     }
 
+    // Debug complet des activités de la commande
+    console.log('All order activities:', order.order_activities);
+
+    // Compter les activités par type
+    const activityCounts = order.order_activities?.reduce((acc, act) => {
+      acc[act.activity_type] = (acc[act.activity_type] || 0) + 1;
+      return acc;
+    }, {});
+    console.log('Activity counts by type:', activityCounts);
+
+    // Compter les activités d'annulation avec et sans note
+    const canceledWithNote = order.order_activities?.filter(act =>
+      act.activity_type === 'canceled' && act.note !== null && act.note !== undefined && act.note !== '').length || 0;
+    const canceledWithoutNote = order.order_activities?.filter(act =>
+      act.activity_type === 'canceled' && (act.note === null || act.note === undefined || act.note === '')).length || 0;
+    console.log('Canceled activities with note:', canceledWithNote);
+    console.log('Canceled activities without note:', canceledWithoutNote);
+
+    // Afficher toutes les notes d'annulation
+    const cancelNotes = order.order_activities?.filter(act =>
+      act.activity_type === 'canceled' && act.note !== null && act.note !== undefined && act.note !== '')
+      .map(act => act.note);
+    console.log('All cancellation notes:', cancelNotes);
+
     // Ajout de l'historique des changements d'état
     // Dédupliquer les activités en gardant la première occurrence de chaque type d'état
+    // MODIFICATION: Pour les annulations, garder l'activité avec une note si elle existe
     const uniqueStateActivities = order.order_activities?.reduce((acc, activity) => {
+      console.log('Activity being processed:', activity);
       if (!['in_progress', 'canceled', 'refunded'].includes(activity.activity_type)) {
         return acc;
       }
-      // Si on n'a pas encore vu cet état, l'ajouter
-      if (!acc.some(a => a.activity_type === activity.activity_type)) {
-        acc.push(activity);
+
+      // Cas spécial pour les annulations: privilégier l'activité avec une note
+      if (activity.activity_type === 'canceled') {
+        // Chercher si on a déjà une activité d'annulation
+        const existingCanceledIndex = acc.findIndex(a => a.activity_type === 'canceled');
+
+        if (existingCanceledIndex >= 0) {
+          // On a déjà une activité d'annulation
+          const existingActivity = acc[existingCanceledIndex];
+
+          // Si l'activité actuelle a une note et l'existante n'en a pas, remplacer
+          if (activity.note && (!existingActivity.note || existingActivity.note === '')) {
+            console.log('Replacing canceled activity without note with one with note');
+            acc[existingCanceledIndex] = activity;
+          }
+        } else {
+          // Pas encore d'activité d'annulation, ajouter celle-ci
+          acc.push(activity);
+        }
+      } else {
+        // Pour les autres types, juste garder la première occurrence
+        if (!acc.some(a => a.activity_type === activity.activity_type)) {
+          acc.push(activity);
+        }
       }
+
       return acc;
     }, []).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
+    console.log('Unique state activities:', uniqueStateActivities);
+
     if (uniqueStateActivities?.length > 0) {
       uniqueStateActivities.forEach(activity => {
+        // Debug: Afficher les informations de l'activité dans la console
+        console.log('Activity:', activity);
         const operatorName = activity.operator?.name;
         // Utiliser created_at de l'activité si le timestamp d'état n'est pas disponible
         const date = order[`${activity.activity_type}_at`] || activity.created_at;
@@ -187,10 +239,29 @@ export const ShowOrder: React.FC<ShowOrderProps> = ({ orderId, currentUser, onSu
             TIME: FormatLib.time(date),
             OPERATOR: operatorName || t('app.shared.store.show_order.payment.unknown_operator', { defaultValue: 'Opérateur inconnu' })
           });
+
+          // Détecter les annulations par conflit de stock
+          if (activity.activity_type === 'canceled') {
+            console.log('Processing canceled activity:', activity);
+            console.log('Canceled activity note:', activity.note);
+            // Si une note est présente pour l'activité d'annulation
+            if (activity.note) {
+              // Afficher la note de l'activité
+              paymentVerbose += ' - ' + activity.note;
+            }
+            // Si l'annulation est automatique par stock épuisé (vérification moins stricte)
+            if (activity.note && (
+              activity.note.includes('stock') ||
+              activity.note.includes('épuisé') ||
+              activity.note.includes('automatique')
+            )) {
+              console.log('Detected stock conflict cancellation');
+            }
+          }
         }
       });
     }
-
+    paymentVerbose += '.';
     return paymentVerbose;
   };
 
