@@ -24,7 +24,6 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [readyNote, setReadyNote] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [selectedProject, setSelectedProject] = useState<SelectOption<string>>(null);
 
   // Styles the React-select component
   const customStyles = {
@@ -106,14 +105,14 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
         // Fermer la modale seulement après une réponse réussie
         setModalIsOpen(false);
         setCurrentAction(null);
-        
+
         // Indiquer le succès
         onSuccess(data, t(`app.shared.store.order_actions.order_${actionValue}_success`));
       })
       .catch(e => {
         // Garder la modale ouverte en cas d'erreur
         console.error('Error updating order state:', e);
-        
+
         if (e.response && e.response.data && e.response.data.error) {
           onError(e.response.data.error);
         } else {
