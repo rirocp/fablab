@@ -99,9 +99,9 @@ class Order < PaymentDocument
         # Envoi du premier email immédiatement
         Rails.logger.info "Envoi de l'email notify_user_order_in_progress à #{statistic_profile.user.email}"
         NotificationsMailer.notify_user_order_in_progress(self).deliver_later
-        # Planification du second email après 2 minutes
-        Rails.logger.info "Planification de NotifyUserOrderReminderWorker pour la commande #{id}"
-        NotifyUserOrderReminderWorker.perform_in((RETURN_DEADLINE_MINUTES).minutes, id)
+        
+        # Ne pas planifier de rappel immédiat; les rappels sont gérés par une tâche cron quotidienne
+        # qui vérifie les commandes dont la date de retour est dans 7 jours
         
         # Gérer les conflits de stock avec d'autres commandes
         Orders::StockConflictService.handle_conflicts(self)

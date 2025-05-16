@@ -47,7 +47,7 @@ module Orders
     # @param order [Order] the order to cancel
     # @param product [Product] the product that caused the conflict
     def self.cancel_order(order, product)
-      message = "Commande automatiquement annulée car le stock du produit #{product.name} est épuisé"
+      message = "Commande automatiquement annulée car le dernier produit du stock de #{product.name} vient d'être réservé"
       Rails.logger.info "[StockConflictService] Cancelling order #{order.id} with message: #{message}"
       
       ActiveRecord::Base.transaction do
