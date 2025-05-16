@@ -93,34 +93,36 @@ export const OrderActions: React.FC<OrderActionsProps> = ({ order, onSuccess, on
   const handleActionConfirmation = () => {
     if (isSubmitting) return;
 
-    // Enregistrer les valeurs actuelles avant de fermer la modale
-    const actionValue = currentAction.value;
-    const noteValue = readyNote;
-
-    // Fermer la modale immédiatement - cette étape est cruciale
-    setModalIsOpen(false);
-
     // Marquer comme en cours de soumission
     setIsSubmitting(true);
 
-    // Puis faire l'appel API
-    setTimeout(() => {
-      OrderAPI.updateState(order, actionValue, noteValue)
-        .then(data => {
-          onSuccess(data, t(`app.shared.store.order_actions.order_${actionValue}_success`));
-        })
-        .catch(e => {
-          if (e.response && e.response.data && e.response.data.error) {
-            onError(e.response.data.error);
-          } else {
-            onError(e.message || 'Une erreur est survenue');
-          }
-        })
-        .finally(() => {
-          setIsSubmitting(false);
-          setCurrentAction(null);
-        });
-    }, 100); // Une légère attente pour s'assurer que la modale est bien fermée
+    // Récupérer les valeurs actuelles
+    const actionValue = currentAction.value;
+    const noteValue = readyNote;
+
+    // Faire l'appel API avant de fermer la modale
+    OrderAPI.updateState(order, actionValue, noteValue)
+      .then(data => {
+        // Fermer la modale seulement après une réponse réussie
+        setModalIsOpen(false);
+        setCurrentAction(null);
+        
+        // Indiquer le succès
+        onSuccess(data, t(`app.shared.store.order_actions.order_${actionValue}_success`));
+      })
+      .catch(e => {
+        // Garder la modale ouverte en cas d'erreur
+        console.error('Error updating order state:', e);
+        
+        if (e.response && e.response.data && e.response.data.error) {
+          onError(e.response.data.error);
+        } else {
+          onError(e.message || 'Une erreur est survenue');
+        }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   return (
