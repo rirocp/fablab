@@ -1168,7 +1168,7 @@ fr:
         surname: "Nom"
         first_name: "Prénom"
         email: "Courriel"
-        phone: "Tel."
+        phone: "Badge."
         user_type: "Type utilisateur"
         subscription: "Abonnement"
         display_more_users: "Afficher plus d'utilisateurs..."
