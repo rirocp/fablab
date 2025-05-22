@@ -7,7 +7,8 @@ class NotificationsMailer < BaseMailer
   layout 'notifications_mailer'
 
   # Définir l'URL par défaut pour les liens dans les emails
-  default_url_options[:host] = Setting.get('host_for_emails') || 'localhost:3000'
+  default_url_options[:host] = Setting.get('host_for_emails') || Rails.application.secrets.default_host
+  default_url_options[:protocol] = Rails.application.secrets.default_protocol
 
   after_action :mark_notification_as_send, if: -> { @notification.present? } # Ajoutez cette condition
 

@@ -68,8 +68,8 @@ export const initialResources: ProductResourcesFetching = {
 
 export type StockType = 'external'; /* Commit 'internal' | 'external' | 'all' */
 
-export const stockMovementInReasons = ['inward_stock', 'inventory_fix', 'other_in'] as const;
-export const stockMovementOutReasons = ['missing', 'damaged', 'other_out'] as const;
+export const stockMovementInReasons = ['inward_stock', 'inventory_fix', 'other_in', 'returned', 'cancelled'] as const;
+export const stockMovementOutReasons = ['missing', 'damaged', 'other_out', 'borrowed'] as const;
 export const stockMovementAllReasons = [...stockMovementInReasons, ...stockMovementOutReasons] as const;
 
 export type StockMovementReason = typeof stockMovementAllReasons[number];
